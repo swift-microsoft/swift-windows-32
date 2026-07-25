@@ -8,5 +8,7 @@ topics:
   - platform-interface
   - operating-systems
 homepage: "https://swift-institute.org"
+socialPreview:
+  displayName: "Win32"
 readme:
   family: E
