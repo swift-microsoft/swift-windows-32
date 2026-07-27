@@ -14,9 +14,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Build + test matrix — see swift-standards/.github/.github/workflows/swift-ci.yml (layer wrapper)
+  # Canary the candidate universal scheduler before it advances to main.
   ci:
-    uses: swift-standards/.github/.github/workflows/swift-ci.yml@main
+    uses: swift-institute/.github/.github/workflows/swift-ci.yml@codex/windows-primary-ci-20260727
+    with:
+      platform-support: windows
+      tier: build
     secrets:
       PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
       SWIFT_INSTITUTE_BOT_APP_CLIENT_ID: ${{ secrets.SWIFT_INSTITUTE_BOT_APP_CLIENT_ID }}
