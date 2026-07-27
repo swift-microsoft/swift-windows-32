@@ -62,6 +62,10 @@
         /// The filename or extension is too long (error 206).
         @inlinable
         public static var ERROR_FILENAME_EXCED_RANGE: Error_Primitives.Error.Code { .win32(206) }
+
+        /// The name of the file cannot be resolved by the system (error 1921).
+        @inlinable
+        public static var ERROR_CANT_RESOLVE_FILENAME: Error_Primitives.Error.Code { .win32(1921) }
     }
 
     // MARK: - Directory Errors

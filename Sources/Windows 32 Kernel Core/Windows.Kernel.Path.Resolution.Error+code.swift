@@ -33,6 +33,10 @@
                 self = .notEmpty
             case .Windows.ERROR_NOT_SAME_DEVICE:
                 self = .crossDevice
+            case .Windows.ERROR_CANT_RESOLVE_FILENAME:
+                self = .loop
+            case .Windows.ERROR_FILENAME_EXCED_RANGE:
+                self = .nameTooLong
             default:
                 return nil
             }
