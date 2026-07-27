@@ -18,6 +18,7 @@
     import Path_Primitives
     import Clock_Primitives
     import Random_Primitives
+    import String_Primitives
     import System_Primitives
 
     extension Path.Canonical {
@@ -250,7 +251,7 @@
             let created = path.withUnsafeBufferPointer { pathPointer in
                 CreateDirectoryW(pathPointer.baseAddress, nil)
             }
-            guard created != 0 else {
+            guard created else {
                 Issue.record("Could not create extended-path test directory: \(GetLastError())")
                 return
             }
