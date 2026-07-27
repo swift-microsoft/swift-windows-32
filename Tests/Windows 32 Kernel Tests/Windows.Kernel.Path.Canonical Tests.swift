@@ -88,7 +88,7 @@
                 return try Path.Canonical.resolve(unsafePath: wpath)
             }
 
-            let resultString = String(decoding: result, as: UTF16.self)
+            let resultString = Swift.String(decoding: result, as: UTF16.self)
             #expect(resultString.uppercased().hasPrefix("C:\\WINDOWS"))
         }
 
