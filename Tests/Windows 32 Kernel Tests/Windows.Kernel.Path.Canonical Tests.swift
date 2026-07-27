@@ -23,7 +23,7 @@
     extension Path.Canonical {
         enum Test {
             @Suite struct Unit {}
-            @Suite struct EdgeCase {}
+            @Suite struct `Edge Case` {}
             @Suite struct Integration {}
             @Suite(.serialized) struct Performance {}
         }
@@ -97,7 +97,7 @@
             let result = try path.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
                     pathPointer.baseAddress!,
-                    count: pathPointer.count - 1
+                    count: pathPointer.indices.dropLast().count
                 )
                 return try Path.Canonical.canonicalize(borrowed)
             }
@@ -138,7 +138,7 @@
             let result = try path.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
                     pathPointer.baseAddress!,
-                    count: pathPointer.count - 1
+                    count: pathPointer.indices.dropLast().count
                 )
                 return try Path.Canonical.canonicalize(borrowed)
             }
@@ -200,14 +200,14 @@
             let targetCanonical = try target.withUnsafeBufferPointer { targetPointer in
                 let borrowed = unsafe Path.Borrowed(
                     targetPointer.baseAddress!,
-                    count: targetPointer.count - 1
+                    count: targetPointer.indices.dropLast().count
                 )
                 return try Path.Canonical.canonicalize(borrowed)
             }
             let linkCanonical = try link.withUnsafeBufferPointer { linkPointer in
                 let borrowed = unsafe Path.Borrowed(
                     linkPointer.baseAddress!,
-                    count: linkPointer.count - 1
+                    count: linkPointer.indices.dropLast().count
                 )
                 return try Path.Canonical.canonicalize(borrowed)
             }
@@ -221,16 +221,16 @@
             let current = try currentPath.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
                     pathPointer.baseAddress!,
-                    count: pathPointer.count - 1
+                    count: pathPointer.indices.dropLast().count
                 )
                 return try Path.Canonical.canonicalize(borrowed)
             }
 
             let token = "\(GetCurrentProcessId())-\(GetTickCount64())"
+            let suffix = "-\(token)"
             let component =
-                Swift.String(repeating: "x", count: 240 - token.count - 1)
-                + "-"
-                + token
+                Swift.String(repeating: "x", count: 240 - suffix.count)
+                + suffix
             let extendedPath = Swift.String(current.view) + "\\" + component
             var path = Array(extendedPath.utf16) + [0]
 
@@ -250,7 +250,7 @@
             let result = try path.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
                     pathPointer.baseAddress!,
-                    count: pathPointer.count - 1
+                    count: pathPointer.indices.dropLast().count
                 )
                 return try Path.Canonical.canonicalize(borrowed)
             }
@@ -273,24 +273,21 @@
             }
             #expect(!lexical.isEmpty)
 
-            do {
+            #expect(throws: Path.Canonical.Error.path(.notFound)) {
                 _ = try path.withUnsafeBufferPointer { pathPointer in
                     let borrowed = unsafe Path.Borrowed(
                         pathPointer.baseAddress!,
-                        count: pathPointer.count - 1
+                        count: pathPointer.indices.dropLast().count
                     )
                     return try Path.Canonical.canonicalize(borrowed)
                 }
-                Issue.record("Expected physical canonicalization to reject a missing path")
-            } catch let error as Path.Canonical.Error {
-                #expect(error == .path(.notFound))
             }
         }
     }
 
     // MARK: - Edge Cases
 
-    extension Path.Canonical.Test.EdgeCase {
+    extension Path.Canonical.Test.`Edge Case` {
         @Test
         func `physical canonicalization reports a symbolic-link loop`() throws {
             let token = "\(GetCurrentProcessId())-\(GetTickCount64())"
@@ -337,17 +334,14 @@
                 }
             }
 
-            do {
+            #expect(throws: Path.Canonical.Error.path(.loop)) {
                 _ = try first.withUnsafeBufferPointer { firstPointer in
                     let borrowed = unsafe Path.Borrowed(
                         firstPointer.baseAddress!,
-                        count: firstPointer.count - 1
+                        count: firstPointer.indices.dropLast().count
                     )
                     return try Path.Canonical.canonicalize(borrowed)
                 }
-                Issue.record("Expected physical canonicalization to reject a link loop")
-            } catch let error as Path.Canonical.Error {
-                #expect(error == .path(.loop))
             }
         }
 

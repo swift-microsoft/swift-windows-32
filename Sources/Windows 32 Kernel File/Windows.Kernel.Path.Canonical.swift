@@ -26,12 +26,12 @@
         /// - Parameters:
         ///   - path: The path to resolve.
         ///   - buffer: Buffer to receive the canonical path (UTF-16).
-        /// - Returns: The number of characters written (excluding null terminator).
+        /// - Returns: The count of UTF-16 code units written (excluding the null terminator).
         /// - Throws: `Path.Canonical.Error` on failure.
         public static func resolve(
             path: borrowing Path,
             into buffer: UnsafeMutableBufferPointer<UInt16>
-        ) throws(Path.Canonical.Error) -> Int {
+        ) throws(Path.Canonical.Error) -> Cardinal {
             try unsafe path.view.withUnsafePointer { ptr throws(Path.Canonical.Error) in
                 try resolve(unsafePath: ptr, into: buffer)
             }
@@ -46,12 +46,12 @@
         /// - Parameters:
         ///   - unsafePath: The path as a null-terminated wide string.
         ///   - buffer: Buffer to receive the canonical path (UTF-16).
-        /// - Returns: The number of characters written (excluding null terminator).
+        /// - Returns: The count of UTF-16 code units written (excluding the null terminator).
         /// - Throws: `Path.Canonical.Error` on failure.
         public static func resolve(
             unsafePath: UnsafePointer<Path.Char>,
             into buffer: UnsafeMutableBufferPointer<UInt16>
-        ) throws(Path.Canonical.Error) -> Int {
+        ) throws(Path.Canonical.Error) -> Cardinal {
             let wpath = UnsafeRawPointer(unsafePath).assumingMemoryBound(to: WCHAR.self)
             let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(to: WCHAR.self)
 
@@ -66,7 +66,7 @@
                 throw .platform(Error_Primitives.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER))))
             }
 
-            return Int(result)
+            return Cardinal(result)
         }
 
         /// Resolves a path to its lexically normalized absolute form, returning
