@@ -94,15 +94,15 @@
         @Test
         func `physical canonicalization of existing directory preserves extended prefix`() throws {
             var path = Array(".".utf16) + [0]
-            let result = try path.withUnsafeBufferPointer { pathPointer in
+            let resultString = try path.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
                     pathPointer.baseAddress!,
                     count: pathPointer.indices.dropLast().count
                 )
-                return try Path.Canonical.canonicalize(borrowed)
+                let result = try Path.Canonical.canonicalize(borrowed)
+                return Swift.String(result.view)
             }
 
-            let resultString = Swift.String(result.view)
             #expect(resultString.hasPrefix("\\\\?\\"))
             #expect(!resultString.hasSuffix("\\."))
         }
@@ -135,15 +135,15 @@
                 }
             }
 
-            let result = try path.withUnsafeBufferPointer { pathPointer in
+            let resultString = try path.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
                     pathPointer.baseAddress!,
                     count: pathPointer.indices.dropLast().count
                 )
-                return try Path.Canonical.canonicalize(borrowed)
+                let result = try Path.Canonical.canonicalize(borrowed)
+                return Swift.String(result.view)
             }
 
-            let resultString = Swift.String(result.view)
             #expect(resultString.hasPrefix("\\\\?\\"))
             #expect(resultString.hasSuffix("\\\(name)"))
         }
@@ -202,17 +202,19 @@
                     targetPointer.baseAddress!,
                     count: targetPointer.indices.dropLast().count
                 )
-                return try Path.Canonical.canonicalize(borrowed)
+                let result = try Path.Canonical.canonicalize(borrowed)
+                return Swift.String(result.view)
             }
             let linkCanonical = try link.withUnsafeBufferPointer { linkPointer in
                 let borrowed = unsafe Path.Borrowed(
                     linkPointer.baseAddress!,
                     count: linkPointer.indices.dropLast().count
                 )
-                return try Path.Canonical.canonicalize(borrowed)
+                let result = try Path.Canonical.canonicalize(borrowed)
+                return Swift.String(result.view)
             }
 
-            #expect(Swift.String(linkCanonical.view) == Swift.String(targetCanonical.view))
+            #expect(linkCanonical == targetCanonical)
         }
 
         @Test
@@ -223,7 +225,8 @@
                     pathPointer.baseAddress!,
                     count: pathPointer.indices.dropLast().count
                 )
-                return try Path.Canonical.canonicalize(borrowed)
+                let result = try Path.Canonical.canonicalize(borrowed)
+                return Swift.String(result.view)
             }
 
             let token = "\(GetCurrentProcessId())-\(GetTickCount64())"
@@ -231,7 +234,7 @@
             let component =
                 Swift.String(repeating: "x", count: 240 - suffix.count)
                 + suffix
-            let extendedPath = Swift.String(current.view) + "\\" + component
+            let extendedPath = current + "\\" + component
             var path = Array(extendedPath.utf16) + [0]
 
             let created = path.withUnsafeBufferPointer { pathPointer in
@@ -247,14 +250,14 @@
                 }
             }
 
-            let result = try path.withUnsafeBufferPointer { pathPointer in
+            let resultString = try path.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
                     pathPointer.baseAddress!,
                     count: pathPointer.indices.dropLast().count
                 )
-                return try Path.Canonical.canonicalize(borrowed)
+                let result = try Path.Canonical.canonicalize(borrowed)
+                return Swift.String(result.view)
             }
-            let resultString = Swift.String(result.view)
 
             #expect(resultString.utf16.count > Int(MAX_PATH))
             #expect(resultString == extendedPath)
@@ -279,7 +282,7 @@
                         pathPointer.baseAddress!,
                         count: pathPointer.indices.dropLast().count
                     )
-                    return try Path.Canonical.canonicalize(borrowed)
+                    _ = try Path.Canonical.canonicalize(borrowed)
                 }
             }
         }
@@ -340,7 +343,7 @@
                         firstPointer.baseAddress!,
                         count: firstPointer.indices.dropLast().count
                     )
-                    return try Path.Canonical.canonicalize(borrowed)
+                    _ = try Path.Canonical.canonicalize(borrowed)
                 }
             }
         }

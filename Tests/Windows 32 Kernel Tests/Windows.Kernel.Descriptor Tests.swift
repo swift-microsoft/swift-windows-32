@@ -44,7 +44,8 @@
             // Compiles only post-fix: pre-fix, this factory was named
             // `borrowing(handle:)`, not `owning(handle:)`.
             let descriptor = Windows.`32`.Kernel.Descriptor.owning(handle: INVALID_HANDLE_VALUE)
-            #expect(!descriptor.isValid)
+            let isValid = descriptor.isValid
+            #expect(!isValid)
         }
 
         @Test

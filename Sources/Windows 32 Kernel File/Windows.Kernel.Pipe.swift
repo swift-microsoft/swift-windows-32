@@ -50,7 +50,7 @@ where
 
     /// Creates pipe descriptors from read and write ends.
     @inlinable
-    internal init(
+    package init(
         read: consuming Windows.`32`.Kernel.Descriptor,
         write: consuming Windows.`32`.Kernel.Descriptor
     ) {

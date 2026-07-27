@@ -148,7 +148,7 @@
 
     /// Creates a WORD value from two bytes.
     @inlinable
-    internal func MAKEWORD(_ low: UInt8, _ high: UInt8) -> WORD {
+    package func MAKEWORD(_ low: UInt8, _ high: UInt8) -> WORD {
         WORD(low) | (WORD(high) << 8)
     }
 

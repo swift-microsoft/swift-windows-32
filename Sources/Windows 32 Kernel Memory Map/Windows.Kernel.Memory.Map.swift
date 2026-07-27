@@ -59,7 +59,8 @@
             let isPrivate = flags.isPrivate
 
             // Create file mapping object
-            let fileMappingProtect = isPrivate
+            let fileMappingProtect =
+                isPrivate
                 ? protection.windowsFileMapProtectCopyOnWrite
                 : protection.windowsFileMapProtect
             let mappingHandle = CreateFileMappingW(
@@ -76,7 +77,8 @@
             }
 
             // Map view of file
-            let desiredAccess = isPrivate
+            let desiredAccess =
+                isPrivate
                 ? protection.windowsMapViewAccessCopyOnWrite
                 : protection.windowsMapViewAccess
             let baseAddress = MapViewOfFile(
