@@ -54,8 +54,11 @@
             let originalHandle = invalid.handle
 
             let descriptor = Windows.`32`.Kernel.Descriptor.owning(handle: originalHandle)
-            #expect(descriptor.handle == originalHandle)
-            #expect(descriptor._rawValue == invalid._rawValue)
+            let actualHandle = descriptor.handle
+            let actualRawValue = descriptor._rawValue
+            let expectedRawValue = invalid._rawValue
+            #expect(actualHandle == originalHandle)
+            #expect(actualRawValue == expectedRawValue)
         }
     }
 

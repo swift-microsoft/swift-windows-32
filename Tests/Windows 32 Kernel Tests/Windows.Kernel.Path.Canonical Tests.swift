@@ -100,7 +100,9 @@
                     count: pathPointer.indices.dropLast().count
                 )
                 let result = try Path.Canonical.canonicalize(borrowed)
-                return Swift.String(result.view)
+                return unsafe result.withUnsafePointer {
+                    Swift.String(decodingCString: $0, as: UTF16.self)
+                }
             }
 
             #expect(resultString.hasPrefix("\\\\?\\"))
@@ -141,7 +143,9 @@
                     count: pathPointer.indices.dropLast().count
                 )
                 let result = try Path.Canonical.canonicalize(borrowed)
-                return Swift.String(result.view)
+                return unsafe result.withUnsafePointer {
+                    Swift.String(decodingCString: $0, as: UTF16.self)
+                }
             }
 
             #expect(resultString.hasPrefix("\\\\?\\"))
@@ -203,7 +207,9 @@
                     count: targetPointer.indices.dropLast().count
                 )
                 let result = try Path.Canonical.canonicalize(borrowed)
-                return Swift.String(result.view)
+                return unsafe result.withUnsafePointer {
+                    Swift.String(decodingCString: $0, as: UTF16.self)
+                }
             }
             let linkCanonical = try link.withUnsafeBufferPointer { linkPointer in
                 let borrowed = unsafe Path.Borrowed(
@@ -211,7 +217,9 @@
                     count: linkPointer.indices.dropLast().count
                 )
                 let result = try Path.Canonical.canonicalize(borrowed)
-                return Swift.String(result.view)
+                return unsafe result.withUnsafePointer {
+                    Swift.String(decodingCString: $0, as: UTF16.self)
+                }
             }
 
             #expect(linkCanonical == targetCanonical)
@@ -226,7 +234,9 @@
                     count: pathPointer.indices.dropLast().count
                 )
                 let result = try Path.Canonical.canonicalize(borrowed)
-                return Swift.String(result.view)
+                return unsafe result.withUnsafePointer {
+                    Swift.String(decodingCString: $0, as: UTF16.self)
+                }
             }
 
             let token = "\(GetCurrentProcessId())-\(GetTickCount64())"
@@ -256,7 +266,9 @@
                     count: pathPointer.indices.dropLast().count
                 )
                 let result = try Path.Canonical.canonicalize(borrowed)
-                return Swift.String(result.view)
+                return unsafe result.withUnsafePointer {
+                    Swift.String(decodingCString: $0, as: UTF16.self)
+                }
             }
 
             #expect(resultString.utf16.count > Int(MAX_PATH))
