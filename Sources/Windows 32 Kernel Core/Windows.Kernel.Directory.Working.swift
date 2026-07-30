@@ -1,8 +1,8 @@
 // ===----------------------------------------------------------------------===//
 //
-// This source file is part of the swift-windows-standard open source project
+// This source file is part of the swift-windows-32 open source project
 //
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-standard project authors
+// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
 // Licensed under Apache License v2.0
 //
 // See LICENSE for license information
@@ -16,6 +16,6 @@ extension Windows.`32`.Kernel.Directory {
     ///
     /// Syscall implementations are in platform-specific packages:
     /// - POSIX: `swift-iso-9945` (`ISO_9945.Kernel.Directory.Working`)
-    /// - Windows: `swift-windows-standard` (`Windows.32.Kernel.Directory.Working`)
+    /// - Windows: `swift-windows-32` (`Windows.32.Kernel.Directory.Working`)
     public enum Working: Sendable {}
 }
