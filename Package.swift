@@ -22,6 +22,10 @@ let package = Package(
             targets: ["Windows 32 Kernel Clock"]
         ),
         .library(
+            name: "Windows 32 Kernel Lock",
+            targets: ["Windows 32 Kernel Lock"]
+        ),
+        .library(
             name: "Windows 32 Kernel Console",
             targets: ["Windows 32 Kernel Console"]
         ),
@@ -156,6 +160,24 @@ let package = Package(
             ]
         ),
 
+        // MARK: - Kernel Lock
+        //
+        // Separate from "Windows 32 Kernel Core" per [PLAT-ARCH-008k] parity
+        // with ISO_9945's "ISO 9945 Kernel Lock" target: Token's deadline
+        // acquisition polls `Clock.Continuous.now`, whose Windows
+        // implementation (`QueryPerformanceCounter`) lives in
+        // "Windows 32 Kernel Clock". Core cannot depend on Clock (Clock
+        // already depends on Core), so Lock's deadline-polling surface
+        // needs its own target depending on both.
+        .target(
+            name: "Windows 32 Kernel Lock",
+            dependencies: [
+                "Windows 32 Kernel Core",
+                "Windows 32 Kernel Clock",
+                .product(name: "Clock Primitives", package: "swift-clock-primitives"),
+            ]
+        ),
+
         // MARK: - Kernel Console
         .target(
             name: "Windows 32 Kernel Console",
@@ -280,6 +302,7 @@ let package = Package(
             dependencies: [
                 "Windows 32 Kernel Core",
                 "Windows 32 Kernel Clock",
+                "Windows 32 Kernel Lock",
                 "Windows 32 Kernel Console",
                 "Windows 32 Kernel Directory",
                 "Windows 32 Kernel Environment",
