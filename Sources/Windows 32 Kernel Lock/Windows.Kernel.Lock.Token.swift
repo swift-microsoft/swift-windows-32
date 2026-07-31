@@ -13,6 +13,7 @@ public import Clock_Primitives
 
 #if os(Windows)
     internal import WinSDK
+    internal import Windows_32_Kernel_Clock
 #endif
 
 // MARK: - Lock Token

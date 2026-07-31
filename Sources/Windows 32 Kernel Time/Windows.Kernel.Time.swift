@@ -11,6 +11,7 @@
 
 #if os(Windows)
     public import WinSDK
+    internal import Windows_32_Kernel_Clock
 
     // MARK: - Windows Time Operations
 
