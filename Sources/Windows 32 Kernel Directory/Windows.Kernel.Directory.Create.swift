@@ -79,14 +79,18 @@
             switch win32Code {
             case Error_Primitives.Error.Code.File.pathNotFound:
                 return .notFound
+
             case Error_Primitives.Error.Code.Access.denied:
                 return .permission
+
             case Error_Primitives.Error.Code.File.exists,
                 Error_Primitives.Error.Code.File.alreadyExists:
                 return .exists
+
             case Error_Primitives.Error.Code.Storage.diskFull,
                 Error_Primitives.Error.Code.Storage.handleDiskFull:
                 return .noSpace
+
             default:
                 return .platform(Error_Primitives.Error(code: .win32(win32Code)))
             }

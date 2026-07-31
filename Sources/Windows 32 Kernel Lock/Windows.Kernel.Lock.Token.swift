@@ -185,6 +185,7 @@ extension Windows.`32`.Kernel.Lock.Token {
                 switch error {
                 case .contention:
                     break  // Lock held, continue polling
+
                 default:
                     throw error
                 }

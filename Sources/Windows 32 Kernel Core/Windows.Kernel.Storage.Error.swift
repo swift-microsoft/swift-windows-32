@@ -30,6 +30,7 @@ extension Windows.`32`.Kernel.Storage.Error: CustomStringConvertible {
         switch self {
         case .exhausted:
             return "no space left on device"
+
         case .quota:
             return "disk quota exceeded"
         }

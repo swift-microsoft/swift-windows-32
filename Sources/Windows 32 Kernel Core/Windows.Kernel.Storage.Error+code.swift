@@ -25,6 +25,7 @@
             switch code {
             case .Windows.ERROR_DISK_FULL:
                 self = .exhausted
+
             default:
                 return nil
             }

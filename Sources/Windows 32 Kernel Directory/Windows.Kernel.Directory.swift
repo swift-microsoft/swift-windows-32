@@ -208,8 +208,10 @@
             case Error_Primitives.Error.Code.File.notFound,
                 Error_Primitives.Error.Code.File.pathNotFound:
                 self = .notFound
+
             case Error_Primitives.Error.Code.Access.denied:
                 self = .permission
+
             case Error_Primitives.Error.Code.Directory.invalidName:
                 // ERROR_DIRECTORY (267): "The directory name is invalid" —
                 // the path exists but is not a directory (ENOTDIR analog).
@@ -217,6 +219,7 @@
                 // means a REMOVE failed on a non-empty directory, which is
                 // not this enum's vocabulary.
                 self = .notDirectory
+
             default:
                 self = .platform(Error_Primitives.Error(code: .win32(error)))
             }

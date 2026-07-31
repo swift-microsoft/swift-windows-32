@@ -70,8 +70,10 @@ public import System_Primitives
             switch nodes.count {
             case 0:
                 return .unavailable
+
             case 1:
                 return .uniformAccess
+
             default:
                 return .nonUniform(nodes: nodes)
             }

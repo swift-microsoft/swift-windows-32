@@ -110,6 +110,7 @@ extension Windows.`32`.Kernel.Lock {
             switch range {
             case .file:
                 return (0, 0, 0xFFFF_FFFF, 0xFFFF_FFFF)
+
             case .bytes(let start, let end):
                 let offset = UInt64(bitPattern: start.underlying)
                 let length = UInt64(bitPattern: (end - start).underlying)

@@ -101,18 +101,25 @@
             switch self {
             case .create(let code):
                 return "CreateIoCompletionPort failed (\(code))"
+
             case .associate(let code):
                 return "associate failed (\(code))"
+
             case .dequeue(let code):
                 return "GetQueuedCompletionStatus failed (\(code))"
+
             case .post(let code):
                 return "PostQueuedCompletionStatus failed (\(code))"
+
             case .read(let code):
                 return "ReadFile failed (\(code))"
+
             case .write(let code):
                 return "WriteFile failed (\(code))"
+
             case .result(let code):
                 return "GetOverlappedResult failed (\(code))"
+
             case .timeout:
                 return "operation timed out"
             }

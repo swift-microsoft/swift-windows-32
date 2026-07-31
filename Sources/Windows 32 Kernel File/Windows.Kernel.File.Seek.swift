@@ -117,8 +117,10 @@
             switch self {
             case .start:
                 return DWORD(FILE_BEGIN)
+
             case .current:
                 return DWORD(FILE_CURRENT)
+
             case .end:
                 return DWORD(FILE_END)
             }
@@ -145,10 +147,13 @@
             switch win32Code {
             case Error_Primitives.Error.Code.Handle.invalid:
                 return .invalidDescriptor
+
             case Error_Primitives.Error.Code.General.invalidParameter:
                 return .negativeOffset
+
             case Error_Primitives.Error.Code.IO.brokenPipe:
                 return .notSeekable
+
             default:
                 return .platform(code: code)
             }

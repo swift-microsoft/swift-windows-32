@@ -33,6 +33,7 @@
             case .Windows.ERROR_NOT_ENOUGH_MEMORY,
                 .win32(14):  // ERROR_OUTOFMEMORY (no named constant yet)
                 self = .exhausted
+
             default:
                 return nil
             }

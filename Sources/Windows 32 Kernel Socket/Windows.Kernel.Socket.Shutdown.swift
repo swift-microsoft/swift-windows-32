@@ -63,8 +63,10 @@
             switch how {
             case .read:
                 sdHow = SD_RECEIVE
+
             case .write:
                 sdHow = SD_SEND
+
             case .both:
                 sdHow = SD_BOTH
             }

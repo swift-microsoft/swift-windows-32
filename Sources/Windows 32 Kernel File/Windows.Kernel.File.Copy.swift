@@ -234,11 +234,14 @@
             case _ where code == .Windows.ERROR_FILE_NOT_FOUND,
                 _ where code == .Windows.ERROR_PATH_NOT_FOUND:
                 self = .sourceNotFound
+
             case _ where code == .Windows.ERROR_FILE_EXISTS,
                 _ where code == .Windows.ERROR_ALREADY_EXISTS:
                 self = .destinationExists
+
             case _ where code == .Windows.ERROR_ACCESS_DENIED:
                 self = .permissionDenied
+
             default:
                 self = .operation("CopyFileW failed: \(code)")
             }

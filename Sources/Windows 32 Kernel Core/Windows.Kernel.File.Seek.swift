@@ -50,12 +50,16 @@ extension Windows.`32`.Kernel.File.Seek.Error: CustomStringConvertible {
         switch self {
         case .invalidDescriptor:
             return "Invalid file descriptor"
+
         case .negativeOffset:
             return "Resulting offset would be negative"
+
         case .notSeekable:
             return "File descriptor is not seekable (pipe, socket, or FIFO)"
+
         case .overflow:
             return "Resulting offset would overflow"
+
         case .platform(let code):
             return "Seek failed: \(code)"
         }

@@ -25,6 +25,7 @@ extension Windows.`32`.Kernel.Descriptor.Validity.Error.Limit: CustomStringConve
         switch self {
         case .process:
             return "too many open handles in process"
+
         case .system:
             return "too many open handles in system"
         }

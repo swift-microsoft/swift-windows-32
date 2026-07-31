@@ -23,6 +23,7 @@
             switch syscall {
             case .notSupported:
                 self = .notSupported
+
             case .platform(let code, let operation):
                 self.init(code: code, operation: operation)
             }
@@ -33,13 +34,17 @@
             switch code {
             case _ where code == .Windows.ERROR_FILE_NOT_FOUND:
                 self = .sourceNotFound
+
             case _ where code == .Windows.ERROR_FILE_EXISTS,
                 _ where code == .Windows.ERROR_ALREADY_EXISTS:
                 self = .destinationExists
+
             case _ where code == .Windows.ERROR_ACCESS_DENIED:
                 self = .permissionDenied
+
             case _ where code == .Windows.ERROR_NOT_SAME_DEVICE:
                 self = .crossDevice
+
             default:
                 self = .platform(code: code, operation: operation)
             }

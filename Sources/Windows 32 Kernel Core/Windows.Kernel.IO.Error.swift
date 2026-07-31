@@ -51,16 +51,22 @@ extension Windows.`32`.Kernel.IO.Error: CustomStringConvertible {
         switch self {
         case .broken:
             return "broken pipe"
+
         case .reset:
             return "connection reset"
+
         case .hardware:
             return "I/O error"
+
         case .illegalSeek:
             return "illegal seek"
+
         case .deviceUnsupported:
             return "operation not supported by device"
+
         case .deviceUnavailable:
             return "device unavailable"
+
         case .unsupported:
             return "operation not supported"
         }

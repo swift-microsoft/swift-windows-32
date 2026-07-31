@@ -25,8 +25,10 @@
             switch code {
             case .Windows.ERROR_INVALID_HANDLE:
                 self = .invalid
+
             case .Windows.ERROR_TOO_MANY_OPEN_FILES:
                 self = .limit(.process)
+
             default:
                 return nil
             }

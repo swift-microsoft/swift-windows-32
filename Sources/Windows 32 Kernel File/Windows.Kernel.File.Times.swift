@@ -45,9 +45,9 @@
                     withUnsafePointer(to: &write) { writePtr in
                         SetFileTime(
                             UnsafeMutableRawPointer(bitPattern: handle)!,
-                            creationTime != nil ? creationPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } ?? nil : nil,
-                            lastAccessTime != nil ? accessPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } ?? nil : nil,
-                            lastWriteTime != nil ? writePtr.pointee.map { withUnsafePointer(to: $0) { $0 } } ?? nil : nil
+                            creationTime != nil ? creationPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil,
+                            lastAccessTime != nil ? accessPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil,
+                            lastWriteTime != nil ? writePtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil
                         )
                     }
                 }

@@ -23,8 +23,10 @@
             switch code {
             case .Windows.ERROR_ACCESS_DENIED:
                 self = .denied
+
             case .Windows.ERROR_WRITE_PROTECT:
                 self = .readOnlyFilesystem
+
             default:
                 return nil
             }

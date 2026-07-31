@@ -25,6 +25,7 @@ extension Windows.`32`.Kernel.Descriptor.Validity.Error: CustomStringConvertible
         switch self {
         case .invalid:
             return "invalid handle"
+
         case .limit(let limit):
             return limit.description
         }

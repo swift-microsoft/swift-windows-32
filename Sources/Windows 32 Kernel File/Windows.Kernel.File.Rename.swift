@@ -67,6 +67,7 @@
                 Error_Primitives.Error.Code.Access.sharingViolation,
                 Error_Primitives.Error.Code.Access.lockViolation:
                 return true
+
             default:
                 return false
             }
@@ -79,6 +80,7 @@
             case Error_Primitives.Error.Code.File.exists,
                 Error_Primitives.Error.Code.File.alreadyExists:
                 return true
+
             default:
                 return false
             }

@@ -111,14 +111,19 @@
                 switch lastError {
                 case DWORD(ERROR_ACCESS_DENIED), DWORD(ERROR_SHARING_VIOLATION):
                     self = .accessDenied
+
                 case DWORD(ERROR_FILE_NOT_FOUND), DWORD(ERROR_PATH_NOT_FOUND), DWORD(ERROR_INVALID_NAME):
                     self = .notFound
+
                 case DWORD(ERROR_DIRECTORY):
                     self = .notDirectory
+
                 case DWORD(ERROR_TOO_MANY_OPEN_FILES):
                     self = .tooManyOpenFiles
+
                 case DWORD(ERROR_FILENAME_EXCED_RANGE):
                     self = .nameTooLong
+
                 default:
                     self = .io
                 }

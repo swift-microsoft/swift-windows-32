@@ -29,6 +29,7 @@
             switch code {
             case .Windows.ERROR_LOCK_VIOLATION:
                 self = .contention
+
             default:
                 return nil
             }
