@@ -289,10 +289,19 @@ let package = Package(
         ),
 
         // MARK: - Kernel Time
+        //
+        // Depends on "Windows 32 Kernel Clock" in addition to Core: this
+        // target's Windows.Kernel.Time.swift uses Clock.Continuous.now,
+        // whose Windows implementation (QueryPerformanceCounter) lives in
+        // Kernel Clock. Core alone cannot see it (Core cannot depend on
+        // Clock — Clock already depends on Core), same defect class fixed
+        // for "Windows 32 Kernel Lock" — see Package.swift's Kernel Lock
+        // target comment.
         .target(
             name: "Windows 32 Kernel Time",
             dependencies: [
                 "Windows 32 Kernel Core",
+                "Windows 32 Kernel Clock",
             ]
         ),
 
