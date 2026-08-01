@@ -100,7 +100,14 @@
             // Note: This is a simplification. A more robust implementation
             // would use VirtualAlloc with MEM_RESERVE, then MEM_COMMIT
             // at the aligned address.
-            try? free(addr: baseAddr)
+            do throws(Memory.Map.Error) {
+                try free(addr: baseAddr)
+            } catch {
+                // We are already about to throw `.invalid(.alignment)`
+                // below; a failure to free the misaligned allocation is
+                // secondary to that and is discarded explicitly, with
+                // the typed error kept local.
+            }
             throw .invalid(.alignment)
         }
 

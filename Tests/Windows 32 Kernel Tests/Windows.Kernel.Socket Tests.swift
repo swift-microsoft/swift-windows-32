@@ -364,32 +364,32 @@
 
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
-        func `SendFlags.none exists`() {
-            let flags = Windows.`32`.Kernel.Socket.SendFlags.none
+        func `SendOptions.none exists`() {
+            let flags = Windows.`32`.Kernel.Socket.SendOptions.none
             #expect(flags.rawValue == 0)
         }
 
         @Test
-        func `SendFlags.outOfBand exists`() {
-            let flags = Windows.`32`.Kernel.Socket.SendFlags.outOfBand
+        func `SendOptions.outOfBand exists`() {
+            let flags = Windows.`32`.Kernel.Socket.SendOptions.outOfBand
             #expect(flags.rawValue == MSG_OOB)
         }
 
         @Test
-        func `ReceiveFlags.none exists`() {
-            let flags = Windows.`32`.Kernel.Socket.ReceiveFlags.none
+        func `ReceiveOptions.none exists`() {
+            let flags = Windows.`32`.Kernel.Socket.ReceiveOptions.none
             #expect(flags.rawValue == 0)
         }
 
         @Test
-        func `ReceiveFlags.peek exists`() {
-            let flags = Windows.`32`.Kernel.Socket.ReceiveFlags.peek
+        func `ReceiveOptions.peek exists`() {
+            let flags = Windows.`32`.Kernel.Socket.ReceiveOptions.peek
             #expect(flags.rawValue == MSG_PEEK)
         }
 
         @Test
-        func `ReceiveFlags.waitAll exists`() {
-            let flags = Windows.`32`.Kernel.Socket.ReceiveFlags.waitAll
+        func `ReceiveOptions.waitAll exists`() {
+            let flags = Windows.`32`.Kernel.Socket.ReceiveOptions.waitAll
             #expect(flags.rawValue == MSG_WAITALL)
         }
     }

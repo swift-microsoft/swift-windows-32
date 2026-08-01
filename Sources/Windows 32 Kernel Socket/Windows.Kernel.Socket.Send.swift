@@ -17,7 +17,7 @@
 
     extension Windows.`32`.Kernel.Socket {
         /// Send flags.
-        public struct SendFlags: OptionSet, Sendable {
+        public struct SendOptions: OptionSet, Sendable {
             public let rawValue: Int32
 
             public init(rawValue: Int32) {
@@ -26,7 +26,7 @@
         }
     }
 
-    extension Windows.`32`.Kernel.Socket.SendFlags {
+    extension Windows.`32`.Kernel.Socket.SendOptions {
         /// Send out-of-band data.
         public static let outOfBand = Self(rawValue: MSG_OOB)
 
@@ -56,7 +56,7 @@
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeRawPointer,
             length: Int,
-            flags: SendFlags = .none
+            flags: SendOptions = .none
         ) throws(Error) -> Int {
             try send(socket._rawValue, buffer: buffer, length: length, flags: flags)
         }
@@ -79,7 +79,7 @@
             _ socket: UInt,
             buffer: UnsafeRawPointer,
             length: Int,
-            flags: SendFlags = .none
+            flags: SendOptions = .none
         ) throws(Error) -> Int {
             let result = WinSDK.send(
                 SOCKET(socket),
@@ -104,7 +104,7 @@
         public static func send(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeBufferPointer<UInt8>,
-            flags: SendFlags = .none
+            flags: SendOptions = .none
         ) throws(Error) -> Int {
             guard let baseAddress = buffer.baseAddress else {
                 return 0
@@ -130,7 +130,7 @@
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeRawPointer,
             length: Int,
-            flags: SendFlags = .none,
+            flags: SendOptions = .none,
             destAddr: UnsafePointer<sockaddr>,
             destAddrLength: Int32
         ) throws(Error) -> Int {
@@ -164,7 +164,7 @@
             _ socket: UInt,
             buffer: UnsafeRawPointer,
             length: Int,
-            flags: SendFlags = .none,
+            flags: SendOptions = .none,
             destAddr: UnsafePointer<sockaddr>,
             destAddrLength: Int32
         ) throws(Error) -> Int {

@@ -331,7 +331,13 @@
         ///
         /// - Parameter port: The port handle to close (consumed).
         public static func close(_ port: consuming Windows.`32`.Kernel.Descriptor) {
-            try? Windows.`32`.Kernel.Close.close(port)
+            do throws(Windows.`32`.Kernel.Close.Error) {
+                try Windows.`32`.Kernel.Close.close(port)
+            } catch {
+                // Fire-and-forget per the doc comment above: errors are
+                // ignored, but explicitly and with the typed error kept
+                // local rather than silently erased by `try?`.
+            }
         }
 
         /// Initiates an overlapped read operation.

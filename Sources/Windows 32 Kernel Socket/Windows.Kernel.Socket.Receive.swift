@@ -17,7 +17,7 @@
 
     extension Windows.`32`.Kernel.Socket {
         /// Receive flags.
-        public struct ReceiveFlags: OptionSet, Sendable {
+        public struct ReceiveOptions: OptionSet, Sendable {
             public let rawValue: Int32
 
             public init(rawValue: Int32) {
@@ -26,7 +26,7 @@
         }
     }
 
-    extension Windows.`32`.Kernel.Socket.ReceiveFlags {
+    extension Windows.`32`.Kernel.Socket.ReceiveOptions {
         /// Peek at incoming data without removing it from the queue.
         public static let peek = Self(rawValue: MSG_PEEK)
 
@@ -60,7 +60,7 @@
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableRawPointer,
             length: Int,
-            flags: ReceiveFlags = .none
+            flags: ReceiveOptions = .none
         ) throws(Error) -> Int {
             try receive(socket._rawValue, buffer: buffer, length: length, flags: flags)
         }
@@ -83,7 +83,7 @@
             _ socket: UInt,
             buffer: UnsafeMutableRawPointer,
             length: Int,
-            flags: ReceiveFlags = .none
+            flags: ReceiveOptions = .none
         ) throws(Error) -> Int {
             let result = recv(
                 SOCKET(socket),
@@ -108,7 +108,7 @@
         public static func receive(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableBufferPointer<UInt8>,
-            flags: ReceiveFlags = .none
+            flags: ReceiveOptions = .none
         ) throws(Error) -> Int {
             guard let baseAddress = buffer.baseAddress else {
                 return 0
@@ -135,7 +135,7 @@
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableRawPointer,
             length: Int,
-            flags: ReceiveFlags = .none,
+            flags: ReceiveOptions = .none,
             srcAddr: UnsafeMutablePointer<sockaddr>,
             srcAddrLength: UnsafeMutablePointer<Int32>
         ) throws(Error) -> Int {
@@ -170,7 +170,7 @@
             _ socket: UInt,
             buffer: UnsafeMutableRawPointer,
             length: Int,
-            flags: ReceiveFlags = .none,
+            flags: ReceiveOptions = .none,
             srcAddr: UnsafeMutablePointer<sockaddr>,
             srcAddrLength: UnsafeMutablePointer<Int32>
         ) throws(Error) -> Int {

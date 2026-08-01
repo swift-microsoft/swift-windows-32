@@ -33,7 +33,13 @@
         ///
         /// ```swift
         /// let handle = try Windows.Loader.Library.open(path: "kernel32.dll")
-        /// defer { try? Windows.Loader.Library.close(handle) }
+        /// defer {
+        ///     do throws(Loader.Error) {
+        ///         try Windows.Loader.Library.close(handle)
+        ///     } catch {
+        ///         // Handle the close failure explicitly.
+        ///     }
+        /// }
         /// ```
         @unsafe
         public static func open(path: String) throws(Loader.Error) -> Loader.Library.Handle {

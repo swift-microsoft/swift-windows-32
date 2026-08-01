@@ -95,7 +95,14 @@ extension Windows.`32`.Kernel.Lock {
             // release(), unlock via the owned descriptor. The descriptor's
             // own deinit runs immediately after and closes the handle.
             guard !isReleased else { return }
-            try? Windows.`32`.Kernel.Lock.unlock(descriptor, range: range)
+            do throws(Windows.`32`.Kernel.Lock.Error) {
+                try Windows.`32`.Kernel.Lock.unlock(descriptor, range: range)
+            } catch {
+                // Backstop release in deinit: the failure cannot be
+                // propagated (deinit is non-throwing) and there is no
+                // caller left to retry, so it is intentionally discarded
+                // here, explicitly, with the typed error kept local.
+            }
         }
     }
 }
