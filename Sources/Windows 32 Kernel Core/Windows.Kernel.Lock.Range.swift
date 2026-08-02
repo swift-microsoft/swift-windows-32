@@ -9,6 +9,8 @@
 //
 // ===----------------------------------------------------------------------===//
 
+public import Memory_Allocation_Primitives
+
 extension Windows.`32`.Kernel.Lock {
     /// The range of bytes to lock within a file.
     ///
@@ -43,6 +45,33 @@ extension Windows.`32`.Kernel.Lock {
         /// non-overlapping ranges don't conflict, enabling concurrent access
         /// to different parts of a file.
         case bytes(start: Windows.`32`.Kernel.File.Offset, end: Windows.`32`.Kernel.File.Offset)
+
+        /// Creates a lock range suitable for a memory mapping.
+        ///
+        /// The range is rounded up to the specified allocation granularity
+        /// to ensure the lock covers every byte that could be faulted.
+        ///
+        /// - Parameters:
+        ///   - offset: The aligned start offset of the mapping.
+        ///   - length: The mapping length.
+        ///   - granularity: The system allocation granularity. Use
+        ///     `Memory.Allocation.system` from platform packages.
+        @inlinable
+        public init(
+            forMappingAt offset: Windows.`32`.Kernel.File.Offset,
+            length: Windows.`32`.Kernel.File.Size,
+            granularity: Memory.Allocation.Granularity
+        ) {
+            // Saturate rather than trap: a sum beyond Int64.max clamps to
+            // the maximum representable offset ("to end of file" in effect).
+            let (sum, overflow) = offset.underlying.addingReportingOverflow(length.underlying)
+            guard !overflow else {
+                self = .bytes(start: offset, end: .max)
+                return
+            }
+            let roundedEnd = granularity.underlying.alignUp(Windows.`32`.Kernel.File.Offset(sum))
+            self = .bytes(start: offset, end: roundedEnd)
+        }
     }
 }
 
