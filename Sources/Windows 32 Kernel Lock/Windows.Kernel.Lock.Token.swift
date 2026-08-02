@@ -164,12 +164,14 @@ extension Windows.`32`.Kernel.Lock.Token {
         kind: Windows.`32`.Kernel.Lock.Kind,
         deadline: Clock.Continuous.Instant
     ) throws(Windows.`32`.Kernel.Lock.Error) {
+        #if os(Windows)
+        let clock = Clock.Continuous()
         var backoff: Duration = .milliseconds(1)
         let maxBackoff: Duration = .milliseconds(100)
 
         while true {
             // Check deadline first
-            let now = Clock.Continuous.now
+            let now = clock.now
             if now >= deadline {
                 throw .timedOut
             }
@@ -180,7 +182,7 @@ extension Windows.`32`.Kernel.Lock.Token {
                 // Critical: re-check deadline after acquisition
                 // If deadline passed, unlock and throw to maintain invariant:
                 // "success means lock was acquired before deadline"
-                if Clock.Continuous.now >= deadline {
+                if clock.now >= deadline {
                     // If the compensating unlock fails, the lock is still
                     // held: surface that failure rather than reporting a
                     // timeout the caller would read as "never acquired".
@@ -199,7 +201,7 @@ extension Windows.`32`.Kernel.Lock.Token {
             }
 
             // Calculate sleep time (don't overshoot deadline)
-            let remaining = deadline - Clock.Continuous.now
+            let remaining = deadline - clock.now
             if remaining <= .zero {
                 throw .timedOut
             }
@@ -210,6 +212,9 @@ extension Windows.`32`.Kernel.Lock.Token {
             // Exponential backoff with cap
             backoff = min(backoff * 2, maxBackoff)
         }
+        #else
+        throw .timedOut
+        #endif
     }
 
     /// Platform-specific sleep without Foundation dependency.
