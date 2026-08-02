@@ -82,7 +82,7 @@
         /// Mirrors `ISO_9945.Kernel.Directory.Stream.next()`.
         public func next() throws(Windows.`32`.Kernel.Directory.Error) -> Windows.`32`.Kernel.Directory.Entry? {
             guard let h = handle else {
-                return nil
+                throw .closed
             }
             if firstEntry {
                 firstEntry = false
