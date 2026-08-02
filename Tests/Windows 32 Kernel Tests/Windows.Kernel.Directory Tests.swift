@@ -126,7 +126,7 @@
                     _ = try stream.next()
                     Issue.record("Expected .closed")
                 } catch {
-                    if case .closed = error {
+                    if case Windows.`32`.Kernel.Directory.Error.closed = error {
                         // Expected
                     } else {
                         Issue.record("Expected .closed, got \(error)")
