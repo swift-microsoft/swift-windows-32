@@ -32,6 +32,7 @@ extension Windows.`32`.Kernel.Directory {
             inode: Windows.`32`.Kernel.Inode? = nil,
             type: Windows.`32`.Kernel.File.Stats.Kind? = nil
         ) {
+            precondition(rawName.last == 0, "Directory.Entry rawName must be a non-empty, null-terminated sequence")
             self.rawName = rawName
             self.inode = inode
             self.type = type
@@ -50,6 +51,25 @@ extension Windows.`32`.Kernel.Directory.Entry {
     }
 
     #if os(Windows)
+        /// Calls `body` with the entry name as a `Path.Borrowed`. Zero allocation.
+        ///
+        /// The borrowed view is valid only for the duration of `body`.
+        /// Its pointer references `rawName` directly and excludes the null
+        /// terminator.
+        public func withName<R, E: Swift.Error>(
+            _ body: (borrowing Path.Borrowed) throws(E) -> R
+        ) throws(E) -> R {
+            let result: Swift.Result<R, E> = unsafe rawName.withUnsafeBufferPointer { buffer in
+                let view = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.count - 1)
+                do throws(E) {
+                    return .success(try body(view))
+                } catch {
+                    return .failure(error)
+                }
+            }
+            return try result.get()
+        }
+
         /// The entry name as a `Path.Borrowed`. Zero allocation.
         ///
         /// `rawName` is null-terminated. This property borrows the array's

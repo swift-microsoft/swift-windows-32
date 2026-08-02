@@ -31,6 +31,12 @@ extension Windows.`32`.Kernel.Directory {
         /// An I/O error occurred.
         case io
 
+        /// The stream was used after `close()`.
+        ///
+        /// Distinct from exhaustion: an exhausted stream returns `nil`
+        /// from `next()`, a closed one throws.
+        case closed
+
         /// A platform-specific error.
         case platform(Error_Primitives.Error)
     }
@@ -44,6 +50,7 @@ extension Windows.`32`.Kernel.Directory.Error: CustomStringConvertible {
         case .notDirectory: return "not a directory"
         case .tooManyOpenFiles: return "too many open files"
         case .io: return "I/O error"
+        case .closed: return "directory stream used after close"
         case .platform(let e): return "\(e)"
         }
     }

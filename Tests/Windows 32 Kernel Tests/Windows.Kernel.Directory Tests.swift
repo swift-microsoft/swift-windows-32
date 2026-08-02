@@ -92,6 +92,50 @@
 
     extension Windows.`32`.Kernel.Directory.Test.EdgeCase {
         @Test
+        func `Entry.withName borrows UTF-16 name without its terminator`() throws {
+            let entry = Kernel.Directory.Entry(
+                rawName: [0x006E, 0x0061, 0x006D, 0x0065, 0x0000],
+                inode: nil,
+                type: .regular
+            )
+
+            let count = try entry.withName { name in
+                #expect(name.count == 4)
+                return try unsafe name.withUnsafePointer { pointer in
+                    #expect(pointer[0] == 0x006E)
+                    #expect(pointer[3] == 0x0065)
+                    #expect(pointer[4] == 0x0000)
+                    return name.count
+                }
+            }
+
+            #expect(count == 4)
+        }
+
+        @Test
+        func `Stream.next after close throws closed`() throws {
+            var currentDirectory = try Kernel.Directory.Working.get()
+            currentDirectory.append(0)
+
+            try currentDirectory.withUnsafeBufferPointer { buffer in
+                let path = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.count - 1)
+                let stream = try Kernel.Directory.open(at: path)
+                stream.close()
+
+                do {
+                    _ = try stream.next()
+                    Issue.record("Expected .closed")
+                } catch {
+                    if case Windows.`32`.Kernel.Directory.Error.closed = error {
+                        // Expected
+                    } else {
+                        Issue.record("Expected .closed, got \(error)")
+                    }
+                }
+            }
+        }
+
+        @Test
         func `Entry type has name, inode, type`() {
             // Check Kernel.Directory.Entry exists with expected properties
             let nameChars: [UInt16] = [0x74, 0x65, 0x73, 0x74, 0x0000]  // "test" (null-terminated)
