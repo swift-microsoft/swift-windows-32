@@ -165,55 +165,55 @@ extension Windows.`32`.Kernel.Lock.Token {
         deadline: Clock.Continuous.Instant
     ) throws(Windows.`32`.Kernel.Lock.Error) {
         #if os(Windows)
-        let clock = Clock.Continuous()
-        var backoff: Duration = .milliseconds(1)
-        let maxBackoff: Duration = .milliseconds(100)
+            let clock = Clock.Continuous()
+            var backoff: Duration = .milliseconds(1)
+            let maxBackoff: Duration = .milliseconds(100)
 
-        while true {
-            // Check deadline first
-            let now = clock.now
-            if now >= deadline {
-                throw .timedOut
-            }
-
-            // Try to acquire
-            do throws(Windows.`32`.Kernel.Lock.Error) {
-                try Windows.`32`.Kernel.Lock.Immediate.lock(descriptor, range: range, kind: kind)
-                // Critical: re-check deadline after acquisition
-                // If deadline passed, unlock and throw to maintain invariant:
-                // "success means lock was acquired before deadline"
-                if clock.now >= deadline {
-                    // If the compensating unlock fails, the lock is still
-                    // held: surface that failure rather than reporting a
-                    // timeout the caller would read as "never acquired".
-                    try Windows.`32`.Kernel.Lock.unlock(descriptor, range: range)
-                    throw Windows.`32`.Kernel.Lock.Error.timedOut
+            while true {
+                // Check deadline first
+                let now = clock.now
+                if now >= deadline {
+                    throw .timedOut
                 }
-                return
-            } catch {
-                switch error {
-                case .contention:
-                    break  // Lock held, continue polling
 
-                default:
-                    throw error
+                // Try to acquire
+                do throws(Windows.`32`.Kernel.Lock.Error) {
+                    try Windows.`32`.Kernel.Lock.Immediate.lock(descriptor, range: range, kind: kind)
+                    // Critical: re-check deadline after acquisition
+                    // If deadline passed, unlock and throw to maintain invariant:
+                    // "success means lock was acquired before deadline"
+                    if clock.now >= deadline {
+                        // If the compensating unlock fails, the lock is still
+                        // held: surface that failure rather than reporting a
+                        // timeout the caller would read as "never acquired".
+                        try Windows.`32`.Kernel.Lock.unlock(descriptor, range: range)
+                        throw Windows.`32`.Kernel.Lock.Error.timedOut
+                    }
+                    return
+                } catch {
+                    switch error {
+                    case .contention:
+                        break  // Lock held, continue polling
+
+                    default:
+                        throw error
+                    }
                 }
+
+                // Calculate sleep time (don't overshoot deadline)
+                let remaining = deadline - clock.now
+                if remaining <= .zero {
+                    throw .timedOut
+                }
+
+                let sleepDuration = min(backoff, remaining)
+                sleep(sleepDuration)
+
+                // Exponential backoff with cap
+                backoff = min(backoff * 2, maxBackoff)
             }
-
-            // Calculate sleep time (don't overshoot deadline)
-            let remaining = deadline - clock.now
-            if remaining <= .zero {
-                throw .timedOut
-            }
-
-            let sleepDuration = min(backoff, remaining)
-            sleep(sleepDuration)
-
-            // Exponential backoff with cap
-            backoff = min(backoff * 2, maxBackoff)
-        }
         #else
-        throw .timedOut
+            throw .timedOut
         #endif
     }
 
