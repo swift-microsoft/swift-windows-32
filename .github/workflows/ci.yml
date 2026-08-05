@@ -23,7 +23,6 @@ jobs:
   ci:
     uses: swift-standards/.github/.github/workflows/swift-ci.yml@main
     with:
-      integrated-docs: true
       platform-support: windows
     secrets:
       PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
