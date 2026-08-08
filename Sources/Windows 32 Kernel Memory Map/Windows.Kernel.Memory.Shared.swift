@@ -243,8 +243,7 @@
         @inlinable
         public init(read: Bool, write: Bool) {
             self.init(
-                rawValue:
-                    (read ? UInt32(FILE_MAP_READ) : 0)
+                rawValue: (read ? UInt32(FILE_MAP_READ) : 0)
                     | (write ? UInt32(FILE_MAP_WRITE) : 0)
             )
         }
