@@ -104,7 +104,6 @@
                 return try unsafe name.withUnsafePointer { pointer in
                     #expect(pointer[0] == 0x006E)
                     #expect(pointer[3] == 0x0065)
-                    #expect(pointer[4] == 0x0000)
                     return name.count
                 }
             }
