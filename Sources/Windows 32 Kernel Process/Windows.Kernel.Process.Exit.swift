@@ -10,6 +10,7 @@
 // ===----------------------------------------------------------------------===//
 
 #if os(Windows)
+    internal import CRT
     public import WinSDK
 
     extension Windows.`32`.Kernel.Process {
@@ -41,6 +42,34 @@
         /// ```
         public static func now(_ exitCode: UInt32) -> Never {
             ExitProcess(exitCode)
+        }
+
+        /// Terminates the calling process normally.
+        ///
+        /// - Parameter status: Exit status code (`int`).
+        ///
+        /// ## Important
+        ///
+        /// - This function does NOT return.
+        /// - Uses CRT `exit()`, NOT `ExitProcess()` — per the Microsoft
+        ///   UCRT documentation, `exit` first calls, in LIFO order, the
+        ///   functions registered by `atexit` and `_onexit`, then flushes
+        ///   all stream buffers before terminating the process.
+        /// - Equivalent to POSIX `exit(3)`.
+        ///
+        /// ## Exit Code Conventions
+        ///
+        /// - `0`: Success
+        /// - `1-255`: Application-defined errors
+        ///
+        /// ## Usage
+        ///
+        /// ```swift
+        /// Windows.`32`.Kernel.Process.Exit.normal(0)  // success
+        /// Windows.`32`.Kernel.Process.Exit.normal(1)  // failure
+        /// ```
+        public static func normal(_ status: Int32) -> Never {
+            CRT.exit(status)
         }
     }
 
