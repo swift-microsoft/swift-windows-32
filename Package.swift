@@ -128,7 +128,7 @@ let package = Package(
             dependencies: []
         ),
         .target(
-            name: "CWindowsMemoryShim",
+            name: "Windows Memory Shims",
             dependencies: []
         ),
 
@@ -357,7 +357,7 @@ let package = Package(
             name: "Windows 32 Memory",
             dependencies: [
                 .target(name: "Windows 32 Core"),
-                .target(name: "CWindowsMemoryShim", condition: .when(platforms: [.windows]))
+                .target(name: "Windows Memory Shims", condition: .when(platforms: [.windows]))
             ]
         ),
 

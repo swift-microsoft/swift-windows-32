@@ -12,7 +12,7 @@
 public import Windows_32_Core
 
 #if os(Windows)
-    import CWindowsMemoryShim
+    import Windows_Memory_Shims
 #endif
 
 extension Windows.Memory.Allocation {
