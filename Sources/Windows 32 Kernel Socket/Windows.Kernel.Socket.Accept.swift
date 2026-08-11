@@ -96,7 +96,7 @@
         ///                    On output, the actual size of the returned address.
         /// - Returns: The new connected socket descriptor.
         /// - Throws: `Error.accept` on failure.
-        public static func accept(
+        package static func accept(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: UnsafeMutablePointer<sockaddr>,
             addressLength: UnsafeMutablePointer<Int32>

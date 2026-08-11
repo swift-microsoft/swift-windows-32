@@ -45,12 +45,22 @@
         ///     }
         /// }
         /// ```
-        public static func bind(
+        package static func bind(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: UnsafePointer<sockaddr>,
             addressLength: Int32
         ) throws(Error) {
             try bind(socket._rawValue, address: address, addressLength: addressLength)
+        }
+
+        /// Binds a socket to an opaque typed address.
+        public static func bind(
+            _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
+            address: Windows.`32`.Kernel.Socket.Address.Storage
+        ) throws(Error) {
+            try address.withUnsafeAddress { pointer, length in
+                try bind(socket._rawValue, address: pointer, addressLength: length)
+            }
         }
 
         /// Binds a SOCKET bit pattern to a local address.
