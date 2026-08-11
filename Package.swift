@@ -112,6 +112,7 @@ let package = Package(
         .package(url: "https://github.com/swift-primitives/swift-path-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-system-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-binary-primitives.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-dimension-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-terminal-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-pair-primitives.git", branch: "main"),
@@ -225,6 +226,7 @@ let package = Package(
             name: "Windows 32 Kernel IO",
             dependencies: [
                 "Windows 32 Kernel Core",
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
             ]
         ),
 

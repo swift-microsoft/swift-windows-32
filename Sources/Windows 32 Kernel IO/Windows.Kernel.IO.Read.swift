@@ -10,6 +10,7 @@
 // ===----------------------------------------------------------------------===//
 
 #if os(Windows)
+    public import Byte_Primitives
     public import Error_Primitives
     public import WinSDK
 
@@ -187,6 +188,37 @@
     // MARK: - Span Adapters
 
     extension Windows.`32`.Kernel.IO.Read {
+        /// Reads bytes from a file descriptor into an output span's free capacity.
+        ///
+        /// The existing initialized prefix is preserved. A successful native read
+        /// advances the initialized frontier exactly once by the returned byte count.
+        /// Partial reads and EOF retain `ReadFile` semantics.
+        ///
+        /// - Parameters:
+        ///   - descriptor: The file descriptor to read from.
+        ///   - output: The output span whose uninitialized suffix receives bytes.
+        /// - Returns: Number of bytes read. Returns 0 at EOF or when no capacity remains.
+        /// - Throws: `Windows.`32`.Kernel.IO.Read.Error` on failure.
+        public static func read(
+            _ descriptor: borrowing Windows.`32`.Kernel.Descriptor,
+            into output: inout Swift.OutputSpan<Byte>
+        ) throws(Error) -> Int {
+            try unsafe output.withUnsafeMutableBufferPointer {
+                buffer,
+                initializedCount throws(Error) -> Int in
+                guard initializedCount < buffer.count else { return 0 }
+
+                let bytes = unsafe UnsafeMutableRawBufferPointer(buffer)
+                let offset = initializedCount * MemoryLayout<Byte>.stride
+                let free = unsafe UnsafeMutableRawBufferPointer(
+                    rebasing: bytes[offset..<bytes.count]
+                )
+                let read = try unsafe read(descriptor, into: free)
+                initializedCount += read
+                return read
+            }
+        }
+
         /// Reads bytes from a file descriptor into a mutable span.
         ///
         /// - Parameters:
