@@ -16,6 +16,9 @@
     // MARK: - Socket Connect
 
     extension Windows.`32`.Kernel.Socket {
+        /// Typed reactive connection operations.
+        public enum Connect: Sendable {}
+
         /// Connects a socket to a remote address.
         ///
         /// Establishes a connection to a specified address. For stream sockets
@@ -34,7 +37,7 @@
         /// established or fails. For non-blocking sockets, it returns
         /// immediately with `WSAEWOULDBLOCK` if the connection cannot be
         /// completed immediately.
-        public static func connect(
+        package static func connect(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: UnsafePointer<sockaddr>,
             addressLength: Int32
@@ -62,6 +65,39 @@
             let result = WinSDK.connect(SOCKET(socket), address, addressLength)
             guard result == 0 else {
                 throw .platform(Error_Primitives.Error(code: captureLastSocketError()))
+            }
+        }
+    }
+
+    extension Windows.`32`.Kernel.Socket.Connect {
+        /// Starts a connection without taking ownership of readiness or cancellation.
+        public static func start(
+            _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
+            address: Windows.`32`.Kernel.Socket.Address.Storage
+        ) throws(Windows.`32`.Kernel.Socket.Error) -> Start {
+            do throws(Windows.`32`.Kernel.Socket.Error) {
+                try address.withUnsafeAddress { pointer, length in
+                    try Windows.`32`.Kernel.Socket.connect(
+                        socket._rawValue,
+                        address: pointer,
+                        addressLength: length
+                    )
+                }
+                return .connected
+            } catch  where error.disposition == .wouldBlock || error.disposition == .pending {
+                return .pending
+            }
+        }
+
+        /// Finishes a pending connection attempt after the socket becomes writable.
+        public static func finish(
+            _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
+        ) throws(Windows.`32`.Kernel.Socket.Error) {
+            let error = try Windows.`32`.Kernel.Socket.getError(socket)
+            guard error == 0 else {
+                throw Windows.`32`.Kernel.Socket.Error(
+                    code: .win32(DWORD(UInt32(bitPattern: error)))
+                )
             }
         }
     }

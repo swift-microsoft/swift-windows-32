@@ -52,7 +52,7 @@
         ///
         /// The return value may be less than `length` if the send buffer is full
         /// or for other reasons. Callers should loop to send remaining data.
-        public static func send(
+        package static func send(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeRawPointer,
             length: Int,
@@ -101,7 +101,7 @@
         ///   - flags: Send flags.
         /// - Returns: Number of bytes sent.
         /// - Throws: `Error.send` on failure.
-        public static func send(
+        package static func send(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeBufferPointer<UInt8>,
             flags: SendOptions = .none
@@ -126,7 +126,7 @@
         ///   - destAddrLength: Size of the destination address structure.
         /// - Returns: Number of bytes sent.
         /// - Throws: `Error.send` on failure.
-        public static func sendTo(
+        package static func sendTo(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeRawPointer,
             length: Int,
@@ -180,6 +180,32 @@
                 throw .platform(Error_Primitives.Error(code: captureLastSocketError()))
             }
             return Int(result)
+        }
+    }
+
+    extension Windows.`32`.Kernel.Socket {
+        /// Sends one datagram and returns Winsock's reported byte count.
+        public static func send(
+            _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
+            from span: Swift.Span<UInt8>,
+            to address: Windows.`32`.Kernel.Socket.Address.Storage,
+            flags: SendOptions = .none
+        ) throws(Error) -> Int {
+            try unsafe span.withUnsafeBytes { buffer throws(Error) in
+                var zero: UInt8 = 0
+                return try unsafe Swift.withUnsafePointer(to: &zero) { fallback throws(Error) in
+                    try address.withUnsafeAddress { pointer, length in
+                        try sendTo(
+                            socket._rawValue,
+                            buffer: buffer.baseAddress ?? UnsafeRawPointer(fallback),
+                            length: buffer.count,
+                            flags: flags,
+                            destAddr: pointer,
+                            destAddrLength: length
+                        )
+                    }
+                }
+            }
         }
     }
 

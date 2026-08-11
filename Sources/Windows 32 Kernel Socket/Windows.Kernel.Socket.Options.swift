@@ -74,7 +74,7 @@
         public static let linger = Self(rawValue: SO_LINGER)
 
         /// Get socket error status.
-        public static let error = Self(rawValue: SO_ERROR)
+        package static let error = Self(rawValue: SO_ERROR)
 
         /// Get socket type.
         public static let type = Self(rawValue: SO_TYPE)
@@ -107,7 +107,7 @@
         ///   - length: On input, size of the value buffer.
         ///             On output, actual size of the returned value.
         /// - Throws: `Error.getOption` on failure.
-        public static func getOption(
+        package static func getOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
             name: OptionName,
@@ -159,7 +159,7 @@
         ///   - value: Pointer to the option value.
         ///   - length: Size of the option value.
         /// - Throws: `Error.setOption` on failure.
-        public static func setOption(
+        package static func setOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
             name: OptionName,
@@ -331,7 +331,7 @@
         /// - Parameter socket: The socket.
         /// - Returns: The error code, or 0 if no error.
         /// - Throws: `Error.getOption` on failure.
-        public static func getError(
+        package static func getError(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
         ) throws(Error) -> Int32 {
             try getIntOption(socket, level: .socket, name: .error)
@@ -388,7 +388,7 @@
         ///   - addressLength: On input, size of the address buffer.
         ///                    On output, actual size of the returned address.
         /// - Throws: `Error.getSockName` on failure.
-        public static func getSockName(
+        package static func getSockName(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: UnsafeMutablePointer<sockaddr>,
             addressLength: UnsafeMutablePointer<Int32>
@@ -428,7 +428,7 @@
         ///   - addressLength: On input, size of the address buffer.
         ///                    On output, actual size of the returned address.
         /// - Throws: `Error.getPeerName` on failure.
-        public static func getPeerName(
+        package static func getPeerName(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: UnsafeMutablePointer<sockaddr>,
             addressLength: UnsafeMutablePointer<Int32>
@@ -458,6 +458,28 @@
             guard result == 0 else {
                 throw .platform(Error_Primitives.Error(code: captureLastSocketError()))
             }
+        }
+
+        /// Returns the local address assigned to a socket.
+        public static func localAddress(
+            _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
+        ) throws(Error) -> Windows.`32`.Kernel.Socket.Address.Storage {
+            var address = Windows.`32`.Kernel.Socket.Address.Storage()
+            try address.withUnsafeMutableAddress { pointer, length in
+                try getSockName(socket._rawValue, address: pointer, addressLength: length)
+            }
+            return address
+        }
+
+        /// Returns the peer address of a connected socket.
+        public static func peerAddress(
+            _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
+        ) throws(Error) -> Windows.`32`.Kernel.Socket.Address.Storage {
+            var address = Windows.`32`.Kernel.Socket.Address.Storage()
+            try address.withUnsafeMutableAddress { pointer, length in
+                try getPeerName(socket._rawValue, address: pointer, addressLength: length)
+            }
+            return address
         }
     }
 

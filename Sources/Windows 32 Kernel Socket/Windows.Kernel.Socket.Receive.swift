@@ -56,7 +56,7 @@
         /// - Positive: Number of bytes received.
         /// - Zero: Connection closed gracefully (EOF).
         /// - Error: Connection error or socket error.
-        public static func receive(
+        package static func receive(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableRawPointer,
             length: Int,
@@ -105,7 +105,7 @@
         ///   - flags: Receive flags.
         /// - Returns: Number of bytes received.
         /// - Throws: `Error.receive` on failure.
-        public static func receive(
+        package static func receive(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableBufferPointer<UInt8>,
             flags: ReceiveOptions = .none
@@ -131,7 +131,7 @@
         ///                    On output, actual size of the returned address.
         /// - Returns: Number of bytes received.
         /// - Throws: `Error.receive` on failure.
-        public static func receiveFrom(
+        package static func receiveFrom(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableRawPointer,
             length: Int,
@@ -186,6 +186,33 @@
                 throw .platform(Error_Primitives.Error(code: captureLastSocketError()))
             }
             return Int(result)
+        }
+    }
+
+    extension Windows.`32`.Kernel.Socket {
+        /// Receives one datagram and returns Winsock's reported byte count and source address.
+        public static func receive(
+            _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
+            into span: inout Swift.MutableSpan<UInt8>,
+            flags: ReceiveOptions = .none
+        ) throws(Error) -> (count: Int, address: Windows.`32`.Kernel.Socket.Address.Storage) {
+            try unsafe span.withUnsafeMutableBytes { buffer throws(Error) in
+                var address = Windows.`32`.Kernel.Socket.Address.Storage()
+                var zero: UInt8 = 0
+                let count = try unsafe Swift.withUnsafeMutablePointer(to: &zero) { fallback throws(Error) in
+                    try address.withUnsafeMutableAddress { pointer, length in
+                        try receiveFrom(
+                            socket._rawValue,
+                            buffer: buffer.baseAddress ?? UnsafeMutableRawPointer(fallback),
+                            length: buffer.count,
+                            flags: flags,
+                            srcAddr: pointer,
+                            srcAddrLength: length
+                        )
+                    }
+                }
+                return (count: count, address: address)
+            }
         }
     }
 
