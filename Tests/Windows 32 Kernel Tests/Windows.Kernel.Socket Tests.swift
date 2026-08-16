@@ -52,7 +52,11 @@
             try Windows.`32`.Kernel.Socket.startup()
             defer { Windows.`32`.Kernel.Socket.cleanup() }
 
-            let sock = try Windows.`32`.Kernel.Socket.create(family: .inet, type: .stream, protocol: .tcp)
+            let sock = try Windows.`32`.Kernel.Socket.create(
+                family: .inet,
+                type: .stream,
+                protocol: .tcp
+            )
 
             let sockIsValid = sock.isValid
             #expect(sockIsValid)
@@ -63,7 +67,11 @@
             try Windows.`32`.Kernel.Socket.startup()
             defer { Windows.`32`.Kernel.Socket.cleanup() }
 
-            let sock = try Windows.`32`.Kernel.Socket.create(family: .inet, type: .datagram, protocol: .udp)
+            let sock = try Windows.`32`.Kernel.Socket.create(
+                family: .inet,
+                type: .datagram,
+                protocol: .udp
+            )
 
             let sockIsValid = sock.isValid
             #expect(sockIsValid)
@@ -74,7 +82,11 @@
             try Windows.`32`.Kernel.Socket.startup()
             defer { Windows.`32`.Kernel.Socket.cleanup() }
 
-            let sock = try Windows.`32`.Kernel.Socket.create(family: .inet6, type: .stream, protocol: .tcp)
+            let sock = try Windows.`32`.Kernel.Socket.create(
+                family: .inet6,
+                type: .stream,
+                protocol: .tcp
+            )
 
             let sockIsValid = sock.isValid
             #expect(sockIsValid)
@@ -213,7 +225,11 @@
             try Windows.`32`.Kernel.Socket.startup()
             defer { Windows.`32`.Kernel.Socket.cleanup() }
 
-            let sock = try Windows.`32`.Kernel.Socket.create(family: .inet, type: .stream, protocol: .tcp)
+            let sock = try Windows.`32`.Kernel.Socket.create(
+                family: .inet,
+                type: .stream,
+                protocol: .tcp
+            )
 
             try Windows.`32`.Kernel.Socket.setNoDelay(sock, enabled: true)
         }

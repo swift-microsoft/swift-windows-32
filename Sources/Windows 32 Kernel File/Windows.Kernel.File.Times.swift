@@ -45,16 +45,22 @@
                     withUnsafePointer(to: &write) { writePtr in
                         SetFileTime(
                             UnsafeMutableRawPointer(bitPattern: handle)!,
-                            creationTime != nil ? creationPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil,
-                            lastAccessTime != nil ? accessPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil,
-                            lastWriteTime != nil ? writePtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil
+                            creationTime != nil
+                                ? creationPtr.pointee.map { withUnsafePointer(to: $0) { $0 } }
+                                : nil,
+                            lastAccessTime != nil
+                                ? accessPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil,
+                            lastWriteTime != nil
+                                ? writePtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil
                         )
                     }
                 }
             }
 
             guard success else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
         }
 
@@ -102,7 +108,14 @@
             var access = FILETIME()
             var write = FILETIME()
 
-            guard GetFileTime(UnsafeMutableRawPointer(bitPattern: handle)!, &creation, &access, &write) else {
+            guard
+                GetFileTime(
+                    UnsafeMutableRawPointer(bitPattern: handle)!,
+                    &creation,
+                    &access,
+                    &write
+                )
+            else {
                 return nil
             }
 
@@ -215,7 +228,8 @@
             // Difference between Windows epoch (1601) and Unix epoch (1970) in 100-ns intervals
             let epochDifference: UInt64 = 116_444_736_000_000_000
 
-            let windowsTime = (UInt64(fileTime.dwHighDateTime) << 32) | UInt64(fileTime.dwLowDateTime)
+            let windowsTime =
+                (UInt64(fileTime.dwHighDateTime) << 32) | UInt64(fileTime.dwLowDateTime)
 
             // Convert from 100-ns intervals to seconds
             return Int64((windowsTime - epochDifference) / 10_000_000)
@@ -308,7 +322,9 @@
             )
 
             guard success else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
 
             return BasicInfo(info)
@@ -339,7 +355,9 @@
             )
 
             guard success else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
         }
 

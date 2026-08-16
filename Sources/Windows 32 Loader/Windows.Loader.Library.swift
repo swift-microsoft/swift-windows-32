@@ -62,7 +62,10 @@
         /// - Returns: Handle to the loaded library.
         /// - Throws: `Loader.Error.open` on failure.
         @unsafe
-        package static func open(path: String, flags: DWORD) throws(Loader.Error) -> Loader.Library.Handle {
+        package static func open(
+            path: String,
+            flags: DWORD
+        ) throws(Loader.Error) -> Loader.Library.Handle {
             let handle = path.withCString(encodedAs: UTF16.self) { pathPtr in
                 LoadLibraryExW(pathPtr, nil, flags)
             }
@@ -89,7 +92,9 @@
         /// occurring on this handle.
         @unsafe
         public static func close(_ handle: Loader.Library.Handle) throws(Loader.Error) {
-            let success = unsafe FreeLibrary(handle.rawValue.assumingMemoryBound(to: HINSTANCE__.self))
+            let success = unsafe FreeLibrary(
+                handle.rawValue.assumingMemoryBound(to: HINSTANCE__.self)
+            )
             guard success else {
                 throw .close(captureLastErrorMessage())
             }
@@ -138,11 +143,15 @@
         /// If this value is used, and the executable module is a DLL, the
         /// system does not call DllMain for process and thread initialization
         /// and termination.
-        public static let dontResolveDllReferences = Self(rawValue: UInt32(DONT_RESOLVE_DLL_REFERENCES))
+        public static let dontResolveDllReferences = Self(
+            rawValue: UInt32(DONT_RESOLVE_DLL_REFERENCES)
+        )
 
         /// The system does not check AppLocker rules or apply Software
         /// Restriction Policies for the DLL.
-        public static let loadIgnoreCodeAuthzLevel = Self(rawValue: UInt32(LOAD_IGNORE_CODE_AUTHZ_LEVEL))
+        public static let loadIgnoreCodeAuthzLevel = Self(
+            rawValue: UInt32(LOAD_IGNORE_CODE_AUTHZ_LEVEL)
+        )
 
         /// If this value is used, the system maps the file into the calling
         /// process's virtual address space as if it were a data file.
@@ -150,16 +159,22 @@
 
         /// Similar to LOAD_LIBRARY_AS_DATAFILE, except that the DLL file is
         /// opened with exclusive write access for the calling process.
-        public static let loadLibraryAsDatafileExclusive = Self(rawValue: UInt32(LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE))
+        public static let loadLibraryAsDatafileExclusive = Self(
+            rawValue: UInt32(LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE)
+        )
 
         /// If this value is used, the system maps the file into the process's
         /// virtual address space as an image file.
-        public static let loadLibraryAsImageResource = Self(rawValue: UInt32(LOAD_LIBRARY_AS_IMAGE_RESOURCE))
+        public static let loadLibraryAsImageResource = Self(
+            rawValue: UInt32(LOAD_LIBRARY_AS_IMAGE_RESOURCE)
+        )
 
         /// If this value is used, the directory that contains the DLL is
         /// temporarily added to the beginning of the list of directories
         /// that are searched for the DLL's dependencies.
-        public static let loadWithAlteredSearchPath = Self(rawValue: UInt32(LOAD_WITH_ALTERED_SEARCH_PATH))
+        public static let loadWithAlteredSearchPath = Self(
+            rawValue: UInt32(LOAD_WITH_ALTERED_SEARCH_PATH)
+        )
     }
 
 #endif

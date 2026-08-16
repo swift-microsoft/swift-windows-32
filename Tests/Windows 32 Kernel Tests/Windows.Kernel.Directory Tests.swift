@@ -59,7 +59,9 @@
     extension Windows.`32`.Kernel.Directory.Test.Unit {
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
-            let error = Kernel.Directory.Error(_windowsError: Error_Primitives.Error.Code.File.notFound)
+            let error = Kernel.Directory.Error(
+                _windowsError: Error_Primitives.Error.Code.File.notFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -69,7 +71,9 @@
 
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
-            let error = Kernel.Directory.Error(_windowsError: Error_Primitives.Error.Code.File.pathNotFound)
+            let error = Kernel.Directory.Error(
+                _windowsError: Error_Primitives.Error.Code.File.pathNotFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -79,7 +83,9 @@
 
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
-            let error = Kernel.Directory.Error(_windowsError: Error_Primitives.Error.Code.Access.denied)
+            let error = Kernel.Directory.Error(
+                _windowsError: Error_Primitives.Error.Code.Access.denied
+            )
             if case .permission = error {
                 // Expected
             } else {
@@ -150,11 +156,19 @@
             #expect(dotEntry.isDotOrDotDot)
 
             let dotDotName: [UInt16] = [0x2E, 0x2E, 0x0000]  // ".."
-            let dotDotEntry = Kernel.Directory.Entry(rawName: dotDotName, inode: nil, type: .directory)
+            let dotDotEntry = Kernel.Directory.Entry(
+                rawName: dotDotName,
+                inode: nil,
+                type: .directory
+            )
             #expect(dotDotEntry.isDotOrDotDot)
 
             let normalName: [UInt16] = [0x74, 0x65, 0x73, 0x74, 0x0000]  // "test"
-            let normalEntry = Kernel.Directory.Entry(rawName: normalName, inode: nil, type: .regular)
+            let normalEntry = Kernel.Directory.Entry(
+                rawName: normalName,
+                inode: nil,
+                type: .regular
+            )
             #expect(!normalEntry.isDotOrDotDot)
         }
     }

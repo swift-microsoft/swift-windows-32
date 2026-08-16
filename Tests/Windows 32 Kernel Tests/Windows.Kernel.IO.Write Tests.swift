@@ -61,7 +61,11 @@
 
             #expect(throws: Kernel.IO.Write.Error.self) {
                 try data.withUnsafeBytes { bufferPtr in
-                    _ = try Windows.`32`.Kernel.IO.Write.pwrite(invalid, from: bufferPtr, at: Kernel.File.Offset(0))
+                    _ = try Windows.`32`.Kernel.IO.Write.pwrite(
+                        invalid,
+                        from: bufferPtr,
+                        at: Kernel.File.Offset(0)
+                    )
                 }
             }
         }

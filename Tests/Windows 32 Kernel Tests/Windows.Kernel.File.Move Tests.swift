@@ -40,7 +40,9 @@
     extension Windows.`32`.Kernel.File.Move.Test.Unit {
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
-            let error = Kernel.File.Move.Error.current(from: Error_Primitives.Error.Code.File.notFound)
+            let error = Kernel.File.Move.Error.current(
+                from: Error_Primitives.Error.Code.File.notFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -50,7 +52,9 @@
 
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
-            let error = Kernel.File.Move.Error.current(from: Error_Primitives.Error.Code.File.pathNotFound)
+            let error = Kernel.File.Move.Error.current(
+                from: Error_Primitives.Error.Code.File.pathNotFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -60,7 +64,9 @@
 
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
-            let error = Kernel.File.Move.Error.current(from: Error_Primitives.Error.Code.Access.denied)
+            let error = Kernel.File.Move.Error.current(
+                from: Error_Primitives.Error.Code.Access.denied
+            )
             if case .permission = error {
                 // Expected
             } else {
@@ -70,7 +76,9 @@
 
         @Test
         func `Error.exists maps from FILE_EXISTS`() {
-            let error = Kernel.File.Move.Error.current(from: Error_Primitives.Error.Code.File.exists)
+            let error = Kernel.File.Move.Error.current(
+                from: Error_Primitives.Error.Code.File.exists
+            )
             if case .exists = error {
                 // Expected
             } else {
@@ -80,7 +88,9 @@
 
         @Test
         func `Error.busy maps from SHARING_VIOLATION`() {
-            let error = Kernel.File.Move.Error.current(from: Error_Primitives.Error.Code.Access.sharingViolation)
+            let error = Kernel.File.Move.Error.current(
+                from: Error_Primitives.Error.Code.Access.sharingViolation
+            )
             if case .busy = error {
                 // Expected
             } else {
@@ -103,8 +113,12 @@
             #expect(throws: Kernel.File.Move.Error.self) {
                 try old.withUnsafeBufferPointer { oldPtr in
                     try new.withUnsafeBufferPointer { newPtr in
-                        let wold = UnsafeRawPointer(oldPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
-                        let wnew = UnsafeRawPointer(newPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
+                        let wold = UnsafeRawPointer(oldPtr.baseAddress!).assumingMemoryBound(
+                            to: UInt16.self
+                        )
+                        let wnew = UnsafeRawPointer(newPtr.baseAddress!).assumingMemoryBound(
+                            to: UInt16.self
+                        )
                         try Windows.`32`.Kernel.File.Move.move(from: wold, to: wnew)
                     }
                 }

@@ -79,13 +79,19 @@
         func `pending does not crash with invalid descriptor`() {
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
             // Should not crash - errors are silently ignored
-            Kernel.IO.Completion.Port.Cancel.pending(Kernel.Descriptor.invalid, overlapped: &overlapped)()
+            Kernel.IO.Completion.Port.Cancel.pending(
+                Kernel.Descriptor.invalid,
+                overlapped: &overlapped
+            )()
         }
 
         @Test
         func `pending is fire-and-forget`() {
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
-            Kernel.IO.Completion.Port.Cancel.pending(Kernel.Descriptor.invalid, overlapped: &overlapped)()
+            Kernel.IO.Completion.Port.Cancel.pending(
+                Kernel.Descriptor.invalid,
+                overlapped: &overlapped
+            )()
             // No return value to check - this is intentional
         }
     }
@@ -128,15 +134,18 @@
 
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
-        func `pending(_:overlapped:) returns Pending Result, not the pointer-storing Pending accessor`() {
+        func
+            `pending(_:overlapped:) returns Pending Result, not the pointer-storing Pending accessor`()
+        {
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
             // This explicit annotation only compiles against the fixed API:
             // pre-fix, `pending(_:overlapped:)` returned `Pending` (no
             // nested `Result` type existed at all).
-            let result: Kernel.IO.Completion.Port.Cancel.Pending.Result = Kernel.IO.Completion.Port.Cancel.pending(
-                Kernel.Descriptor.invalid,
-                overlapped: &overlapped
-            )
+            let result: Kernel.IO.Completion.Port.Cancel.Pending.Result = Kernel.IO.Completion.Port
+                .Cancel.pending(
+                    Kernel.Descriptor.invalid,
+                    overlapped: &overlapped
+                )
             _ = result.status
         }
 
@@ -148,7 +157,10 @@
             // already-computed state and is therefore idempotent by
             // construction.
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
-            let result = Kernel.IO.Completion.Port.Cancel.pending(Kernel.Descriptor.invalid, overlapped: &overlapped)
+            let result = Kernel.IO.Completion.Port.Cancel.pending(
+                Kernel.Descriptor.invalid,
+                overlapped: &overlapped
+            )
             let first = result.status
             let second = result.status
             #expect(first == second)
@@ -169,7 +181,10 @@
 
             // Call pending multiple times - should be safe
             for _ in 0..<3 {
-                Kernel.IO.Completion.Port.Cancel.pending(Kernel.Descriptor.invalid, overlapped: &overlapped)()
+                Kernel.IO.Completion.Port.Cancel.pending(
+                    Kernel.Descriptor.invalid,
+                    overlapped: &overlapped
+                )()
             }
 
             // Call pending.status multiple times - should be safe
@@ -188,9 +203,18 @@
             var overlapped2 = Kernel.IO.Completion.Port.Overlapped()
             var overlapped3 = Kernel.IO.Completion.Port.Overlapped()
 
-            Kernel.IO.Completion.Port.Cancel.pending(Kernel.Descriptor.invalid, overlapped: &overlapped1)()
-            Kernel.IO.Completion.Port.Cancel.pending(Kernel.Descriptor.invalid, overlapped: &overlapped2)()
-            Kernel.IO.Completion.Port.Cancel.pending(Kernel.Descriptor.invalid, overlapped: &overlapped3)()
+            Kernel.IO.Completion.Port.Cancel.pending(
+                Kernel.Descriptor.invalid,
+                overlapped: &overlapped1
+            )()
+            Kernel.IO.Completion.Port.Cancel.pending(
+                Kernel.Descriptor.invalid,
+                overlapped: &overlapped2
+            )()
+            Kernel.IO.Completion.Port.Cancel.pending(
+                Kernel.Descriptor.invalid,
+                overlapped: &overlapped3
+            )()
         }
     }
 

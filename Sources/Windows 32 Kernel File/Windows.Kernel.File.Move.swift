@@ -73,8 +73,10 @@
             to newPath: borrowing Path,
             options: Options
         ) throws(Windows.`32`.Kernel.File.Move.Error) {
-            try unsafe oldPath.view.withUnsafePointer { oldPtr throws(Windows.`32`.Kernel.File.Move.Error) in
-                try unsafe newPath.view.withUnsafePointer { newPtr throws(Windows.`32`.Kernel.File.Move.Error) in
+            try unsafe oldPath.view.withUnsafePointer {
+                oldPtr throws(Windows.`32`.Kernel.File.Move.Error) in
+                try unsafe newPath.view.withUnsafePointer {
+                    newPtr throws(Windows.`32`.Kernel.File.Move.Error) in
                     try move(
                         from: oldPtr,
                         to: newPtr,

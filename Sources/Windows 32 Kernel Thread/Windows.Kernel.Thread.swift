@@ -134,7 +134,12 @@
         ///   equivalent that works across platforms. This Windows-specific
         ///   overload remains for parity with the Windows API surface but
         ///   new code should use the cross-platform form.
-        @available(*, deprecated, message: "Use Windows.`32`.Kernel.Thread.ID.current for portable, typed thread identity.")
+        @available(
+            *,
+            deprecated,
+            message:
+                "Use Windows.`32`.Kernel.Thread.ID.current for portable, typed thread identity."
+        )
         @inlinable
         public static func currentID() -> DWORD {
             GetCurrentThreadId()

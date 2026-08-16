@@ -34,7 +34,8 @@
             let status = string.withCString { cString in
                 // UuidFromStringA expects RPC_CSTR (unsigned char*); withCString yields
                 // UnsafePointer<CChar> (Int8), so rebind the same bytes to UInt8.
-                cString.withMemoryRebound(to: UInt8.self, capacity: string.utf8.count + 1) { rebound in
+                cString.withMemoryRebound(to: UInt8.self, capacity: string.utf8.count + 1) {
+                    rebound in
                     UuidFromStringA(RPC_CSTR(mutating: rebound), &winUUID)
                 }
             }
@@ -71,7 +72,8 @@
         public static func unparse(_ bytes: Bytes, uppercase: Bool = false) -> String {
             // Convert RFC 4122 big-endian to Windows mixed-endian
             var winUUID = WinSDK.UUID(
-                Data1: (UInt32(bytes.0) << 24) | (UInt32(bytes.1) << 16) | (UInt32(bytes.2) << 8) | UInt32(bytes.3),
+                Data1: (UInt32(bytes.0) << 24) | (UInt32(bytes.1) << 16) | (UInt32(bytes.2) << 8)
+                    | UInt32(bytes.3),
                 Data2: (UInt16(bytes.4) << 8) | UInt16(bytes.5),
                 Data3: (UInt16(bytes.6) << 8) | UInt16(bytes.7),
                 Data4: (

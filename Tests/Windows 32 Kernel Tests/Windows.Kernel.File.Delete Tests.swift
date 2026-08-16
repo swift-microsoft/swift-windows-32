@@ -40,7 +40,9 @@
     extension Windows.`32`.Kernel.File.Delete.Test.Unit {
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
-            let error = Kernel.File.Delete.Error.current(from: Error_Primitives.Error.Code.File.notFound)
+            let error = Kernel.File.Delete.Error.current(
+                from: Error_Primitives.Error.Code.File.notFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -50,7 +52,9 @@
 
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
-            let error = Kernel.File.Delete.Error.current(from: Error_Primitives.Error.Code.File.pathNotFound)
+            let error = Kernel.File.Delete.Error.current(
+                from: Error_Primitives.Error.Code.File.pathNotFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -60,7 +64,9 @@
 
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
-            let error = Kernel.File.Delete.Error.current(from: Error_Primitives.Error.Code.Access.denied)
+            let error = Kernel.File.Delete.Error.current(
+                from: Error_Primitives.Error.Code.Access.denied
+            )
             if case .permission = error {
                 // Expected
             } else {
@@ -70,7 +76,9 @@
 
         @Test
         func `Error.busy maps from SHARING_VIOLATION`() {
-            let error = Kernel.File.Delete.Error.current(from: Error_Primitives.Error.Code.Access.sharingViolation)
+            let error = Kernel.File.Delete.Error.current(
+                from: Error_Primitives.Error.Code.Access.sharingViolation
+            )
             if case .busy = error {
                 // Expected
             } else {
@@ -89,7 +97,9 @@
 
             #expect(throws: Kernel.File.Delete.Error.self) {
                 try path.withUnsafeBufferPointer { pathPtr in
-                    let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
+                    let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(
+                        to: UInt16.self
+                    )
                     try Windows.`32`.Kernel.File.Delete.delete(unsafePath: wpath)
                 }
             }

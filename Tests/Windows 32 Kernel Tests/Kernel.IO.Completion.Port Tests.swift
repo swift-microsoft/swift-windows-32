@@ -236,7 +236,9 @@
     extension Kernel.IO.Completion.Port.Test.Unit {
         @Test
         func `read(_:into:overlapped:) takes a caller-owned pointer, not a closure-scoped inout`() {
-            let overlapped = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(capacity: 1)
+            let overlapped = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(
+                capacity: 1
+            )
             overlapped.initialize(to: .init())
             defer {
                 overlapped.deinitialize(count: 1)
@@ -258,8 +260,11 @@
         }
 
         @Test
-        func `write(_:from:overlapped:) takes a caller-owned pointer, not a closure-scoped inout`() {
-            let overlapped = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(capacity: 1)
+        func `write(_:from:overlapped:) takes a caller-owned pointer, not a closure-scoped inout`()
+        {
+            let overlapped = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(
+                capacity: 1
+            )
             overlapped.initialize(to: .init())
             defer {
                 overlapped.deinitialize(count: 1)
@@ -294,7 +299,8 @@
 
         @Test
         func `Overlapped type exists`() {
-            let _: Kernel.IO.Completion.Port.Overlapped.Type = Kernel.IO.Completion.Port.Overlapped.self
+            let _: Kernel.IO.Completion.Port.Overlapped.Type = Kernel.IO.Completion.Port.Overlapped
+                .self
         }
 
         @Test
@@ -314,12 +320,14 @@
 
         @Test
         func `Read.Result type exists`() {
-            let _: Kernel.IO.Completion.Port.Read.Result.Type = Kernel.IO.Completion.Port.Read.Result.self
+            let _: Kernel.IO.Completion.Port.Read.Result.Type = Kernel.IO.Completion.Port.Read
+                .Result.self
         }
 
         @Test
         func `Write.Result type exists`() {
-            let _: Kernel.IO.Completion.Port.Write.Result.Type = Kernel.IO.Completion.Port.Write.Result.self
+            let _: Kernel.IO.Completion.Port.Write.Result.Type = Kernel.IO.Completion.Port.Write
+                .Result.self
         }
     }
 

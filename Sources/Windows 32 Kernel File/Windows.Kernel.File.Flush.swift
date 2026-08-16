@@ -52,7 +52,9 @@
         ///
         /// - Parameter descriptor: The file descriptor to flush.
         /// - Throws: `Windows.`32`.Kernel.File.Flush.Error` on failure.
-        public static func flush(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) throws(Windows.`32`.Kernel.File.Flush.Error) {
+        public static func flush(
+            _ descriptor: borrowing Windows.`32`.Kernel.Descriptor
+        ) throws(Windows.`32`.Kernel.File.Flush.Error) {
             guard descriptor.isValid else {
                 throw .handle(.invalid)
             }
@@ -69,7 +71,9 @@
         ///
         /// - Parameter descriptor: The file descriptor to flush.
         /// - Throws: `Windows.`32`.Kernel.File.Flush.Error` on failure.
-        public static func flushData(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) throws(Windows.`32`.Kernel.File.Flush.Error) {
+        public static func flushData(
+            _ descriptor: borrowing Windows.`32`.Kernel.Descriptor
+        ) throws(Windows.`32`.Kernel.File.Flush.Error) {
             try flush(descriptor)
         }
     }

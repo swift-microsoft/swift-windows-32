@@ -65,7 +65,8 @@
         public static func open(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.Directory.Error) -> Self {
-            try unsafe path.view.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Directory.Error) in
+            try unsafe path.view.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Directory.Error) in
                 try open(unsafePath: ptr)
             }
         }
@@ -120,7 +121,9 @@
             pattern[patternLength] = 0  // null terminator
 
             return pattern.withUnsafeBufferPointer { patternBuffer in
-                let wpath = UnsafeRawPointer(patternBuffer.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wpath = UnsafeRawPointer(patternBuffer.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 return FindFirstFileW(wpath, &findData)
             }
         }
@@ -129,7 +132,9 @@
         ///
         /// - Returns: The next entry, or `nil` at end of directory.
         /// - Throws: `Windows.`32`.Kernel.Directory.Error` on I/O failure.
-        public mutating func next() throws(Windows.`32`.Kernel.Directory.Error) -> Windows.`32`.Kernel.Directory.Entry? {
+        public mutating func next() throws(Windows.`32`.Kernel.Directory.Error) -> Windows.`32`
+            .Kernel.Directory.Entry?
+        {
             if firstEntry {
                 firstEntry = false
                 return entryFromFindData()
@@ -170,13 +175,16 @@
         ///
         /// Shared by ``next()`` and the ISO-parity
         /// ``Windows/32/Kernel/Directory/Stream``.
-        internal static func _entry(from findData: WIN32_FIND_DATAW) -> Windows.`32`.Kernel.Directory.Entry {
+        internal static func _entry(
+            from findData: WIN32_FIND_DATAW
+        ) -> Windows.`32`.Kernel.Directory.Entry {
             // Extract the name from cFileName. Entry's rawName contract is
             // null-terminated ("." is [0x2E, 0x0000]) — its isDotOrDotDot and
             // name accessor both depend on the terminator, so append it.
             var nameChars = withUnsafeBytes(of: findData.cFileName) { buffer in
                 let ptr = buffer.baseAddress!.assumingMemoryBound(to: UInt16.self)
-                let capacity = MemoryLayout.size(ofValue: findData.cFileName) / MemoryLayout<UInt16>.size
+                let capacity =
+                    MemoryLayout.size(ofValue: findData.cFileName) / MemoryLayout<UInt16>.size
                 var length = 0
                 while length < capacity && ptr[length] != 0 {
                     length += 1

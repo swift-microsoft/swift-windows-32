@@ -64,9 +64,15 @@
 
         @Test
         func `Error is Equatable`() {
-            let a = Windows.`32`.Kernel.Socket.Error.platform(Error_Primitives.Error(code: .win32(1)))
-            let b = Windows.`32`.Kernel.Socket.Error.platform(Error_Primitives.Error(code: .win32(1)))
-            let c = Windows.`32`.Kernel.Socket.Error.platform(Error_Primitives.Error(code: .win32(2)))
+            let a = Windows.`32`.Kernel.Socket.Error.platform(
+                Error_Primitives.Error(code: .win32(1))
+            )
+            let b = Windows.`32`.Kernel.Socket.Error.platform(
+                Error_Primitives.Error(code: .win32(1))
+            )
+            let c = Windows.`32`.Kernel.Socket.Error.platform(
+                Error_Primitives.Error(code: .win32(2))
+            )
             #expect(a == b)
             #expect(a != c)
         }
@@ -100,7 +106,9 @@
         func `Different code platform errors are not equal`() {
             #expect(
                 Windows.`32`.Kernel.Socket.Error.platform(Error_Primitives.Error(code: .win32(1)))
-                    != Windows.`32`.Kernel.Socket.Error.platform(Error_Primitives.Error(code: .win32(2)))
+                    != Windows.`32`.Kernel.Socket.Error.platform(
+                        Error_Primitives.Error(code: .win32(2))
+                    )
             )
         }
     }

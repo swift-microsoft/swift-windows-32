@@ -112,7 +112,8 @@
             if Windows.`32`.Kernel.IO.Completion.Port.Cancel.all(handle) {
                 return true
             }
-            return GetLastError() != Windows.`32`.Kernel.IO.Completion.Port.Error.Code.Lookup.notFound
+            return GetLastError()
+                != Windows.`32`.Kernel.IO.Completion.Port.Error.Code.Lookup.notFound
         }
     }
 
@@ -142,10 +143,14 @@
         public struct Pending: @unchecked Sendable {
             let handle: UInt
 
-            let overlappedPtr: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>
+            let overlappedPtr:
+                UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>
 
             @unsafe
-            init(_ handle: UInt, overlapped: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>) {
+            init(
+                _ handle: UInt,
+                overlapped: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>
+            ) {
                 self.handle = handle
                 self.overlappedPtr = unsafe overlapped
             }
@@ -177,7 +182,8 @@
             if result {
                 return true
             }
-            return GetLastError() != Windows.`32`.Kernel.IO.Completion.Port.Error.Code.Lookup.notFound
+            return GetLastError()
+                != Windows.`32`.Kernel.IO.Completion.Port.Error.Code.Lookup.notFound
         }
     }
 
@@ -198,11 +204,6 @@
         public struct Result: Sendable {
             let succeeded: Bool
             let lastError: DWORD
-
-            init(succeeded: Bool, lastError: DWORD) {
-                self.succeeded = succeeded
-                self.lastError = lastError
-            }
         }
     }
 

@@ -252,15 +252,27 @@
         @Test
         func `All cases with same code are equal`() {
             let code = Error_Primitives.Error.Code.win32(42)
-            #expect(Kernel.IO.Completion.Port.Error.create(code) == Kernel.IO.Completion.Port.Error.create(code))
-            #expect(Kernel.IO.Completion.Port.Error.read(code) == Kernel.IO.Completion.Port.Error.read(code))
+            #expect(
+                Kernel.IO.Completion.Port.Error.create(code)
+                    == Kernel.IO.Completion.Port.Error.create(code)
+            )
+            #expect(
+                Kernel.IO.Completion.Port.Error.read(code)
+                    == Kernel.IO.Completion.Port.Error.read(code)
+            )
         }
 
         @Test
         func `Different cases with same code are not equal`() {
             let code = Error_Primitives.Error.Code.win32(42)
-            #expect(Kernel.IO.Completion.Port.Error.create(code) != Kernel.IO.Completion.Port.Error.read(code))
-            #expect(Kernel.IO.Completion.Port.Error.write(code) != Kernel.IO.Completion.Port.Error.result(code))
+            #expect(
+                Kernel.IO.Completion.Port.Error.create(code)
+                    != Kernel.IO.Completion.Port.Error.read(code)
+            )
+            #expect(
+                Kernel.IO.Completion.Port.Error.write(code)
+                    != Kernel.IO.Completion.Port.Error.result(code)
+            )
         }
     }
 

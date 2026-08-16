@@ -25,7 +25,8 @@
             path: borrowing Path,
             permissions: Windows.`32`.Kernel.File.Permissions = .standardDirectory
         ) throws(Windows.`32`.Kernel.Directory.Create.Error) {
-            try unsafe path.view.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Directory.Create.Error) in
+            try unsafe path.view.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Directory.Create.Error) in
                 try create(unsafePath: ptr, permissions: permissions)
             }
         }
@@ -39,7 +40,8 @@
             _ path: borrowing Path.Borrowed,
             permissions: Windows.`32`.Kernel.File.Permissions = .standardDirectory
         ) throws(Windows.`32`.Kernel.Directory.Create.Error) {
-            try unsafe path.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Directory.Create.Error) in
+            try unsafe path.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Directory.Create.Error) in
                 try create(unsafePath: ptr, permissions: permissions)
             }
         }

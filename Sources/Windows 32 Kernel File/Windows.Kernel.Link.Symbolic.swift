@@ -30,8 +30,10 @@
             linkPath: borrowing Path,
             isDirectory: Bool = false
         ) throws(Windows.`32`.Kernel.Link.Symbolic.Error) {
-            try unsafe target.view.withUnsafePointer { targetPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
-                try unsafe linkPath.view.withUnsafePointer { linkPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
+            try unsafe target.view.withUnsafePointer {
+                targetPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
+                try unsafe linkPath.view.withUnsafePointer {
+                    linkPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
                     try create(
                         target: targetPtr,
                         linkPath: linkPtr,
@@ -83,7 +85,8 @@
             path: borrowing Path,
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Windows.`32`.Kernel.Link.Symbolic.Error) -> Int {
-            try unsafe path.view.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
+            try unsafe path.view.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
                 try readTarget(unsafePath: ptr, into: buffer)
             }
         }
@@ -121,7 +124,9 @@
             defer { _ = CloseHandle(handle) }
 
             // Get the final path name which resolves the symlink
-            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
+                to: WCHAR.self
+            )
             let result = GetFinalPathNameByHandleW(
                 handle,
                 wbuffer,

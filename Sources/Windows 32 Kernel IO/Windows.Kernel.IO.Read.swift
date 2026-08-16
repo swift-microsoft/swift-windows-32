@@ -199,7 +199,8 @@
             _ descriptor: borrowing Windows.`32`.Kernel.Descriptor,
             into span: inout MutableSpan<UInt8>
         ) throws(Error) -> Int {
-            try span.withUnsafeMutableBytes { (buffer: UnsafeMutableRawBufferPointer) throws(Error) -> Int in
+            try span.withUnsafeMutableBytes {
+                (buffer: UnsafeMutableRawBufferPointer) throws(Error) -> Int in
                 try read(descriptor, into: buffer)
             }
         }
@@ -218,7 +219,8 @@
             into span: inout MutableSpan<UInt8>,
             at offset: Windows.`32`.Kernel.File.Offset
         ) throws(Error) -> Int {
-            try span.withUnsafeMutableBytes { (buffer: UnsafeMutableRawBufferPointer) throws(Error) -> Int in
+            try span.withUnsafeMutableBytes {
+                (buffer: UnsafeMutableRawBufferPointer) throws(Error) -> Int in
                 try pread(descriptor, into: buffer, at: offset)
             }
         }

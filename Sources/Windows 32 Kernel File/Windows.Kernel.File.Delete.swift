@@ -25,7 +25,8 @@
         public static func delete(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.File.Delete.Error) {
-            try unsafe path.view.withUnsafePointer { ptr throws(Windows.`32`.Kernel.File.Delete.Error) in
+            try unsafe path.view.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.File.Delete.Error) in
                 try delete(unsafePath: ptr)
             }
         }

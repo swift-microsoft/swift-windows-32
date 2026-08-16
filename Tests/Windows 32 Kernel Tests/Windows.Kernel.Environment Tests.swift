@@ -45,7 +45,9 @@
         func `get PATH returns value`() {
             var name = Array("PATH".utf16) + [0]
             let result = name.withUnsafeBufferPointer { namePtr in
-                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 return Windows.`32`.Kernel.Environment.get(name: wname)
             }
 
@@ -57,7 +59,9 @@
         func `get nonexistent variable returns nil`() {
             var name = Array("NONEXISTENT_VAR_12345_\(GetCurrentProcessId())".utf16) + [0]
             let result = name.withUnsafeBufferPointer { namePtr in
-                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 return Windows.`32`.Kernel.Environment.get(name: wname)
             }
 
@@ -71,7 +75,9 @@
 
             let length = try name.withUnsafeBufferPointer { namePtr in
                 try buffer.withUnsafeMutableBufferPointer { bufferPtr in
-                    let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                    let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                        to: WCHAR.self
+                    )
                     return try Windows.`32`.Kernel.Environment.get(name: wname, into: bufferPtr)
                 }
             }
@@ -94,15 +100,21 @@
             // Set
             try name.withUnsafeBufferPointer { namePtr in
                 try value.withUnsafeBufferPointer { valuePtr in
-                    let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
-                    let wvalue = UnsafeRawPointer(valuePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                    let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                        to: WCHAR.self
+                    )
+                    let wvalue = UnsafeRawPointer(valuePtr.baseAddress!).assumingMemoryBound(
+                        to: WCHAR.self
+                    )
                     try Windows.`32`.Kernel.Environment.set(name: wname, value: wvalue)
                 }
             }
 
             // Get
             let result = name.withUnsafeBufferPointer { namePtr in
-                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 return Windows.`32`.Kernel.Environment.get(name: wname)
             }
 
@@ -112,7 +124,9 @@
 
             // Clean up
             try name.withUnsafeBufferPointer { namePtr in
-                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 try Windows.`32`.Kernel.Environment.unset(name: wname)
             }
         }
@@ -127,21 +141,29 @@
             // Set
             try name.withUnsafeBufferPointer { namePtr in
                 try value.withUnsafeBufferPointer { valuePtr in
-                    let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
-                    let wvalue = UnsafeRawPointer(valuePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                    let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                        to: WCHAR.self
+                    )
+                    let wvalue = UnsafeRawPointer(valuePtr.baseAddress!).assumingMemoryBound(
+                        to: WCHAR.self
+                    )
                     try Windows.`32`.Kernel.Environment.set(name: wname, value: wvalue)
                 }
             }
 
             // Unset
             try name.withUnsafeBufferPointer { namePtr in
-                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 try Windows.`32`.Kernel.Environment.unset(name: wname)
             }
 
             // Verify gone
             let result = name.withUnsafeBufferPointer { namePtr in
-                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 return Windows.`32`.Kernel.Environment.get(name: wname)
             }
 
@@ -159,7 +181,9 @@
 
             // Should not throw - variable already doesn't exist
             try name.withUnsafeBufferPointer { namePtr in
-                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                    to: WCHAR.self
+                )
                 try Windows.`32`.Kernel.Environment.unset(name: wname)
             }
         }
@@ -172,7 +196,9 @@
             #expect(throws: Kernel.Environment.Error.self) {
                 try name.withUnsafeBufferPointer { namePtr in
                     try buffer.withUnsafeMutableBufferPointer { bufferPtr in
-                        let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                        let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
+                            to: WCHAR.self
+                        )
                         _ = try Windows.`32`.Kernel.Environment.get(name: wname, into: bufferPtr)
                     }
                 }

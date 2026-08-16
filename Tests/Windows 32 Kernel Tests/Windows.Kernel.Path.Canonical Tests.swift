@@ -58,7 +58,9 @@
         func `lexical resolve of current directory succeeds`() throws {
             var path = Array(".".utf16) + [0]
             let result = try path.withUnsafeBufferPointer { pathPtr in
-                let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
+                let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(
+                    to: UInt16.self
+                )
                 return try Path.Canonical.resolve(unsafePath: wpath)
             }
 
@@ -72,7 +74,9 @@
 
             let length = try path.withUnsafeBufferPointer { pathPtr in
                 try buffer.withUnsafeMutableBufferPointer { bufferPtr in
-                    let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
+                    let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(
+                        to: UInt16.self
+                    )
                     return try Path.Canonical.resolve(unsafePath: wpath, into: bufferPtr)
                 }
             }
@@ -84,7 +88,9 @@
         func `lexical resolve of absolute path returns same path`() throws {
             var path = Array("C:\\Windows".utf16) + [0]
             let result = try path.withUnsafeBufferPointer { pathPtr in
-                let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
+                let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(
+                    to: UInt16.self
+                )
                 return try Path.Canonical.resolve(unsafePath: wpath)
             }
 
@@ -369,7 +375,9 @@
             #expect(throws: Path.Canonical.Error.self) {
                 try path.withUnsafeBufferPointer { pathPtr in
                     try buffer.withUnsafeMutableBufferPointer { bufferPtr in
-                        let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
+                        let wpath = UnsafeRawPointer(pathPtr.baseAddress!).assumingMemoryBound(
+                            to: UInt16.self
+                        )
                         _ = try Path.Canonical.resolve(unsafePath: wpath, into: bufferPtr)
                     }
                 }

@@ -69,7 +69,9 @@
         /// This is safe because `Overlapped` is a transparent wrapper around `OVERLAPPED`.
         @unsafe
         @inlinable
-        public var overlapped: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>? {
+        public var overlapped:
+            UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>?
+        {
             guard let rawPtr = unsafe raw.lpOverlapped else { return nil }
             return unsafe UnsafeMutableRawPointer(rawPtr)
                 .assumingMemoryBound(to: Windows.`32`.Kernel.IO.Completion.Port.Overlapped.self)

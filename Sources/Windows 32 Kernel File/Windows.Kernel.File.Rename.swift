@@ -37,13 +37,19 @@
 
     extension Windows.`32`.Kernel.File.Rename.Error {
         /// Destination file already exists.
-        public static let destinationExists = Self(code: .win32(Error_Primitives.Error.Code.File.alreadyExists))
+        public static let destinationExists = Self(
+            code: .win32(Error_Primitives.Error.Code.File.alreadyExists)
+        )
 
         /// Permission denied.
-        public static let permissionDenied = Self(code: .win32(Error_Primitives.Error.Code.Access.denied))
+        public static let permissionDenied = Self(
+            code: .win32(Error_Primitives.Error.Code.Access.denied)
+        )
 
         /// File is in use by another process.
-        public static let sharingViolation = Self(code: .win32(Error_Primitives.Error.Code.Access.sharingViolation))
+        public static let sharingViolation = Self(
+            code: .win32(Error_Primitives.Error.Code.Access.sharingViolation)
+        )
 
         /// The operation is not supported (e.g., struct layout unavailable).
         public static let notSupported = Self(code: .win32(0x32))  // ERROR_NOT_SUPPORTED
@@ -198,7 +204,9 @@
             info.pointee.FileNameLength = DWORD(nameByteCount - MemoryLayout<WCHAR>.size)
 
             // Copy destination path into struct tail
-            let fileNamePtr = buffer.advanced(by: fileNameOffset).assumingMemoryBound(to: WCHAR.self)
+            let fileNamePtr = buffer.advanced(by: fileNameOffset).assumingMemoryBound(
+                to: WCHAR.self
+            )
             var srcPtr = wDest
             var dstIdx = 0
             while srcPtr.pointee != 0 {

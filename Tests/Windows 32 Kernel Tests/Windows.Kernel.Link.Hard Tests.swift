@@ -53,7 +53,9 @@
 
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
-            let error = Kernel.Link.Error.current(from: Error_Primitives.Error.Code.File.pathNotFound)
+            let error = Kernel.Link.Error.current(
+                from: Error_Primitives.Error.Code.File.pathNotFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -83,7 +85,9 @@
 
         @Test
         func `Error.noSpace maps from DISK_FULL`() {
-            let error = Kernel.Link.Error.current(from: Error_Primitives.Error.Code.Storage.diskFull)
+            let error = Kernel.Link.Error.current(
+                from: Error_Primitives.Error.Code.Storage.diskFull
+            )
             if case .noSpace = error {
                 // Expected
             } else {
@@ -106,8 +110,12 @@
             #expect(throws: Kernel.Link.Error.self) {
                 try source.withUnsafeBufferPointer { sourcePtr in
                     try link.withUnsafeBufferPointer { linkPtr in
-                        let wsource = UnsafeRawPointer(sourcePtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
-                        let wlink = UnsafeRawPointer(linkPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
+                        let wsource = UnsafeRawPointer(sourcePtr.baseAddress!).assumingMemoryBound(
+                            to: UInt16.self
+                        )
+                        let wlink = UnsafeRawPointer(linkPtr.baseAddress!).assumingMemoryBound(
+                            to: UInt16.self
+                        )
                         try Windows.`32`.Kernel.Link.create(source: wsource, linkPath: wlink)
                     }
                 }

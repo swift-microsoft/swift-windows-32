@@ -49,7 +49,10 @@
             switch unsafe scope {
             case .handle(let handle):
                 procAddress = name.withCString { namePtr in
-                    unsafe GetProcAddress(handle.rawValue.assumingMemoryBound(to: HINSTANCE__.self), namePtr)
+                    unsafe GetProcAddress(
+                        handle.rawValue.assumingMemoryBound(to: HINSTANCE__.self),
+                        namePtr
+                    )
                 }
 
             case .default:
@@ -57,7 +60,10 @@
                 // Search in main executable first, then loaded modules.
                 if let mainHandle = Windows.Loader.Library.getHandle(moduleName: nil) {
                     procAddress = name.withCString { namePtr in
-                        unsafe GetProcAddress(mainHandle.rawValue.assumingMemoryBound(to: HINSTANCE__.self), namePtr)
+                        unsafe GetProcAddress(
+                            mainHandle.rawValue.assumingMemoryBound(to: HINSTANCE__.self),
+                            namePtr
+                        )
                     }
                 } else {
                     procAddress = nil
@@ -66,7 +72,9 @@
             case .next:
                 // Windows doesn't have RTLD_NEXT equivalent.
                 // This is not directly supported on Windows.
-                throw .symbol(Loader.Message(ascii: "RTLD_NEXT equivalent not available on Windows"))
+                throw .symbol(
+                    Loader.Message(ascii: "RTLD_NEXT equivalent not available on Windows")
+                )
             }
 
             guard let procAddress else {
@@ -90,7 +98,10 @@
         ) throws(Loader.Error) -> UnsafeRawPointer {
             // MAKEINTRESOURCEA converts ordinal to a pseudo-pointer
             let namePtr = UnsafePointer<CChar>(bitPattern: UInt(ordinal))
-            let procAddress = unsafe GetProcAddress(handle.rawValue.assumingMemoryBound(to: HINSTANCE__.self), namePtr)
+            let procAddress = unsafe GetProcAddress(
+                handle.rawValue.assumingMemoryBound(to: HINSTANCE__.self),
+                namePtr
+            )
 
             guard let procAddress else {
                 throw .symbol(captureLastErrorMessage())

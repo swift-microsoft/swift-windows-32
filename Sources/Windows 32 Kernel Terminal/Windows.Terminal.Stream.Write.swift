@@ -33,7 +33,10 @@
             _ bytes: some Swift.Sequence<UInt8>
         ) throws(Windows.`32`.Kernel.IO.Write.Error) -> Int {
             let array = ContiguousArray<UInt8>(bytes)
-            return try unsafe array.withUnsafeBufferPointer { (buffer: UnsafeBufferPointer<UInt8>) throws(Windows.`32`.Kernel.IO.Write.Error) -> Int in
+            return try unsafe array.withUnsafeBufferPointer {
+                (
+                    buffer: UnsafeBufferPointer<UInt8>
+                ) throws(Windows.`32`.Kernel.IO.Write.Error) -> Int in
                 let raw = UnsafeRawBufferPointer(buffer)
                 return try unsafe write(raw)
             }

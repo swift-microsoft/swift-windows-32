@@ -99,10 +99,14 @@
         public static let enableQuickEditMode = Self(rawValue: UInt32(ENABLE_QUICK_EDIT_MODE))
 
         /// Enable virtual terminal input sequences.
-        public static let enableVirtualTerminalInput = Self(rawValue: UInt32(ENABLE_VIRTUAL_TERMINAL_INPUT))
+        public static let enableVirtualTerminalInput = Self(
+            rawValue: UInt32(ENABLE_VIRTUAL_TERMINAL_INPUT)
+        )
 
         /// Default console input mode.
-        public static let `default`: Self = [.enableLineInput, .enableEchoInput, .enableProcessedInput]
+        public static let `default`: Self = [
+            .enableLineInput, .enableEchoInput, .enableProcessedInput,
+        ]
 
         /// Raw mode (no line buffering, no echo).
         public static let raw: Self = []
@@ -116,16 +120,22 @@
         public static let enableWrapAtEolOutput = Self(rawValue: UInt32(ENABLE_WRAP_AT_EOL_OUTPUT))
 
         /// Enable virtual terminal processing (ANSI escape sequences).
-        public static let enableVirtualTerminalProcessing = Self(rawValue: UInt32(ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+        public static let enableVirtualTerminalProcessing = Self(
+            rawValue: UInt32(ENABLE_VIRTUAL_TERMINAL_PROCESSING)
+        )
 
         /// Disable newline auto-return.
-        public static let disableNewlineAutoReturn = Self(rawValue: UInt32(DISABLE_NEWLINE_AUTO_RETURN))
+        public static let disableNewlineAutoReturn = Self(
+            rawValue: UInt32(DISABLE_NEWLINE_AUTO_RETURN)
+        )
 
         /// Default console output mode.
         public static let `default`: Self = [.enableProcessedOutput, .enableWrapAtEolOutput]
 
         /// ANSI mode (enables VT processing).
-        public static let ansi: Self = [.enableProcessedOutput, .enableWrapAtEolOutput, .enableVirtualTerminalProcessing]
+        public static let ansi: Self = [
+            .enableProcessedOutput, .enableWrapAtEolOutput, .enableVirtualTerminalProcessing,
+        ]
     }
 
     extension Windows.`32`.Kernel.Console {
@@ -191,7 +201,8 @@
             into buffer: UnsafeMutableBufferPointer<WCHAR>
         ) -> Int? {
             var charsRead: DWORD = 0
-            guard ReadConsoleW(handle, buffer.baseAddress, DWORD(buffer.count), &charsRead, nil) else {
+            guard ReadConsoleW(handle, buffer.baseAddress, DWORD(buffer.count), &charsRead, nil)
+            else {
                 return nil
             }
             return Int(charsRead)
@@ -209,7 +220,8 @@
             from buffer: UnsafeBufferPointer<WCHAR>
         ) -> Int? {
             var charsWritten: DWORD = 0
-            guard WriteConsoleW(handle, buffer.baseAddress, DWORD(buffer.count), &charsWritten, nil) else {
+            guard WriteConsoleW(handle, buffer.baseAddress, DWORD(buffer.count), &charsWritten, nil)
+            else {
                 return nil
             }
             return Int(charsWritten)
@@ -226,7 +238,9 @@
             var utf16 = Array(string.utf16)
             return utf16.withUnsafeBufferPointer { buffer in
                 let wcharBuffer = UnsafeBufferPointer<WCHAR>(
-                    start: UnsafeRawPointer(buffer.baseAddress)?.assumingMemoryBound(to: WCHAR.self),
+                    start: UnsafeRawPointer(buffer.baseAddress)?.assumingMemoryBound(
+                        to: WCHAR.self
+                    ),
                     count: buffer.count
                 )
                 return write(handle, from: wcharBuffer)
@@ -264,7 +278,9 @@
                     Int(info.srWindow.Right),
                     Int(info.srWindow.Bottom)
                 )
-                self.maxWindowSize = (Int(info.dwMaximumWindowSize.X), Int(info.dwMaximumWindowSize.Y))
+                self.maxWindowSize = (
+                    Int(info.dwMaximumWindowSize.X), Int(info.dwMaximumWindowSize.Y)
+                )
             }
         }
 

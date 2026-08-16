@@ -152,7 +152,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
     /// (`ProcThreadAttributeValue(ProcThreadAttributeHandleList, FALSE, TRUE,
     /// FALSE)`), so WinSDK does not import it — the composed value is
     /// `2 | PROC_THREAD_ATTRIBUTE_INPUT` (0x20002).
-    private let PROC_THREAD_ATTRIBUTE_HANDLE_LIST: DWORD = 0x20002
+    private let processThreadAttributeHandleList: DWORD = 0x20002
 
     // MARK: - Internal accessors used by spawn
 
@@ -165,11 +165,13 @@ extension Windows.`32`.Kernel.Process.Spawn {
         /// Stdio handle triple if any slot was overridden; `nil` if no slots
         /// were redirected (child inherits parent stdio).
         internal var _stdioHandles: (stdin: HANDLE?, stdout: HANDLE?, stderr: HANDLE?)? {
-            let s_in = unsafe _stdinHandle
-            let s_out = unsafe _stdoutHandle
-            let s_err = unsafe _stderrHandle
-            guard s_in != nil || s_out != nil || s_err != nil else { return nil }
-            return unsafe (s_in, s_out, s_err)
+            let standardInput = unsafe _stdinHandle
+            let standardOutput = unsafe _stdoutHandle
+            let standardError = unsafe _stderrHandle
+            guard standardInput != nil || standardOutput != nil || standardError != nil else {
+                return nil
+            }
+            return unsafe (standardInput, standardOutput, standardError)
         }
     }
 
@@ -272,7 +274,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 unsafe UpdateProcThreadAttribute(
                     LPPROC_THREAD_ATTRIBUTE_LIST(attrList),
                     0,
-                    DWORD_PTR(PROC_THREAD_ATTRIBUTE_HANDLE_LIST),
+                    DWORD_PTR(processThreadAttributeHandleList),
                     newRaw,
                     SIZE_T(MemoryLayout<HANDLE>.size * newCount),
                     nil,

@@ -29,7 +29,10 @@
         var buffer: LPWSTR?
         let length = withUnsafeMutablePointer(to: &buffer) { bufferSlot in
             unsafe FormatMessageW(
-                DWORD(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS),
+                DWORD(
+                    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                        | FORMAT_MESSAGE_IGNORE_INSERTS
+                ),
                 nil,
                 errorCode,
                 0,  // Default language
