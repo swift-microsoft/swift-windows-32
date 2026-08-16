@@ -111,7 +111,10 @@
     extension Windows.`32`.Kernel.Random.Test.EdgeCase {
         @Test
         func `bCryptGenRandom fills a one-megabyte buffer`() throws(Random.Error) {
-            let buffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 1024 * 1024, alignment: 1)
+            let buffer = UnsafeMutableRawBufferPointer.allocate(
+                byteCount: 1024 * 1024,
+                alignment: 1
+            )
             defer { buffer.deallocate() }
             buffer.initializeMemory(as: UInt8.self, repeating: 0)
             try Windows.`32`.Kernel.Random.bCryptGenRandom(buffer)

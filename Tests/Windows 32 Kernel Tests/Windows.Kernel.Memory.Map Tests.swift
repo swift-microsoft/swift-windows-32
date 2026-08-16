@@ -165,7 +165,9 @@
         }
 
         @Test
-        func `Protection.readExecute converts to PAGE_EXECUTE_WRITECOPY for a private mapping object`() {
+        func
+            `Protection.readExecute converts to PAGE_EXECUTE_WRITECOPY for a private mapping object`()
+        {
             let prot = Memory.Map.Protection.readExecute
             #expect(prot.windowsFileMapProtectCopyOnWrite == DWORD(PAGE_EXECUTE_WRITECOPY))
         }

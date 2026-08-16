@@ -9,6 +9,9 @@
 //
 // ===----------------------------------------------------------------------===//
 
+// These public spellings mirror the Win32 error-code specification.
+// swift-format-ignore-file: AlwaysUseLowerCamelCase
+
 #if os(Windows)
 
     extension Error_Primitives.Error.Code {

@@ -41,7 +41,9 @@
         @Test
         func `Status type exists with ok and platform cases`() {
             let ok: Kernel.IO.Completion.Port.Dequeue.Status = .ok
-            let error: Kernel.IO.Completion.Port.Dequeue.Status = .platform(Error_Primitives.Error(code: .win32(0)))
+            let error: Kernel.IO.Completion.Port.Dequeue.Status = .platform(
+                Error_Primitives.Error(code: .win32(0))
+            )
 
             #expect(ok == .ok)
             #expect(error != .ok)
@@ -49,7 +51,9 @@
 
         @Test
         func `Item type exists with expected properties`() {
-            let ov = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(capacity: 1)
+            let ov = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(
+                capacity: 1
+            )
             ov.initialize(to: .init())
             defer {
                 ov.deinitialize(count: 1)
@@ -85,7 +89,9 @@
 
         @Test
         func `Item with platform error status`() {
-            let ov = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(capacity: 1)
+            let ov = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(
+                capacity: 1
+            )
             ov.initialize(to: .init())
             defer {
                 ov.deinitialize(count: 1)
@@ -122,7 +128,9 @@
         func `single returns .ok for posted completion with overlapped`() throws {
             let port = try Kernel.IO.Completion.Port.create()
 
-            let ov = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(capacity: 1)
+            let ov = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(
+                capacity: 1
+            )
             ov.initialize(to: .init())
             defer {
                 ov.deinitialize(count: 1)

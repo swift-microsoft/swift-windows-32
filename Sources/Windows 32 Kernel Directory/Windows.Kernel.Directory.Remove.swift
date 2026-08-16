@@ -22,7 +22,8 @@
         public static func remove(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.Directory.Remove.Error) {
-            try unsafe path.view.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Directory.Remove.Error) in
+            try unsafe path.view.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Directory.Remove.Error) in
                 try remove(unsafePath: ptr)
             }
         }
@@ -34,7 +35,8 @@
         public static func remove(
             _ path: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.Directory.Remove.Error) {
-            try unsafe path.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Directory.Remove.Error) in
+            try unsafe path.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Directory.Remove.Error) in
                 try remove(unsafePath: ptr)
             }
         }

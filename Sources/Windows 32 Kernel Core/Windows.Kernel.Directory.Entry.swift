@@ -32,7 +32,10 @@ extension Windows.`32`.Kernel.Directory {
             inode: Windows.`32`.Kernel.Inode? = nil,
             type: Windows.`32`.Kernel.File.Stats.Kind? = nil
         ) {
-            precondition(rawName.last == 0, "Directory.Entry rawName must be a non-empty, null-terminated sequence")
+            precondition(
+                rawName.last == 0,
+                "Directory.Entry rawName must be a non-empty, null-terminated sequence"
+            )
             self.rawName = rawName
             self.inode = inode
             self.type = type

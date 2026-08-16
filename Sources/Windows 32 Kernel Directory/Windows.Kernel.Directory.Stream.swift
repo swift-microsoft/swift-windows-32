@@ -80,7 +80,9 @@
         /// Returns the next entry, or nil if at end of directory.
         ///
         /// Mirrors `ISO_9945.Kernel.Directory.Stream.next()`.
-        public func next() throws(Windows.`32`.Kernel.Directory.Error) -> Windows.`32`.Kernel.Directory.Entry? {
+        public func next() throws(Windows.`32`.Kernel.Directory.Error) -> Windows.`32`.Kernel
+            .Directory.Entry?
+        {
             guard let h = handle else {
                 throw .closed
             }

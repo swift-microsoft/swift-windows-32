@@ -33,7 +33,9 @@
             wname.append(0)
             guard
                 let units = wname.withUnsafeBufferPointer({ buf -> [UInt16]? in
-                    let wptr = UnsafeRawPointer(buf.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                    let wptr = UnsafeRawPointer(buf.baseAddress!).assumingMemoryBound(
+                        to: WCHAR.self
+                    )
                     return get(name: wptr)
                 })
             else {
@@ -60,7 +62,9 @@
             wvalue.append(0)
             if !overwrite {
                 let exists = wname.withUnsafeBufferPointer { buf in
-                    let wptr = UnsafeRawPointer(buf.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+                    let wptr = UnsafeRawPointer(buf.baseAddress!).assumingMemoryBound(
+                        to: WCHAR.self
+                    )
                     return GetEnvironmentVariableW(wptr, nil, 0) != 0
                 }
                 if exists {
@@ -84,7 +88,8 @@
         ///
         /// Mirrors `ISO_9945.Kernel.Environment.unset(_:)`; does not fail if
         /// the variable does not exist.
-        public static func unset(_ name: Swift.String) throws(Windows.`32`.Kernel.Environment.Error) {
+        public static func unset(_ name: Swift.String) throws(Windows.`32`.Kernel.Environment.Error)
+        {
             var wname = Array(name.utf16)
             wname.append(0)
             let ok = wname.withUnsafeBufferPointer { buf in

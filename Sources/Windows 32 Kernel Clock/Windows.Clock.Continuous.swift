@@ -22,7 +22,10 @@
 
         /// Suspends until the given deadline, checking for cancellation.
         nonisolated(nonsending)
-            public func sleep(until deadline: Instant, tolerance: Duration? = nil) async throws(CancellationError)
+            public func sleep(
+                until deadline: Instant,
+                tolerance: Duration? = nil
+            ) async throws(CancellationError)
         {
             while Clock.Continuous.now < deadline {
                 guard !Task.isCancelled else { throw CancellationError() }
@@ -46,7 +49,10 @@
 
         /// Suspends until the given deadline, checking for cancellation.
         nonisolated(nonsending)
-            public func sleep(until deadline: Instant, tolerance: Duration? = nil) async throws(CancellationError)
+            public func sleep(
+                until deadline: Instant,
+                tolerance: Duration? = nil
+            ) async throws(CancellationError)
         {
             while Clock.Suspending.now < deadline {
                 guard !Task.isCancelled else { throw CancellationError() }

@@ -100,7 +100,9 @@
         /// - Parameter descriptor: The file descriptor.
         /// - Returns: The current offset from the beginning of the file.
         /// - Throws: `Windows.`32`.Kernel.File.Seek.Error` on failure.
-        public static func tell(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) throws(Error) -> Int64 {
+        public static func tell(
+            _ descriptor: borrowing Windows.`32`.Kernel.Descriptor
+        ) throws(Error) -> Int64 {
             guard descriptor.isValid else {
                 throw .invalidDescriptor
             }

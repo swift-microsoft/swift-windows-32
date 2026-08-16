@@ -61,11 +61,6 @@
             public let name: Swift.String
 
             internal let attributes: DWORD
-
-            internal init(name: Swift.String, attributes: DWORD) {
-                self.name = name
-                self.attributes = attributes
-            }
         }
     }
 
@@ -112,7 +107,8 @@
                 case DWORD(ERROR_ACCESS_DENIED), DWORD(ERROR_SHARING_VIOLATION):
                     self = .accessDenied
 
-                case DWORD(ERROR_FILE_NOT_FOUND), DWORD(ERROR_PATH_NOT_FOUND), DWORD(ERROR_INVALID_NAME):
+                case DWORD(ERROR_FILE_NOT_FOUND), DWORD(ERROR_PATH_NOT_FOUND),
+                    DWORD(ERROR_INVALID_NAME):
                     self = .notFound
 
                 case DWORD(ERROR_DIRECTORY):

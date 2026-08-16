@@ -158,9 +158,12 @@ extension Windows.`32`.Kernel.File.Permissions: ExpressibleByIntegerLiteral {
 
 extension Windows.`32`.Kernel.File.Permissions: CustomStringConvertible {
     public var description: Swift.String {
-        let owner = "\(rawValue & 0o400 != 0 ? "r" : "-")\(rawValue & 0o200 != 0 ? "w" : "-")\(rawValue & 0o100 != 0 ? "x" : "-")"
-        let group = "\(rawValue & 0o040 != 0 ? "r" : "-")\(rawValue & 0o020 != 0 ? "w" : "-")\(rawValue & 0o010 != 0 ? "x" : "-")"
-        let other = "\(rawValue & 0o004 != 0 ? "r" : "-")\(rawValue & 0o002 != 0 ? "w" : "-")\(rawValue & 0o001 != 0 ? "x" : "-")"
+        let owner =
+            "\(rawValue & 0o400 != 0 ? "r" : "-")\(rawValue & 0o200 != 0 ? "w" : "-")\(rawValue & 0o100 != 0 ? "x" : "-")"
+        let group =
+            "\(rawValue & 0o040 != 0 ? "r" : "-")\(rawValue & 0o020 != 0 ? "w" : "-")\(rawValue & 0o010 != 0 ? "x" : "-")"
+        let other =
+            "\(rawValue & 0o004 != 0 ? "r" : "-")\(rawValue & 0o002 != 0 ? "w" : "-")\(rawValue & 0o001 != 0 ? "x" : "-")"
         return "\(owner)\(group)\(other)"
     }
 }

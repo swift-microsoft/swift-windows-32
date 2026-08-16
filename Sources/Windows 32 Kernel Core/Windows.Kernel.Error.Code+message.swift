@@ -32,7 +32,10 @@
 
             case .win32(let rawValue):
                 let flags: DWORD =
-                    DWORD(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS)
+                    DWORD(
+                        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                            | FORMAT_MESSAGE_IGNORE_INSERTS
+                    )
 
                 var buffer: LPWSTR? = nil
 

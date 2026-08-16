@@ -66,7 +66,9 @@
         public static let offline = Self(rawValue: DWORD(FILE_ATTRIBUTE_OFFLINE))
 
         /// File is not indexed by content indexing service.
-        public static let notContentIndexed = Self(rawValue: DWORD(FILE_ATTRIBUTE_NOT_CONTENT_INDEXED))
+        public static let notContentIndexed = Self(
+            rawValue: DWORD(FILE_ATTRIBUTE_NOT_CONTENT_INDEXED)
+        )
 
         /// File is encrypted.
         public static let encrypted = Self(rawValue: DWORD(FILE_ATTRIBUTE_ENCRYPTED))
@@ -104,7 +106,9 @@
             to attributes: Attributes
         ) throws(Windows.`32`.Kernel.File.Attributes.Error) {
             guard SetFileAttributesW(path, attributes.rawValue) else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
         }
 

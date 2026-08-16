@@ -73,10 +73,6 @@
         /// Lock operation accessor with variants.
         public struct Lock: Sendable {
             let mutex: Windows.`32`.Kernel.Thread.Mutex
-
-            init(mutex: Windows.`32`.Kernel.Thread.Mutex) {
-                self.mutex = mutex
-            }
         }
 
         /// Internal blocking lock implementation.

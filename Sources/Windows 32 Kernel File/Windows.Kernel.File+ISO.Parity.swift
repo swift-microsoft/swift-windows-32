@@ -76,13 +76,17 @@
                 nil
             )
             guard let handle, handle != INVALID_HANDLE_VALUE else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
             defer { CloseHandle(handle) }
 
             var info = BY_HANDLE_FILE_INFORMATION()
             guard GetFileInformationByHandle(handle, &info) else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
             return Windows.`32`.Kernel.File.Stats(_from: info)
         }
@@ -152,14 +156,18 @@
                     nil
                 )
                 guard let handle, handle != INVALID_HANDLE_VALUE else {
-                    throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                    throw .platform(
+                        Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    )
                 }
                 defer { CloseHandle(handle) }
 
                 var access = FILETIME(_from: accessTime)
                 var write = FILETIME(_from: modificationTime)
                 guard SetFileTime(handle, nil, &access, &write) else {
-                    throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                    throw .platform(
+                        Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    )
                 }
             }
         }
@@ -178,11 +186,14 @@
             _ permissions: Windows.`32`.Kernel.File.Permissions,
             at path: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.File.Attributes.Error) {
-            try unsafe path.withUnsafePointer { ptr throws(Windows.`32`.Kernel.File.Attributes.Error) in
+            try unsafe path.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.File.Attributes.Error) in
                 let wpath = UnsafeRawPointer(ptr).assumingMemoryBound(to: WCHAR.self)
                 let current = GetFileAttributesW(wpath)
                 guard current != INVALID_FILE_ATTRIBUTES else {
-                    throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                    throw .platform(
+                        Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    )
                 }
                 var updated = current
                 if (permissions & .ownerWrite) == .none {
@@ -191,7 +202,9 @@
                     updated &= ~DWORD(FILE_ATTRIBUTE_READONLY)
                 }
                 guard updated == current || SetFileAttributesW(wpath, updated) else {
-                    throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                    throw .platform(
+                        Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    )
                 }
             }
         }
@@ -209,8 +222,10 @@
             from oldPath: borrowing Path.Borrowed,
             to newPath: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.File.Move.Error) {
-            try unsafe oldPath.withUnsafePointer { oldPtr throws(Windows.`32`.Kernel.File.Move.Error) in
-                try unsafe newPath.withUnsafePointer { newPtr throws(Windows.`32`.Kernel.File.Move.Error) in
+            try unsafe oldPath.withUnsafePointer {
+                oldPtr throws(Windows.`32`.Kernel.File.Move.Error) in
+                try unsafe newPath.withUnsafePointer {
+                    newPtr throws(Windows.`32`.Kernel.File.Move.Error) in
                     try move(from: oldPtr, to: newPtr, replaceExisting: true)
                 }
             }
@@ -233,7 +248,9 @@
             var write = FILETIME(_from: modificationTime)
             let handle = UnsafeMutableRawPointer(bitPattern: descriptor._rawValue)
             guard SetFileTime(handle, nil, &access, &write) else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
         }
     }
@@ -271,8 +288,10 @@
             at linkPath: borrowing Path.Borrowed,
             to existingPath: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.Link.Error) {
-            try unsafe existingPath.withUnsafePointer { sourcePtr throws(Windows.`32`.Kernel.Link.Error) in
-                try unsafe linkPath.withUnsafePointer { linkPtr throws(Windows.`32`.Kernel.Link.Error) in
+            try unsafe existingPath.withUnsafePointer {
+                sourcePtr throws(Windows.`32`.Kernel.Link.Error) in
+                try unsafe linkPath.withUnsafePointer {
+                    linkPtr throws(Windows.`32`.Kernel.Link.Error) in
                     try create(source: sourcePtr, linkPath: linkPtr)
                 }
             }
@@ -302,7 +321,9 @@
                     DWORD(MemoryLayout<FILE_BASIC_INFO>.size)
                 )
             else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
             let current = info.FileAttributes
             var updated = current
@@ -326,7 +347,9 @@
                     DWORD(MemoryLayout<FILE_BASIC_INFO>.size)
                 )
             else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
         }
     }
@@ -341,8 +364,10 @@
             target: borrowing Path.Borrowed,
             at linkPath: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.Link.Symbolic.Error) {
-            try unsafe target.withUnsafePointer { targetPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
-                try unsafe linkPath.withUnsafePointer { linkPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
+            try unsafe target.withUnsafePointer {
+                targetPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
+                try unsafe linkPath.withUnsafePointer {
+                    linkPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
                     // symlink(2) has no file/directory distinction, but
                     // CreateSymbolicLinkW requires SYMBOLIC_LINK_FLAG_DIRECTORY
                     // for directory targets or the link never resolves. Probe
@@ -378,7 +403,8 @@
             defer { unsafe raw.deallocate() }
             unsafe raw.initialize(repeating: 0, count: capacity)
             let buf = unsafe UnsafeMutableBufferPointer(start: raw, count: capacity)
-            let length = try unsafe path.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
+            let length = try unsafe path.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
                 try unsafe readTarget(unsafePath: ptr, into: buf)
             }
             // GetFinalPathNameByHandleW returns the \\?\-prefixed NT form;

@@ -268,7 +268,8 @@
             var maxInstances: DWORD = 0
 
             let pipePtr = UnsafeMutableRawPointer(bitPattern: handle)!
-            guard GetNamedPipeInfo(pipePtr, &flags, &outBufferSize, &inBufferSize, &maxInstances) else {
+            guard GetNamedPipeInfo(pipePtr, &flags, &outBufferSize, &inBufferSize, &maxInstances)
+            else {
                 return nil
             }
 
@@ -320,7 +321,9 @@
         ///
         /// - Parameter pipe: The pipe handle.
         /// - Returns: Tuple of (currentInstances, maxInstances), or `nil` on failure.
-        package static func getInfo(_ pipe: borrowing Windows.`32`.Kernel.Descriptor) -> (current: DWORD, max: DWORD)? {
+        package static func getInfo(
+            _ pipe: borrowing Windows.`32`.Kernel.Descriptor
+        ) -> (current: DWORD, max: DWORD)? {
             getInfo(pipe._rawValue)
         }
 

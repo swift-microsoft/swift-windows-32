@@ -9,7 +9,7 @@ let package = Package(
         .iOS(.v26),
         .tvOS(.v26),
         .watchOS(.v26),
-        .visionOS(.v26)
+        .visionOS(.v26),
     ],
     products: [
         // MARK: - Kernel
@@ -97,29 +97,98 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-primitives/swift-memory-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-memory-map-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-memory-lock-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-memory-shared-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-memory-allocation-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-clock-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-time-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-loader-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-sequence-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-standard-library-extensions.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-error-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-random-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-path-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-system-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-binary-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-dimension-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-terminal-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-pair-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-equation-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-hash-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-tagged-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-cardinal-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-string-primitives.git", branch: "main"),
+        .package(
+            url: "https://github.com/swift-primitives/swift-memory-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-memory-map-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-memory-lock-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-memory-shared-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-memory-allocation-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-clock-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-time-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-loader-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-sequence-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-standard-library-extensions.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-error-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-random-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-path-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-system-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-binary-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-dimension-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-terminal-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-pair-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-equation-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-hash-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-tagged-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-cardinal-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-string-primitives.git",
+            branch: "main"
+        ),
     ],
     targets: [
         // MARK: - Core
@@ -140,13 +209,19 @@ let package = Package(
                 .product(name: "Error Primitives", package: "swift-error-primitives"),
                 .product(name: "Memory Primitives", package: "swift-memory-primitives"),
                 .product(name: "Path Primitives", package: "swift-path-primitives"),
-                .product(name: "Equation Protocol Primitives", package: "swift-equation-primitives"),
+                .product(
+                    name: "Equation Protocol Primitives",
+                    package: "swift-equation-primitives"
+                ),
                 .product(name: "Hash Protocol Primitives", package: "swift-hash-primitives"),
                 .product(name: "Time Primitives", package: "swift-time-primitives"),
                 .product(name: "Dimension Primitives", package: "swift-dimension-primitives"),
                 .product(name: "Tagged Primitives", package: "swift-tagged-primitives"),
                 .product(name: "Cardinal Primitives", package: "swift-cardinal-primitives"),
-                .product(name: "Memory Allocation Primitives", package: "swift-memory-allocation-primitives"),
+                .product(
+                    name: "Memory Allocation Primitives",
+                    package: "swift-memory-allocation-primitives"
+                ),
                 .product(name: "Clock Primitives", package: "swift-clock-primitives"),
             ]
         ),
@@ -182,7 +257,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Console",
             dependencies: [
-                "Windows 32 Kernel Core",
+                "Windows 32 Kernel Core"
             ]
         ),
 
@@ -224,7 +299,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel IO",
             dependencies: [
-                "Windows 32 Kernel Core",
+                "Windows 32 Kernel Core"
             ]
         ),
 
@@ -246,8 +321,14 @@ let package = Package(
                 .product(name: "Memory Primitives", package: "swift-memory-primitives"),
                 .product(name: "Memory Map Primitives", package: "swift-memory-map-primitives"),
                 .product(name: "Memory Lock Primitives", package: "swift-memory-lock-primitives"),
-                .product(name: "Memory Shared Primitives", package: "swift-memory-shared-primitives"),
-                .product(name: "Memory Allocation Primitives", package: "swift-memory-allocation-primitives"),
+                .product(
+                    name: "Memory Shared Primitives",
+                    package: "swift-memory-shared-primitives"
+                ),
+                .product(
+                    name: "Memory Allocation Primitives",
+                    package: "swift-memory-allocation-primitives"
+                ),
             ]
         ),
 
@@ -265,7 +346,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Socket",
             dependencies: [
-                "Windows 32 Kernel Core",
+                "Windows 32 Kernel Core"
             ]
         ),
 
@@ -331,7 +412,7 @@ let package = Package(
         .target(
             name: "Windows 32 Identity",
             dependencies: [
-                .target(name: "Windows 32 Core"),
+                .target(name: "Windows 32 Core")
             ]
         ),
 
@@ -339,7 +420,7 @@ let package = Package(
         .target(
             name: "Windows 32 Interop",
             dependencies: [
-                .target(name: "Windows 32 Core"),
+                .target(name: "Windows 32 Core")
             ]
         ),
 
@@ -348,7 +429,7 @@ let package = Package(
             name: "Windows 32 Loader",
             dependencies: [
                 .target(name: "Windows 32 Core"),
-                .product(name: "Loader Primitives", package: "swift-loader-primitives")
+                .product(name: "Loader Primitives", package: "swift-loader-primitives"),
             ]
         ),
 
@@ -357,7 +438,7 @@ let package = Package(
             name: "Windows 32 Memory",
             dependencies: [
                 .target(name: "Windows 32 Core"),
-                .target(name: "Windows Memory Shims", condition: .when(platforms: [.windows]))
+                .target(name: "Windows Memory Shims", condition: .when(platforms: [.windows])),
             ]
         ),
 
@@ -378,7 +459,10 @@ let package = Package(
                 "Windows 32 Kernel",
                 "Windows 32 Kernel Test Support",
                 "Windows 32 Kernel Memory Map",
-                .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions"),
+                .product(
+                    name: "Standard Library Extensions",
+                    package: "swift-standard-library-extensions"
+                ),
             ]
         ),
         .testTarget(

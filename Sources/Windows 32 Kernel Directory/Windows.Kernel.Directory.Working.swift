@@ -23,7 +23,9 @@
         public static func get(
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Windows.`32`.Kernel.Directory.Working.Error) -> Int {
-            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
+                to: WCHAR.self
+            )
             let result = GetCurrentDirectoryW(DWORD(buffer.count), wbuffer)
 
             guard result != 0 else {
@@ -32,7 +34,9 @@
 
             // If result > buffer.count, the buffer was too small
             if result > buffer.count {
-                throw .platform(Error_Primitives.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER))))
+                throw .platform(
+                    Error_Primitives.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER)))
+                )
             }
 
             return Int(result)
@@ -68,7 +72,8 @@
         public static func set(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.Directory.Working.Error) {
-            try unsafe path.view.withUnsafePointer { ptr throws(Windows.`32`.Kernel.Directory.Working.Error) in
+            try unsafe path.view.withUnsafePointer {
+                ptr throws(Windows.`32`.Kernel.Directory.Working.Error) in
                 try set(unsafePath: ptr)
             }
         }

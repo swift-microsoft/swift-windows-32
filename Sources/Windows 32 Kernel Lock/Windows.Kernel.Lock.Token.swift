@@ -178,7 +178,11 @@ extension Windows.`32`.Kernel.Lock.Token {
 
                 // Try to acquire
                 do throws(Windows.`32`.Kernel.Lock.Error) {
-                    try Windows.`32`.Kernel.Lock.Immediate.lock(descriptor, range: range, kind: kind)
+                    try Windows.`32`.Kernel.Lock.Immediate.lock(
+                        descriptor,
+                        range: range,
+                        kind: kind
+                    )
                     // Critical: re-check deadline after acquisition
                     // If deadline passed, unlock and throw to maintain invariant:
                     // "success means lock was acquired before deadline"

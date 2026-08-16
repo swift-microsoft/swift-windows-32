@@ -210,8 +210,10 @@
             source: borrowing Path.Borrowed,
             destination: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.File.Clone.Error.Syscall) {
-            try unsafe source.withUnsafePointer { srcPtr throws(Windows.`32`.Kernel.File.Clone.Error.Syscall) in
-                try unsafe destination.withUnsafePointer { dstPtr throws(Windows.`32`.Kernel.File.Clone.Error.Syscall) in
+            try unsafe source.withUnsafePointer {
+                srcPtr throws(Windows.`32`.Kernel.File.Clone.Error.Syscall) in
+                try unsafe destination.withUnsafePointer {
+                    dstPtr throws(Windows.`32`.Kernel.File.Clone.Error.Syscall) in
                     let wSource = UnsafeRawPointer(srcPtr).assumingMemoryBound(to: WCHAR.self)
                     let wDest = UnsafeRawPointer(dstPtr).assumingMemoryBound(to: WCHAR.self)
                     guard CopyFileW(wSource, wDest, true) else {

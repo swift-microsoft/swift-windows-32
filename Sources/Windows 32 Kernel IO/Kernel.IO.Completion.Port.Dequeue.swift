@@ -86,7 +86,8 @@
             ///
             /// May be `nil` for synthetic completions posted via `PostQueuedCompletionStatus`
             /// without an associated overlapped structure.
-            public let overlapped: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>?
+            public let overlapped:
+                UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>?
 
             /// Status of the completed I/O operation.
             public let status: Status
@@ -96,7 +97,9 @@
             public init(
                 bytes: UInt32,
                 key: Windows.`32`.Kernel.IO.Completion.Port.Key,
-                overlapped: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>?,
+                overlapped: UnsafeMutablePointer<
+                    Windows.`32`.Kernel.IO.Completion.Port.Overlapped
+                >?,
                 status: Status
             ) {
                 self.bytes = bytes
@@ -144,7 +147,9 @@
 
             // Helper to convert raw pointer to Swift wrapper pointer
             @unsafe
-            func toOverlapped(_ raw: LPOVERLAPPED?) -> UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>? {
+            func toOverlapped(
+                _ raw: LPOVERLAPPED?
+            ) -> UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>? {
                 guard let raw = unsafe raw else { return nil }
                 return unsafe UnsafeMutableRawPointer(raw)
                     .assumingMemoryBound(to: Windows.`32`.Kernel.IO.Completion.Port.Overlapped.self)

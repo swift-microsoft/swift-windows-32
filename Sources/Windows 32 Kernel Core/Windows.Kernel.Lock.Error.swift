@@ -70,7 +70,10 @@ extension Windows.`32`.Kernel.Lock.Error: CustomStringConvertible {
         case .unavailable: return "no locks available"
         case .timedOut: return "lock acquisition timed out"
         case .interrupted: return "lock wait interrupted"
-        case .invalidRange(let start, let end): return "invalid lock range: start \(start), end \(end)"
+
+        case .invalidRange(let start, let end):
+            return "invalid lock range: start \(start), end \(end)"
+
         case .platform(let code): return "platform error \(code)"
         }
     }

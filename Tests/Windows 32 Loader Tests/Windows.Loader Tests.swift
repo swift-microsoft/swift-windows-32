@@ -91,7 +91,9 @@
 
         @Test
         func `getHandle for nonexistent module returns nil`() {
-            let handle = Windows.Loader.Library.getHandle(moduleName: "nonexistent_module_12345.dll")
+            let handle = Windows.Loader.Library.getHandle(
+                moduleName: "nonexistent_module_12345.dll"
+            )
             #expect(handle == nil)
         }
 
@@ -121,7 +123,10 @@
             let handle = try Windows.Loader.Library.open(path: "kernel32.dll")
             defer { try? Windows.Loader.Library.close(handle) }
 
-            let symbol = try Windows.Loader.Symbol.lookup(name: "GetCurrentProcessId", in: .handle(handle))
+            let symbol = try Windows.Loader.Symbol.lookup(
+                name: "GetCurrentProcessId",
+                in: .handle(handle)
+            )
             #expect(symbol != nil)
         }
 
@@ -131,7 +136,10 @@
             defer { try? Windows.Loader.Library.close(handle) }
 
             do {
-                _ = try Windows.Loader.Symbol.lookup(name: "NonexistentFunction12345", in: .handle(handle))
+                _ = try Windows.Loader.Symbol.lookup(
+                    name: "NonexistentFunction12345",
+                    in: .handle(handle)
+                )
                 Issue.record("Expected Loader.Error")
             } catch is Loader.Error {
                 // Expected (do/catch: see `open nonexistent library fails`)
@@ -269,8 +277,14 @@
             let handle = try Windows.Loader.Library.open(path: "kernel32.dll")
             defer { try? Windows.Loader.Library.close(handle) }
 
-            let symbol1 = try Windows.Loader.Symbol.lookup(name: "GetLastError", in: .handle(handle))
-            let symbol2 = try Windows.Loader.Symbol.lookup(name: "GetLastError", in: .handle(handle))
+            let symbol1 = try Windows.Loader.Symbol.lookup(
+                name: "GetLastError",
+                in: .handle(handle)
+            )
+            let symbol2 = try Windows.Loader.Symbol.lookup(
+                name: "GetLastError",
+                in: .handle(handle)
+            )
 
             #expect(symbol1 == symbol2)
         }

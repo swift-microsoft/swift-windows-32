@@ -61,7 +61,11 @@
 
             #expect(throws: Kernel.IO.Read.Error.self) {
                 try buffer.withUnsafeMutableBytes { bufferPtr in
-                    _ = try Windows.`32`.Kernel.IO.Read.pread(invalid, into: bufferPtr, at: Kernel.File.Offset(0))
+                    _ = try Windows.`32`.Kernel.IO.Read.pread(
+                        invalid,
+                        into: bufferPtr,
+                        at: Kernel.File.Offset(0)
+                    )
                 }
             }
         }

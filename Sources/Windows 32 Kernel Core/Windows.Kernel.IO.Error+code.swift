@@ -26,7 +26,8 @@
             case .Windows.ERROR_BROKEN_PIPE:
                 self = .broken
 
-            case .win32(1167):  // ERROR_DEVICE_NOT_CONNECTED — closest stable Win32 analogue for hardware I/O failure
+            // ERROR_DEVICE_NOT_CONNECTED is the closest stable Win32 analogue.
+            case .win32(1167):
                 self = .hardware
 
             default:

@@ -88,7 +88,9 @@ extension Windows.`32`.Kernel.Lock {
     /// - Returns: `false` for an empty range (which locks/unlocks nothing),
     ///   `true` otherwise.
     /// - Throws: `Error.invalidRange` when the end precedes the start.
-    static func validate(_ range: Windows.`32`.Kernel.Lock.Range) throws(Windows.`32`.Kernel.Lock.Error) -> Bool {
+    static func validate(
+        _ range: Windows.`32`.Kernel.Lock.Range
+    ) throws(Windows.`32`.Kernel.Lock.Error) -> Bool {
         guard case .bytes(let start, let end) = range else { return true }
         if end.underlying < start.underlying {
             throw .invalidRange(start: start.underlying, end: end.underlying)
@@ -149,9 +151,11 @@ extension Windows.`32`.Kernel.Lock.Immediate {
         kind: Windows.`32`.Kernel.Lock.Kind
     ) throws(Windows.`32`.Kernel.Lock.Error) {
         #if os(Windows)
-            guard try Windows.`32`.Kernel.Lock.validate(range) else { return }  // empty range locks nothing
+            // An empty range locks nothing.
+            guard try Windows.`32`.Kernel.Lock.validate(range) else { return }
             var overlapped = OVERLAPPED()
-            let (offsetLow, offsetHigh, lengthLow, lengthHigh) = Windows.`32`.Kernel.Lock.lockParameters(range: range)
+            let (offsetLow, offsetHigh, lengthLow, lengthHigh) = Windows.`32`.Kernel.Lock
+                .lockParameters(range: range)
             overlapped.Offset = offsetLow
             overlapped.OffsetHigh = offsetHigh
 

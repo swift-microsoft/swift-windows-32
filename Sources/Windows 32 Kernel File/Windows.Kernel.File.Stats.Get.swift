@@ -34,12 +34,15 @@
             }
 
             // Synthesize POSIX-like permissions from Windows attributes
-            var permissions: Windows.`32`.Kernel.File.Permissions = .standard  // Default: rw-r--r-- (0o644)
+            // Default: rw-r--r-- (0o644).
+            var permissions: Windows.`32`.Kernel.File.Permissions = .standard
             if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_READONLY)) != 0 {
-                permissions = Windows.`32`.Kernel.File.Permissions(rawValue: 0o444)  // r--r--r--
+                // r--r--r--
+                permissions = Windows.`32`.Kernel.File.Permissions(rawValue: 0o444)
             }
             if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
-                permissions = permissions | Windows.`32`.Kernel.File.Permissions(rawValue: 0o111)  // Add execute for directories
+                // Add execute for directories.
+                permissions = permissions | Windows.`32`.Kernel.File.Permissions(rawValue: 0o111)
             }
 
             let inode = (UInt64(info.nFileIndexHigh) << 32) | UInt64(info.nFileIndexLow)
@@ -52,7 +55,9 @@
                 gid: .root,
                 inode: Windows.`32`.Kernel.Inode(inode),
                 device: Windows.`32`.Kernel.Device(UInt64(info.dwVolumeSerialNumber)),
-                linkCount: Windows.`32`.Kernel.Link.Count(_unchecked: Cardinal(UInt(info.nNumberOfLinks))),
+                linkCount: Windows.`32`.Kernel.Link.Count(
+                    _unchecked: Cardinal(UInt(info.nNumberOfLinks))
+                ),
                 accessTime: Instant(_from: info.ftLastAccessTime),
                 modificationTime: Instant(_from: info.ftLastWriteTime),
                 changeTime: Instant(_from: info.ftLastWriteTime)  // Windows doesn't have ctime
@@ -77,8 +82,11 @@
         ) throws(Windows.`32`.Kernel.File.Stats.Error) -> Stats {
             var info = BY_HANDLE_FILE_INFORMATION()
 
-            guard GetFileInformationByHandle(UnsafeMutableRawPointer(bitPattern: handle)!, &info) else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.captureLastError()))
+            guard GetFileInformationByHandle(UnsafeMutableRawPointer(bitPattern: handle)!, &info)
+            else {
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                )
             }
 
             return Stats(_from: info)

@@ -31,7 +31,12 @@
             address: UnsafeRawPointer,
             length: Memory.Address.Count
         ) throws(Memory.Lock.Error) {
-            guard VirtualLock(UnsafeMutableRawPointer(mutating: address), SIZE_T(length.underlying.rawValue)) else {
+            guard
+                VirtualLock(
+                    UnsafeMutableRawPointer(mutating: address),
+                    SIZE_T(length.underlying.rawValue)
+                )
+            else {
                 throw .lock(Error_Primitives.Error.captureLastError())
             }
         }
@@ -50,7 +55,12 @@
             address: UnsafeRawPointer,
             length: Memory.Address.Count
         ) throws(Memory.Lock.Error) {
-            guard VirtualUnlock(UnsafeMutableRawPointer(mutating: address), SIZE_T(length.underlying.rawValue)) else {
+            guard
+                VirtualUnlock(
+                    UnsafeMutableRawPointer(mutating: address),
+                    SIZE_T(length.underlying.rawValue)
+                )
+            else {
                 throw .unlock(Error_Primitives.Error.captureLastError())
             }
         }

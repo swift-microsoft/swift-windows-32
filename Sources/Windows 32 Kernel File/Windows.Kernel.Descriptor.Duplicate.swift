@@ -62,7 +62,9 @@
         /// - Parameter descriptor: The handle to duplicate.
         /// - Returns: The duplicated handle.
         /// - Throws: `Windows.`32`.Kernel.Descriptor.Duplicate.Error` on failure.
-        public static func duplicate(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) throws(Error) -> Windows.`32`.Kernel.Descriptor {
+        public static func duplicate(
+            _ descriptor: borrowing Windows.`32`.Kernel.Descriptor
+        ) throws(Error) -> Windows.`32`.Kernel.Descriptor {
             guard descriptor.isValid else {
                 throw .handle(.invalid)
             }

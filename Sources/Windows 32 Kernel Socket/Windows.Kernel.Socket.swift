@@ -28,9 +28,11 @@
         /// Thread-safe. Winsock uses reference counting for startup/cleanup.
         public static func startup() throws(Error) {
             var wsaData = WSADATA()
-            let result = WSAStartup(MAKEWORD(2, 2), &wsaData)
+            let result = WSAStartup(makeWord(2, 2), &wsaData)
             guard result == 0 else {
-                throw .platform(Error_Primitives.Error(code: Error_Primitives.Error.Code.win32(DWORD(result))))
+                throw .platform(
+                    Error_Primitives.Error(code: Error_Primitives.Error.Code.win32(DWORD(result)))
+                )
             }
         }
 
@@ -148,7 +150,7 @@
 
     /// Creates a WORD value from two bytes.
     @inlinable
-    package func MAKEWORD(_ low: UInt8, _ high: UInt8) -> WORD {
+    package func makeWord(_ low: UInt8, _ high: UInt8) -> WORD {
         WORD(low) | (WORD(high) << 8)
     }
 

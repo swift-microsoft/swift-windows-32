@@ -43,7 +43,9 @@
     extension Windows.`32`.Kernel.Link.Symbolic.Test.Unit {
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
-            let error = Kernel.Link.Symbolic.Error.current(from: Error_Primitives.Error.Code.File.notFound)
+            let error = Kernel.Link.Symbolic.Error.current(
+                from: Error_Primitives.Error.Code.File.notFound
+            )
             if case .notFound = error {
                 // Expected
             } else {
@@ -53,7 +55,9 @@
 
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
-            let error = Kernel.Link.Symbolic.Error.current(from: Error_Primitives.Error.Code.Access.denied)
+            let error = Kernel.Link.Symbolic.Error.current(
+                from: Error_Primitives.Error.Code.Access.denied
+            )
             if case .permission = error {
                 // Expected
             } else {
@@ -63,7 +67,9 @@
 
         @Test
         func `Error.exists maps from FILE_EXISTS`() {
-            let error = Kernel.Link.Symbolic.Error.current(from: Error_Primitives.Error.Code.File.exists)
+            let error = Kernel.Link.Symbolic.Error.current(
+                from: Error_Primitives.Error.Code.File.exists
+            )
             if case .exists = error {
                 // Expected
             } else {
@@ -73,7 +79,9 @@
 
         @Test
         func `Error.noSpace maps from DISK_FULL`() {
-            let error = Kernel.Link.Symbolic.Error.current(from: Error_Primitives.Error.Code.Storage.diskFull)
+            let error = Kernel.Link.Symbolic.Error.current(
+                from: Error_Primitives.Error.Code.Storage.diskFull
+            )
             if case .noSpace = error {
                 // Expected
             } else {
@@ -111,14 +119,23 @@
             do {
                 try target.withUnsafeBufferPointer { targetPtr in
                     try link.withUnsafeBufferPointer { linkPtr in
-                        let wtarget = UnsafeRawPointer(targetPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
-                        let wlink = UnsafeRawPointer(linkPtr.baseAddress!).assumingMemoryBound(to: UInt16.self)
-                        try Windows.`32`.Kernel.Link.Symbolic.create(target: wtarget, linkPath: wlink)
+                        let wtarget = UnsafeRawPointer(targetPtr.baseAddress!).assumingMemoryBound(
+                            to: UInt16.self
+                        )
+                        let wlink = UnsafeRawPointer(linkPtr.baseAddress!).assumingMemoryBound(
+                            to: UInt16.self
+                        )
+                        try Windows.`32`.Kernel.Link.Symbolic.create(
+                            target: wtarget,
+                            linkPath: wlink
+                        )
                     }
                 }
                 // Privileged runner: clean up the dangling link.
                 link.withUnsafeBufferPointer { linkPtr in
-                    let wlink = UnsafeRawPointer(linkPtr.baseAddress!).assumingMemoryBound(to: Path.Char.self)
+                    let wlink = UnsafeRawPointer(linkPtr.baseAddress!).assumingMemoryBound(
+                        to: Path.Char.self
+                    )
                     try? Windows.`32`.Kernel.File.Delete.delete(unsafePath: wlink)
                 }
             } catch is Kernel.Link.Symbolic.Error {

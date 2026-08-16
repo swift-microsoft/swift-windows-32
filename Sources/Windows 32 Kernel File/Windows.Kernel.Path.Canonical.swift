@@ -53,7 +53,9 @@
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Path.Canonical.Error) -> Cardinal {
             let wpath = UnsafeRawPointer(unsafePath).assumingMemoryBound(to: WCHAR.self)
-            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(to: WCHAR.self)
+            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
+                to: WCHAR.self
+            )
 
             let result = GetFullPathNameW(wpath, DWORD(buffer.count), wbuffer, nil)
 
@@ -63,7 +65,9 @@
 
             // If result > buffer.count, the buffer was too small
             if result > buffer.count {
-                throw .platform(Error_Primitives.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER))))
+                throw .platform(
+                    Error_Primitives.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER)))
+                )
             }
 
             return Cardinal(result)

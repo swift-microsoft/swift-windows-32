@@ -49,7 +49,10 @@ internal import Windows_32_Core
 
             /// Creates Windows file stats.
             @inlinable
-            public init(base: Windows.`32`.Kernel.File.Stats, creationTime: Windows.`32`.Kernel.Time) {
+            public init(
+                base: Windows.`32`.Kernel.File.Stats,
+                creationTime: Windows.`32`.Kernel.Time
+            ) {
                 self.base = base
                 self.creationTime = creationTime
             }
@@ -197,7 +200,8 @@ internal import Windows_32_Core
         /// - Throws: ``Kernel/File/Stats/Error`` if the syscall fails.
         package static func get(handle: UInt) throws(Error) -> Self {
             var info = BY_HANDLE_FILE_INFORMATION()
-            guard GetFileInformationByHandle(UnsafeMutableRawPointer(bitPattern: handle)!, &info) else {
+            guard GetFileInformationByHandle(UnsafeMutableRawPointer(bitPattern: handle)!, &info)
+            else {
                 throw Error(_windowsError: GetLastError())
             }
             return Self(_from: info)
@@ -211,7 +215,9 @@ internal import Windows_32_Core
         /// - Parameter descriptor: The file descriptor to stat.
         /// - Returns: Windows file metadata including creation time.
         /// - Throws: ``Kernel/File/Stats/Error`` if the syscall fails.
-        public static func get(descriptor: borrowing Windows.`32`.Kernel.Descriptor) throws(Error) -> Self {
+        public static func get(
+            descriptor: borrowing Windows.`32`.Kernel.Descriptor
+        ) throws(Error) -> Self {
             try get(handle: descriptor._rawValue)
         }
     }
