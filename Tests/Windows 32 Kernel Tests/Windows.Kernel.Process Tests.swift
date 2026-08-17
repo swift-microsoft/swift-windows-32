@@ -95,6 +95,63 @@
         }
     }
 
+    // MARK: - Spawn Integration
+
+    extension Windows.`32`.Kernel.Process.Test.Integration {
+        /// Regression for #18: marking a SECOND handle inheritable must
+        /// rewire `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` successfully.
+        ///
+        /// The attribute list holds room for exactly one attribute and
+        /// `UpdateProcThreadAttribute` appends rather than replaces, so
+        /// before the fix the second ``markHandleInheritable(_:)`` call
+        /// failed with `ERROR_GEN_FAILURE` (win32 error 31) — the shape
+        /// every consumer spawning with both stdout and stderr piped hits
+        /// (swift-process#6; observed fleet-wide via swift-git's client,
+        /// which pipes both streams on every invocation).
+        @Test
+        func `spawn succeeds with two inheritable stdio handles`() throws {
+            var actions = try Windows.`32`.Kernel.Process.Spawn.Actions()
+            let stdoutPipe = try Windows.`32`.Kernel.Pipe.pipe()
+            let stderrPipe = try Windows.`32`.Kernel.Pipe.pipe()
+
+            try actions.markHandleInheritable(stdoutPipe.write)
+            try actions.markHandleInheritable(stderrPipe.write)
+            actions.setStdout(stdoutPipe.write)
+            actions.setStderr(stderrPipe.write)
+
+            var commandLine: [WCHAR] = Array("cmd.exe /C exit 0".utf16)
+            commandLine.append(0)
+            let executable: [WCHAR] = Array(#"C:\Windows\System32\cmd.exe"#.utf16) + [0]
+
+            var spawned: Windows.`32`.Kernel.Process.Spawn.Result?
+            try unsafe executable.withUnsafeBufferPointer { exePtr in
+                try unsafe commandLine.withUnsafeMutableBufferPointer { cmdPtr in
+                    spawned = try unsafe Windows.`32`.Kernel.Process.Spawn.spawn(
+                        executable: exePtr.baseAddress,
+                        commandLine: cmdPtr.baseAddress!,
+                        environment: nil,
+                        workingDirectory: nil,
+                        actions: actions
+                    )
+                }
+            }
+
+            guard let result = consume spawned else {
+                Issue.record("spawn produced no result")
+                return
+            }
+
+            let processHandle = unsafe UnsafeMutableRawPointer(
+                bitPattern: result.processHandle._rawValue
+            )
+            #expect(processHandle != nil)
+            if let processHandle {
+                let waited = unsafe WaitForSingleObject(processHandle, 10_000)
+                #expect(waited == WAIT_OBJECT_0)
+            }
+        }
+    }
+
     // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Process.Test.EdgeCase {
