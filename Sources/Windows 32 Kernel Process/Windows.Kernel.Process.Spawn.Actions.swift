@@ -72,6 +72,16 @@ extension Windows.`32`.Kernel.Process.Spawn {
             /// Number of HANDLEs allocated at `_inheritHandlesRaw`.
             internal var _inheritHandlesCount: Int = 0
 
+            /// Byte size of the buffer at `_attributeListRaw`, as reported by
+            /// the `InitializeProcThreadAttributeList` size query in `init`.
+            ///
+            /// Kept so ``markHandleInheritable(_:)`` can re-initialize the
+            /// attribute list in place: `UpdateProcThreadAttribute` appends an
+            /// entry rather than replacing a same-attribute entry, so wiring
+            /// `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` for a grown handle array
+            /// requires resetting the one-attribute list first.
+            internal var _attributeListSize: SIZE_T = 0
+
             /// Stdin / stdout / stderr override handles (only set when the
             /// caller explicitly redirected the slot).
             internal var _stdinHandle: HANDLE?
@@ -121,6 +131,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 unsafe (self._attributeListRaw = raw)
                 unsafe (self._inheritHandlesRaw = nil)
                 self._inheritHandlesCount = 0
+                self._attributeListSize = size
                 unsafe (self._stdinHandle = nil)
                 unsafe (self._stdoutHandle = nil)
                 unsafe (self._stderrHandle = nil)
@@ -203,29 +214,6 @@ extension Windows.`32`.Kernel.Process.Spawn {
     // MARK: - Handle Inheritance List
 
     extension Windows.`32`.Kernel.Process.Spawn.Actions {
-        /// Set the precise list of handles the child process inherits.
-        ///
-        /// This wires `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` into the attribute
-        /// list. Only the listed handles inherit; any other inheritable
-        /// handle in the parent's open-handle table is excluded. Required for
-        /// safe stdio redirection — without it, CreateProcessW with
-        /// `bInheritHandles = true` leaks every inheritable handle the parent
-        /// has open.
-        ///
-        /// - Parameter handles: Parent-owned handles to allow into the child.
-        ///   Must include the stdio HANDLEs passed via ``setStdin(_:)`` etc.
-        /// - Throws: ``Windows/32/Kernel/Process/Error/create(_:)`` on
-        ///   `UpdateProcThreadAttribute` failure.
-        public mutating func setInheritedHandles(
-            _ handles: [Windows.`32`.Kernel.Descriptor.Validity.Error.Limit?] = []
-        ) throws(Windows.`32`.Kernel.Process.Error) {
-            // NOTE: this overload accepts the Limit type purely so the
-            // signature compiles cross-platform; the actual implementation
-            // dispatches on individual HANDLE values via the borrowing
-            // overload below.
-            throw .create(.win32(0))
-        }
-
         /// Marks a specific descriptor's HANDLE as inheritable and appends it
         /// to the inheritance list for `PROC_THREAD_ATTRIBUTE_HANDLE_LIST`.
         ///
@@ -266,8 +254,36 @@ extension Windows.`32`.Kernel.Process.Spawn {
             self._inheritHandlesCount = newCount
 
             // Re-wire the attribute list to point at the updated array.
+            //
+            // `UpdateProcThreadAttribute` appends an entry; it does not
+            // replace a same-attribute entry. The list was initialized with
+            // room for exactly one attribute, so a second update against it
+            // (the second `markHandleInheritable` call — e.g. spawning with
+            // both stdout and stderr piped) fails with `ERROR_GEN_FAILURE`
+            // (win32 error 31). Reset the list in place first, then wire
+            // `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` exactly once with the
+            // complete array.
             guard let attrList = unsafe _attributeListRaw else {
                 throw .create(.win32(UInt32(ERROR_INVALID_HANDLE)))
+            }
+
+            unsafe DeleteProcThreadAttributeList(LPPROC_THREAD_ATTRIBUTE_LIST(attrList))
+            var size = _attributeListSize
+            guard
+                unsafe InitializeProcThreadAttributeList(
+                    LPPROC_THREAD_ATTRIBUTE_LIST(attrList),
+                    1,
+                    0,
+                    &size
+                )
+            else {
+                // The list is no longer initialized: detach the buffer so
+                // `deinit` does not call `DeleteProcThreadAttributeList` on
+                // an uninitialized list.
+                let err = Error_Primitives.Error.captureLastError()
+                unsafe attrList.deallocate()
+                unsafe (self._attributeListRaw = nil)
+                throw .create(err)
             }
 
             guard
