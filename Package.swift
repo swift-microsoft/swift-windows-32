@@ -158,6 +158,10 @@ let package = Package(
             branch: "main"
         ),
         .package(
+            url: "https://github.com/swift-primitives/swift-byte-primitives.git",
+            branch: "main"
+        ),
+        .package(
             url: "https://github.com/swift-primitives/swift-dimension-primitives.git",
             branch: "main"
         ),
@@ -299,7 +303,8 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel IO",
             dependencies: [
-                "Windows 32 Kernel Core"
+                "Windows 32 Kernel Core",
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
             ]
         ),
 

@@ -10,6 +10,7 @@
 // ===----------------------------------------------------------------------===//
 
 #if os(Windows)
+    public import Byte_Primitives
     public import Error_Primitives
     public import WinSDK
 
@@ -194,6 +195,26 @@
     // MARK: - Span Adapters
 
     extension Windows.`32`.Kernel.IO.Write {
+        /// Writes the initialized bytes in a span to a file descriptor.
+        ///
+        /// Performs one synchronous `WriteFile` operation and returns its native
+        /// completion count, which may be less than `span.count`.
+        ///
+        /// - Parameters:
+        ///   - descriptor: The file descriptor to write to.
+        ///   - span: The initialized bytes to write.
+        /// - Returns: Number of bytes written.
+        /// - Throws: `Windows.`32`.Kernel.IO.Write.Error` on failure.
+        public static func write(
+            _ descriptor: borrowing Windows.`32`.Kernel.Descriptor,
+            from span: borrowing Swift.Span<Byte>
+        ) throws(Error) -> Int {
+            try unsafe span.withUnsafeBytes {
+                (buffer: UnsafeRawBufferPointer) throws(Error) -> Int in
+                try unsafe write(descriptor, from: buffer)
+            }
+        }
+
         /// Writes bytes from a span to a file descriptor.
         ///
         /// - Parameters:
