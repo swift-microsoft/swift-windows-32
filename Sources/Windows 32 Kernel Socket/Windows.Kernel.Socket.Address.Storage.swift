@@ -43,7 +43,8 @@
         }
 
         internal mutating func withUnsafeMutableAddress<Result, Failure: Swift.Error>(
-            _ body: (UnsafeMutablePointer<sockaddr>, UnsafeMutablePointer<Int32>) throws(Failure) -> Result
+            _ body: (UnsafeMutablePointer<sockaddr>, UnsafeMutablePointer<Int32>) throws(Failure) ->
+                Result
         ) throws(Failure) -> Result {
             try unsafe Swift.withUnsafeMutablePointer(to: &value) { pointer throws(Failure) in
                 try unsafe pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { address in

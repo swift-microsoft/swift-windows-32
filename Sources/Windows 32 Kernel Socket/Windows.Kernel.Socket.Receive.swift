@@ -199,7 +199,8 @@
             try unsafe span.withUnsafeMutableBytes { buffer throws(Error) in
                 var address = Windows.`32`.Kernel.Socket.Address.Storage()
                 var zero: UInt8 = 0
-                let count = try unsafe Swift.withUnsafeMutablePointer(to: &zero) { fallback throws(Error) in
+                let count = try unsafe Swift.withUnsafeMutablePointer(to: &zero) {
+                    fallback throws(Error) in
                     try address.withUnsafeMutableAddress { pointer, length in
                         try receiveFrom(
                             socket._rawValue,
