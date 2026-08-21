@@ -1,20 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 public import Error_Primitives
 public import Memory_Primitives
 
 extension Windows.`32`.Kernel.File.Handle {
-    /// Errors for handle-level I/O. Mirrors
-    /// `ISO_9945.Kernel.File.Handle.Error`.
+
     public enum Error: Swift.Error, Sendable, Equatable {
         case invalidHandle
         case endOfFile

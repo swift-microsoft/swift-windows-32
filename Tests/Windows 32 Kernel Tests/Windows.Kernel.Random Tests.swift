@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -30,8 +19,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Random.Test.Unit {
         @Test
         func `Random namespace exists`() {
@@ -39,12 +26,10 @@
         }
     }
 
-    // MARK: - BCryptGenRandom Tests
-
     extension Windows.`32`.Kernel.Random.Test.Unit {
         @Test
         func `bCryptGenRandom fills buffer without throwing`() throws(Random.Error) {
-            var buffer: (UInt64, UInt64, UInt64, UInt64) = (0, 0, 0, 0)  // 32 bytes
+            var buffer: (UInt64, UInt64, UInt64, UInt64) = (0, 0, 0, 0)
             try withUnsafeMutableBytes(of: &buffer) { raw throws(Random.Error) in
                 try Windows.`32`.Kernel.Random.bCryptGenRandom(raw)
             }
@@ -52,11 +37,11 @@
 
         @Test
         func `bCryptGenRandom produces non-zero bytes`() throws(Random.Error) {
-            var buffer: (UInt64, UInt64, UInt64, UInt64) = (0, 0, 0, 0)  // 32 bytes
+            var buffer: (UInt64, UInt64, UInt64, UInt64) = (0, 0, 0, 0)
             try withUnsafeMutableBytes(of: &buffer) { raw throws(Random.Error) in
                 try Windows.`32`.Kernel.Random.bCryptGenRandom(raw)
             }
-            // Very unlikely all 32 bytes are zero
+
             #expect(buffer != (0, 0, 0, 0))
         }
 
@@ -66,8 +51,6 @@
             try Windows.`32`.Kernel.Random.bCryptGenRandom(buffer)
         }
     }
-
-    // MARK: - Random Value Tests
 
     extension Windows.`32`.Kernel.Random.Test.Unit {
         @Test
@@ -90,7 +73,7 @@
                     values.insert(v)
                 }
             }
-            // Should have at least 9 unique values (statistically near-certain)
+
             #expect(values.count >= 9)
         }
 
@@ -105,8 +88,6 @@
             #expect(values.count >= 9)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Random.Test.EdgeCase {
         @Test

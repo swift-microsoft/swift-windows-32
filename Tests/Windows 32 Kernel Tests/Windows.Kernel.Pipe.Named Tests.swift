@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Pipe.Named.Test.Unit {
         @Test
         func `Pipe.Named namespace exists`() {
@@ -47,8 +34,6 @@
             _ = Windows.`32`.Kernel.Pipe.Named.PipeMode.self
         }
     }
-
-    // MARK: - OpenMode Tests
 
     extension Windows.`32`.Kernel.Pipe.Named.Test.Unit {
         @Test
@@ -87,8 +72,6 @@
             #expect(mode.rawValue == DWORD(FILE_FLAG_FIRST_PIPE_INSTANCE))
         }
     }
-
-    // MARK: - PipeMode Tests
 
     extension Windows.`32`.Kernel.Pipe.Named.Test.Unit {
         @Test
@@ -143,8 +126,6 @@
             #expect(mode.contains(.wait))
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Pipe.Named.Test.EdgeCase {
         @Test

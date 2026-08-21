@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -22,8 +11,6 @@
             @Suite struct EdgeCase {}
         }
     }
-
-    // MARK: - Case Existence Tests
 
     extension Windows.`32`.Kernel.Socket.Error.Test.Unit {
         @Test
@@ -42,8 +29,6 @@
             }
         }
     }
-
-    // MARK: - Conformance Tests
 
     extension Windows.`32`.Kernel.Socket.Error.Test.Unit {
         @Test
@@ -78,8 +63,6 @@
         }
     }
 
-    // MARK: - Description Tests
-
     extension Windows.`32`.Kernel.Socket.Error.Test.Unit {
         @Test
         func `platform error description is non-empty`() {
@@ -89,8 +72,6 @@
             #expect(!error.description.isEmpty)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Socket.Error.Test.EdgeCase {
         @Test

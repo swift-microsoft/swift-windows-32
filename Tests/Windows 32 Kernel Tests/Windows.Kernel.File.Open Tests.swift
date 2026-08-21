@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -25,8 +14,6 @@
             @Suite(.serialized) struct Performance {}
         }
     }
-
-    // MARK: - Namespace Tests
 
     extension Windows.`32`.Kernel.File.Open.Test.Unit {
         @Test
@@ -50,8 +37,6 @@
         }
     }
 
-    // MARK: - Mode Tests
-
     extension Windows.`32`.Kernel.File.Open.Test.Unit {
         @Test
         func `Mode.read exists`() {
@@ -74,8 +59,6 @@
             #expect(mode.write)
         }
     }
-
-    // MARK: - Options Tests
 
     extension Windows.`32`.Kernel.File.Open.Test.Unit {
         @Test
@@ -126,8 +109,6 @@
             #expect(options.contains(.deleteOnClose))
         }
     }
-
-    // MARK: - Windows Conversion Tests
 
     extension Windows.`32`.Kernel.File.Open.Test.Unit {
         @Test
@@ -189,8 +170,6 @@
             #expect(disposition == DWORD(OPEN_EXISTING))
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.File.Open.Test.EdgeCase {
         @Test

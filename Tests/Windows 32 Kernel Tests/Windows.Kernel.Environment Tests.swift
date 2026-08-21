@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,16 +18,12 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Environment.Test.Unit {
         @Test
         func `Environment namespace exists`() {
             _ = Windows.`32`.Kernel.Environment.self
         }
     }
-
-    // MARK: - Get Tests
 
     extension Windows.`32`.Kernel.Environment.Test.Unit {
         @Test
@@ -71,7 +56,7 @@
         @Test
         func `get with buffer works`() throws {
             var name = Array("PATH".utf16) + [0]
-            var buffer = [UInt16](repeating: 0, count: 32768)  // MAX_ENV_VALUE
+            var buffer = [UInt16](repeating: 0, count: 32768)
 
             let length = try name.withUnsafeBufferPointer { namePtr in
                 try buffer.withUnsafeMutableBufferPointer { bufferPtr in
@@ -86,8 +71,6 @@
         }
     }
 
-    // MARK: - Set and Unset Tests
-
     extension Windows.`32`.Kernel.Environment.Test.Unit {
         @Test
         func `set and get round-trip`() throws {
@@ -97,7 +80,6 @@
             var name = Array(varName.utf16) + [0]
             var value = Array(varValue.utf16) + [0]
 
-            // Set
             try name.withUnsafeBufferPointer { namePtr in
                 try value.withUnsafeBufferPointer { valuePtr in
                     let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
@@ -110,7 +92,6 @@
                 }
             }
 
-            // Get
             let result = name.withUnsafeBufferPointer { namePtr in
                 let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
                     to: WCHAR.self
@@ -122,7 +103,6 @@
             let resultString = String(decoding: result!, as: UTF16.self)
             #expect(resultString == varValue)
 
-            // Clean up
             try name.withUnsafeBufferPointer { namePtr in
                 let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
                     to: WCHAR.self
@@ -138,7 +118,6 @@
             var name = Array(varName.utf16) + [0]
             var value = Array("value".utf16) + [0]
 
-            // Set
             try name.withUnsafeBufferPointer { namePtr in
                 try value.withUnsafeBufferPointer { valuePtr in
                     let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
@@ -151,7 +130,6 @@
                 }
             }
 
-            // Unset
             try name.withUnsafeBufferPointer { namePtr in
                 let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
                     to: WCHAR.self
@@ -159,7 +137,6 @@
                 try Windows.`32`.Kernel.Environment.unset(name: wname)
             }
 
-            // Verify gone
             let result = name.withUnsafeBufferPointer { namePtr in
                 let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
                     to: WCHAR.self
@@ -171,15 +148,12 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Windows.`32`.Kernel.Environment.Test.EdgeCase {
         @Test
         func `unset nonexistent variable succeeds`() throws {
             let varName = "NONEXISTENT_UNSET_\(GetCurrentProcessId())"
             var name = Array(varName.utf16) + [0]
 
-            // Should not throw - variable already doesn't exist
             try name.withUnsafeBufferPointer { namePtr in
                 let wname = UnsafeRawPointer(namePtr.baseAddress!).assumingMemoryBound(
                     to: WCHAR.self
@@ -191,7 +165,7 @@
         @Test
         func `get with small buffer throws`() {
             var name = Array("PATH".utf16) + [0]
-            var buffer = [UInt16](repeating: 0, count: 1)  // Too small
+            var buffer = [UInt16](repeating: 0, count: 1)
 
             #expect(throws: Kernel.Environment.Error.self) {
                 try name.withUnsafeBufferPointer { namePtr in

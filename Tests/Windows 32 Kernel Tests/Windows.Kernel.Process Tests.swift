@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Process.Test.Unit {
         @Test
         func `Process namespace exists`() {
@@ -47,8 +34,6 @@
             _ = Windows.`32`.Kernel.Process.Info.self
         }
     }
-
-    // MARK: - Current Process Tests
 
     extension Windows.`32`.Kernel.Process.Test.Unit {
         @Test
@@ -71,14 +56,12 @@
         }
     }
 
-    // MARK: - Error Tests
-
     extension Windows.`32`.Kernel.Process.Test.Unit {
         @Test
         func `Error.create exists`() {
             let error = Windows.`32`.Kernel.Process.Error.create(.win32(0))
             if case .create = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .create, got \(error)")
             }
@@ -88,26 +71,15 @@
         func `Error.wait exists`() {
             let error = Windows.`32`.Kernel.Process.Error.wait(.win32(0))
             if case .wait = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .wait, got \(error)")
             }
         }
     }
 
-    // MARK: - Spawn Integration
-
     extension Windows.`32`.Kernel.Process.Test.Integration {
-        /// Regression for #18: marking a SECOND handle inheritable must
-        /// rewire `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` successfully.
-        ///
-        /// The attribute list holds room for exactly one attribute and
-        /// `UpdateProcThreadAttribute` appends rather than replaces, so
-        /// before the fix the second ``markHandleInheritable(_:)`` call
-        /// failed with `ERROR_GEN_FAILURE` (win32 error 31) — the shape
-        /// every consumer spawning with both stdout and stderr piped hits
-        /// (swift-process#6; observed fleet-wide via swift-git's client,
-        /// which pipes both streams on every invocation).
+
         @Test
         func `spawn succeeds with two inheritable stdio handles`() throws {
             var actions = try Windows.`32`.Kernel.Process.Spawn.Actions()
@@ -152,8 +124,6 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Windows.`32`.Kernel.Process.Test.EdgeCase {
         @Test
         func `getCurrentId is consistent`() {
@@ -164,7 +134,7 @@
 
         @Test
         func `Info has expected properties`() {
-            // Type check only
+
             _ = \Windows.`32`.Kernel.Process.Info.processHandle
             _ = \Windows.`32`.Kernel.Process.Info.threadHandle
             _ = \Windows.`32`.Kernel.Process.Info.processId

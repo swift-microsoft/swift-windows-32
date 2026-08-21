@@ -1,23 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows MoveFileExW syscall
-
-    // MARK: - Move Options
-
     extension Windows.`32`.Kernel.File.Move {
-        /// Options for move operations.
+
         public struct Options: OptionSet, Sendable {
             public let rawValue: DWORD
 
@@ -28,30 +13,18 @@
     }
 
     extension Windows.`32`.Kernel.File.Move.Options {
-        /// Replace existing file at destination.
+
         public static let replaceExisting = Self(rawValue: DWORD(MOVEFILE_REPLACE_EXISTING))
 
-        /// Flush buffers to disk before returning (write-through semantics).
-        /// Provides durability guarantee that the rename is persisted.
         public static let writeThrough = Self(rawValue: DWORD(MOVEFILE_WRITE_THROUGH))
 
-        /// Allow move across volumes (copy + delete).
         public static let copyAllowed = Self(rawValue: DWORD(MOVEFILE_COPY_ALLOWED))
 
-        /// Delay move until reboot (requires privileges).
         public static let delayUntilReboot = Self(rawValue: DWORD(MOVEFILE_DELAY_UNTIL_REBOOT))
     }
 
-    // MARK: - Move Operations
-
     extension Windows.`32`.Kernel.File.Move {
-        /// Moves (renames) a file or directory.
-        ///
-        /// - Parameters:
-        ///   - oldPath: The current path of the file or directory.
-        ///   - newPath: The new path for the file or directory.
-        ///   - replaceExisting: If true, replaces an existing file at newPath.
-        /// - Throws: `Windows.`32`.Kernel.File.Move.Error` on failure.
+
         public static func move(
             from oldPath: borrowing Path,
             to newPath: borrowing Path,
@@ -61,13 +34,6 @@
             try move(from: oldPath, to: newPath, options: options)
         }
 
-        /// Moves (renames) a file or directory with options.
-        ///
-        /// - Parameters:
-        ///   - oldPath: The current path of the file or directory.
-        ///   - newPath: The new path for the file or directory.
-        ///   - options: Move options (replaceExisting, writeThrough, etc.).
-        /// - Throws: `Windows.`32`.Kernel.File.Move.Error` on failure.
         public static func move(
             from oldPath: borrowing Path,
             to newPath: borrowing Path,
@@ -86,13 +52,6 @@
             }
         }
 
-        /// Moves (renames) a file or directory using unsafe wide strings.
-        ///
-        /// - Parameters:
-        ///   - oldPath: The current path as a null-terminated wide string.
-        ///   - newPath: The new path as a null-terminated wide string.
-        ///   - replaceExisting: If true, replaces an existing file at newPath.
-        /// - Throws: `Windows.`32`.Kernel.File.Move.Error` on failure.
         public static func move(
             from oldPath: UnsafePointer<Path.Char>,
             to newPath: UnsafePointer<Path.Char>,
@@ -102,13 +61,6 @@
             try move(from: oldPath, to: newPath, options: options)
         }
 
-        /// Moves (renames) a file or directory using unsafe wide strings with options.
-        ///
-        /// - Parameters:
-        ///   - oldPath: The current path as a null-terminated wide string.
-        ///   - newPath: The new path as a null-terminated wide string.
-        ///   - options: Move options (replaceExisting, writeThrough, etc.).
-        /// - Throws: `Windows.`32`.Kernel.File.Move.Error` on failure.
         public static func move(
             from oldPath: UnsafePointer<Path.Char>,
             to newPath: UnsafePointer<Path.Char>,
@@ -123,10 +75,8 @@
         }
     }
 
-    // MARK: - Error Construction
-
     extension Windows.`32`.Kernel.File.Move.Error {
-        /// Creates an error from the current Win32 last error.
+
         @usableFromInline
         internal static func current() -> Self {
             let code = Error_Primitives.Error.captureLastError()
@@ -136,7 +86,6 @@
             return current(from: win32Code)
         }
 
-        /// Maps a Win32 error code to the semantic error (testing seam).
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
             case Error_Primitives.Error.Code.File.notFound,

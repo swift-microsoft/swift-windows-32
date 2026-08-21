@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,16 +18,12 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Directory.Working.Test.Unit {
         @Test
         func `Directory.Working namespace exists`() {
             _ = Windows.`32`.Kernel.Directory.Working.self
         }
     }
-
-    // MARK: - Get Tests
 
     extension Windows.`32`.Kernel.Directory.Working.Test.Unit {
         @Test
@@ -49,7 +34,7 @@
 
         @Test
         func `get(into:) works with buffer`() throws {
-            var buffer = [UInt16](repeating: 0, count: 260)  // MAX_PATH
+            var buffer = [UInt16](repeating: 0, count: 260)
             let length = try buffer.withUnsafeMutableBufferPointer { bufferPtr in
                 try Windows.`32`.Kernel.Directory.Working.get(into: bufferPtr)
             }
@@ -60,7 +45,6 @@
         func `get() result matches GetCurrentDirectoryW`() throws {
             let cwd = try Windows.`32`.Kernel.Directory.Working.get()
 
-            // Get via Win32 API directly
             var buffer = [WCHAR](repeating: 0, count: 260)
             let length = GetCurrentDirectoryW(DWORD(buffer.count), &buffer)
 
@@ -69,12 +53,10 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Windows.`32`.Kernel.Directory.Working.Test.EdgeCase {
         @Test
         func `get(into:) with small buffer throws`() {
-            var buffer = [UInt16](repeating: 0, count: 1)  // Too small
+            var buffer = [UInt16](repeating: 0, count: 1)
 
             #expect(throws: Kernel.Directory.Working.Error.self) {
                 try buffer.withUnsafeMutableBufferPointer { bufferPtr in

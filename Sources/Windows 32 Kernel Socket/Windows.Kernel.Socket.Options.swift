@@ -1,22 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import Error_Primitives
     public import WinSDK
 
-    // MARK: - Socket Options
-
     extension Windows.`32`.Kernel.Socket {
-        /// Socket option level.
+
         public struct OptionLevel: RawRepresentable, Sendable, Equatable {
             public let rawValue: Int32
 
@@ -25,7 +12,6 @@
             }
         }
 
-        /// Socket option name.
         public struct OptionName: RawRepresentable, Sendable, Equatable {
             public let rawValue: Int32
 
@@ -36,77 +22,47 @@
     }
 
     extension Windows.`32`.Kernel.Socket.OptionLevel {
-        /// Socket-level options.
+
         public static let socket = Self(rawValue: SOL_SOCKET)
 
-        /// TCP-level options.
         public static let tcp = Self(rawValue: IPPROTO_TCP.rawValue)
 
-        /// IPv4-level options.
         public static let ipv4 = Self(rawValue: IPPROTO_IP)
 
-        /// IPv6-level options.
         public static let ipv6 = Self(rawValue: IPPROTO_IPV6.rawValue)
     }
 
     extension Windows.`32`.Kernel.Socket.OptionName {
-        // MARK: - SOL_SOCKET Options
 
-        /// Allow reuse of local addresses.
         public static let reuseAddr = Self(rawValue: SO_REUSEADDR)
 
-        /// Keep connections alive.
         public static let keepAlive = Self(rawValue: SO_KEEPALIVE)
 
-        /// Receive buffer size.
         public static let receiveBuffer = Self(rawValue: SO_RCVBUF)
 
-        /// Send buffer size.
         public static let sendBuffer = Self(rawValue: SO_SNDBUF)
 
-        /// Receive timeout.
         public static let receiveTimeout = Self(rawValue: SO_RCVTIMEO)
 
-        /// Send timeout.
         public static let sendTimeout = Self(rawValue: SO_SNDTIMEO)
 
-        /// Linger on close.
         public static let linger = Self(rawValue: SO_LINGER)
 
-        /// Get socket error status.
         package static let error = Self(rawValue: SO_ERROR)
 
-        /// Get socket type.
         public static let type = Self(rawValue: SO_TYPE)
 
-        /// Enable broadcast.
         public static let broadcast = Self(rawValue: SO_BROADCAST)
 
-        /// Enable out-of-band inline.
         public static let oobInline = Self(rawValue: SO_OOBINLINE)
 
-        // MARK: - IPPROTO_TCP Options
-
-        /// Disable Nagle algorithm.
         public static let tcpNoDelay = Self(rawValue: TCP_NODELAY)
 
-        // MARK: - IPPROTO_IPV6 Options
-
-        /// Restrict to IPv6 only.
         public static let ipv6Only = Self(rawValue: IPV6_V6ONLY)
     }
 
     extension Windows.`32`.Kernel.Socket {
-        /// Gets a socket option.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - level: Option level (socket, TCP, IP, etc.).
-        ///   - name: Option name.
-        ///   - value: Pointer to receive the option value.
-        ///   - length: On input, size of the value buffer.
-        ///             On output, actual size of the returned value.
-        /// - Throws: `Error.getOption` on failure.
+
         package static func getOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
@@ -117,20 +73,6 @@
             try getOption(socket._rawValue, level: level, name: name, value: value, length: length)
         }
 
-        /// Gets a socket option on a SOCKET bit pattern.
-        ///
-        /// Spec-literal raw `getsockopt`. The typed L2 convenience
-        /// (`getOption(_:level:name:value:length:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - level: Option level (socket, TCP, IP, etc.).
-        ///   - name: Option name.
-        ///   - value: Pointer to receive the option value.
-        ///   - length: On input, size of the value buffer. On output, actual size.
-        /// - Throws: `Error.getOption` on failure.
         package static func getOption(
             _ socket: UInt,
             level: OptionLevel,
@@ -150,15 +92,6 @@
             }
         }
 
-        /// Sets a socket option.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - level: Option level (socket, TCP, IP, etc.).
-        ///   - name: Option name.
-        ///   - value: Pointer to the option value.
-        ///   - length: Size of the option value.
-        /// - Throws: `Error.setOption` on failure.
         package static func setOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
@@ -169,20 +102,6 @@
             try setOption(socket._rawValue, level: level, name: name, value: value, length: length)
         }
 
-        /// Sets a socket option on a SOCKET bit pattern.
-        ///
-        /// Spec-literal raw `setsockopt`. The typed L2 convenience
-        /// (`setOption(_:level:name:value:length:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - level: Option level (socket, TCP, IP, etc.).
-        ///   - name: Option name.
-        ///   - value: Pointer to the option value.
-        ///   - length: Size of the option value.
-        /// - Throws: `Error.setOption` on failure.
         package static func setOption(
             _ socket: UInt,
             level: OptionLevel,
@@ -202,16 +121,6 @@
             }
         }
 
-        // MARK: - Convenience Methods
-
-        /// Gets a boolean socket option.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - level: Option level.
-        ///   - name: Option name.
-        /// - Returns: The boolean option value.
-        /// - Throws: `Error.getOption` on failure.
         public static func getBoolOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
@@ -223,14 +132,6 @@
             return value != 0
         }
 
-        /// Sets a boolean socket option.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - level: Option level.
-        ///   - name: Option name.
-        ///   - value: The boolean value to set.
-        /// - Throws: `Error.setOption` on failure.
         public static func setBoolOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
@@ -247,14 +148,6 @@
             )
         }
 
-        /// Gets an integer socket option.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - level: Option level.
-        ///   - name: Option name.
-        /// - Returns: The integer option value.
-        /// - Throws: `Error.getOption` on failure.
         public static func getIntOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
@@ -266,14 +159,6 @@
             return value
         }
 
-        /// Sets an integer socket option.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - level: Option level.
-        ///   - name: Option name.
-        ///   - value: The integer value to set.
-        /// - Throws: `Error.setOption` on failure.
         public static func setIntOption(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             level: OptionLevel,
@@ -290,17 +175,6 @@
             )
         }
 
-        // MARK: - Common Operations
-
-        /// Enables or disables address reuse.
-        ///
-        /// When enabled, allows binding to an address that is already in use.
-        /// Commonly used for server sockets to enable quick restart.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - enabled: Whether to enable address reuse.
-        /// - Throws: `Error.setOption` on failure.
         public static func setReuseAddress(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             enabled: Bool
@@ -308,15 +182,6 @@
             try setBoolOption(socket, level: .socket, name: .reuseAddr, value: enabled)
         }
 
-        /// Enables or disables the Nagle algorithm.
-        ///
-        /// When TCP_NODELAY is enabled (Nagle disabled), small packets are
-        /// sent immediately without waiting to coalesce with other data.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - enabled: Whether to disable Nagle (true = no delay).
-        /// - Throws: `Error.setOption` on failure.
         public static func setNoDelay(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             enabled: Bool
@@ -324,25 +189,12 @@
             try setBoolOption(socket, level: .tcp, name: .tcpNoDelay, value: enabled)
         }
 
-        /// Gets the socket error status.
-        ///
-        /// Retrieves and clears the pending socket error.
-        ///
-        /// - Parameter socket: The socket.
-        /// - Returns: The error code, or 0 if no error.
-        /// - Throws: `Error.getOption` on failure.
         package static func getError(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
         ) throws(Error) -> Int32 {
             try getIntOption(socket, level: .socket, name: .error)
         }
 
-        /// Sets the receive buffer size.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - size: Buffer size in bytes.
-        /// - Throws: `Error.setOption` on failure.
         public static func setReceiveBuffer(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             size: Int32
@@ -350,12 +202,6 @@
             try setIntOption(socket, level: .socket, name: .receiveBuffer, value: size)
         }
 
-        /// Sets the send buffer size.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - size: Buffer size in bytes.
-        /// - Throws: `Error.setOption` on failure.
         public static func setSendBuffer(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             size: Int32
@@ -363,12 +209,6 @@
             try setIntOption(socket, level: .socket, name: .sendBuffer, value: size)
         }
 
-        /// Enables or disables keep-alive probes.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - enabled: Whether to enable keep-alive.
-        /// - Throws: `Error.setOption` on failure.
         public static func setKeepAlive(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             enabled: Bool
@@ -377,17 +217,8 @@
         }
     }
 
-    // MARK: - Socket Name Operations
-
     extension Windows.`32`.Kernel.Socket {
-        /// Gets the local address of a socket.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - address: Pointer to receive the address.
-        ///   - addressLength: On input, size of the address buffer.
-        ///                    On output, actual size of the returned address.
-        /// - Throws: `Error.getSockName` on failure.
+
         package static func getSockName(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: UnsafeMutablePointer<sockaddr>,
@@ -396,19 +227,6 @@
             try getSockName(socket._rawValue, address: address, addressLength: addressLength)
         }
 
-        /// Gets the local address on a SOCKET bit pattern.
-        ///
-        /// Spec-literal raw `getsockname`. The typed L2 convenience
-        /// (`getSockName(_:address:addressLength:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - address: Pointer to receive the address.
-        ///   - addressLength: On input, size of the address buffer.
-        ///                    On output, actual size of the returned address.
-        /// - Throws: `Error.getSockName` on failure.
         package static func getSockName(
             _ socket: UInt,
             address: UnsafeMutablePointer<sockaddr>,
@@ -420,14 +238,6 @@
             }
         }
 
-        /// Gets the remote address of a connected socket.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - address: Pointer to receive the address.
-        ///   - addressLength: On input, size of the address buffer.
-        ///                    On output, actual size of the returned address.
-        /// - Throws: `Error.getPeerName` on failure.
         package static func getPeerName(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: UnsafeMutablePointer<sockaddr>,
@@ -436,19 +246,6 @@
             try getPeerName(socket._rawValue, address: address, addressLength: addressLength)
         }
 
-        /// Gets the remote address on a SOCKET bit pattern.
-        ///
-        /// Spec-literal raw `getpeername`. The typed L2 convenience
-        /// (`getPeerName(_:address:addressLength:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - address: Pointer to receive the address.
-        ///   - addressLength: On input, size of the address buffer.
-        ///                    On output, actual size of the returned address.
-        /// - Throws: `Error.getPeerName` on failure.
         package static func getPeerName(
             _ socket: UInt,
             address: UnsafeMutablePointer<sockaddr>,
@@ -460,7 +257,6 @@
             }
         }
 
-        /// Returns the local address assigned to a socket.
         public static func localAddress(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
         ) throws(Error) -> Windows.`32`.Kernel.Socket.Address.Storage {
@@ -471,7 +267,6 @@
             return address
         }
 
-        /// Returns the peer address of a connected socket.
         public static func peerAddress(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
         ) throws(Error) -> Windows.`32`.Kernel.Socket.Address.Storage {

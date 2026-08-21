@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -26,16 +15,12 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.File.Move.Test.Unit {
         @Test
         func `Rename namespace exists`() {
             _ = Windows.`32`.Kernel.File.Move.self
         }
     }
-
-    // MARK: - Error Mapping Tests
 
     extension Windows.`32`.Kernel.File.Move.Test.Unit {
         @Test
@@ -44,7 +29,7 @@
                 from: Error_Primitives.Error.Code.File.notFound
             )
             if case .notFound = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .notFound, got \(error)")
             }
@@ -56,7 +41,7 @@
                 from: Error_Primitives.Error.Code.File.pathNotFound
             )
             if case .notFound = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .notFound, got \(error)")
             }
@@ -68,7 +53,7 @@
                 from: Error_Primitives.Error.Code.Access.denied
             )
             if case .permission = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .permission, got \(error)")
             }
@@ -80,7 +65,7 @@
                 from: Error_Primitives.Error.Code.File.exists
             )
             if case .exists = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .exists, got \(error)")
             }
@@ -92,14 +77,12 @@
                 from: Error_Primitives.Error.Code.Access.sharingViolation
             )
             if case .busy = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .busy, got \(error)")
             }
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.File.Move.Test.EdgeCase {
         @Test

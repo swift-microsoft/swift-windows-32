@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Link.Test.Unit {
         @Test
         func `Link namespace exists`() {
@@ -38,14 +25,12 @@
         }
     }
 
-    // MARK: - Error Mapping Tests
-
     extension Windows.`32`.Kernel.Link.Test.Unit {
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
             let error = Kernel.Link.Error.current(from: Error_Primitives.Error.Code.File.notFound)
             if case .notFound = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .notFound, got \(error)")
             }
@@ -57,7 +42,7 @@
                 from: Error_Primitives.Error.Code.File.pathNotFound
             )
             if case .notFound = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .notFound, got \(error)")
             }
@@ -67,7 +52,7 @@
         func `Error.permission maps from ACCESS_DENIED`() {
             let error = Kernel.Link.Error.current(from: Error_Primitives.Error.Code.Access.denied)
             if case .permission = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .permission, got \(error)")
             }
@@ -77,7 +62,7 @@
         func `Error.exists maps from FILE_EXISTS`() {
             let error = Kernel.Link.Error.current(from: Error_Primitives.Error.Code.File.exists)
             if case .exists = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .exists, got \(error)")
             }
@@ -89,14 +74,12 @@
                 from: Error_Primitives.Error.Code.Storage.diskFull
             )
             if case .noSpace = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .noSpace, got \(error)")
             }
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Link.Test.EdgeCase {
         @Test

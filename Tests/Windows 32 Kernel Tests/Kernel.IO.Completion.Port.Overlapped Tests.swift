@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -24,8 +13,6 @@
             @Suite(.serialized) struct Performance {}
         }
     }
-
-    // MARK: - Unit Tests
 
     extension Kernel.IO.Completion.Port.Overlapped.Test.Unit {
         @Test
@@ -49,13 +36,11 @@
         @Test
         func `Overlapped offset handles large values`() {
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
-            let largeValue: Int64 = 0x1_0000_0000  // 4GB
+            let largeValue: Int64 = 0x1_0000_0000
             overlapped.offset = largeValue
             #expect(overlapped.offset == largeValue)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Kernel.IO.Completion.Port.Overlapped.Test.EdgeCase {
         @Test

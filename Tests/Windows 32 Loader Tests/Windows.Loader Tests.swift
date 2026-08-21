@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -24,8 +13,6 @@
             @Suite(.serialized) struct Performance {}
         }
     }
-
-    // MARK: - Namespace Tests
 
     extension Windows.Loader.Test.Unit {
         @Test
@@ -44,8 +31,6 @@
         }
     }
 
-    // MARK: - Library Loading Tests
-
     extension Windows.Loader.Test.Unit {
         @Test
         func `open kernel32.dll succeeds`() throws {
@@ -61,16 +46,12 @@
 
         @Test
         func `open nonexistent library fails`() {
-            // do/catch, not #expect(throws:): swift-testing's throws-matcher
-            // crashes the process on Windows when the thrown Loader.Error
-            // (Ownership.Shared<String> payload) passes through it — probe runs
-            // 28561512482/28561881582 isolate the crash to the #expect wrapper
-            // while the identical do/catch path passes.
+
             do {
                 _ = try Windows.Loader.Library.open(path: "nonexistent_library_12345.dll")
                 Issue.record("Expected Loader.Error")
             } catch is Loader.Error {
-                // Expected
+
             } catch {
                 Issue.record("Unexpected error type: \(error)")
             }
@@ -78,7 +59,7 @@
 
         @Test
         func `getHandle for kernel32 succeeds`() throws {
-            // kernel32 is always loaded
+
             let handle = Windows.Loader.Library.getHandle(moduleName: "kernel32.dll")
             #expect(handle != nil)
         }
@@ -105,8 +86,6 @@
             }
         }
     }
-
-    // MARK: - Symbol Lookup Tests
 
     extension Windows.Loader.Test.Unit {
         @Test
@@ -142,7 +121,7 @@
                 )
                 Issue.record("Expected Loader.Error")
             } catch is Loader.Error {
-                // Expected (do/catch: see `open nonexistent library fails`)
+
             } catch {
                 Issue.record("Unexpected error type: \(error)")
             }
@@ -150,12 +129,11 @@
 
         @Test
         func `lookup with default scope`() throws {
-            // This may or may not succeed depending on what's in the main exe
-            // Just test that it doesn't crash
+
             do {
                 _ = try Windows.Loader.Symbol.lookup(name: "GetLastError", in: .default)
             } catch {
-                // Expected if not found in main executable
+
             }
         }
 
@@ -168,14 +146,12 @@
                 _ = try Windows.Loader.Symbol.lookup(name: "GetLastError", in: .next)
                 Issue.record("Expected Loader.Error")
             } catch is Loader.Error {
-                // Expected (do/catch: see `open nonexistent library fails`)
+
             } catch {
                 Issue.record("Unexpected error type: \(error)")
             }
         }
     }
-
-    // MARK: - Loading Flags Tests
 
     extension Windows.Loader.Test.Unit {
         @Test
@@ -197,8 +173,6 @@
         }
     }
 
-    // MARK: - Handle Tests
-
     extension Windows.Loader.Test.Unit {
         @Test
         func `Handle is Equatable`() throws {
@@ -209,7 +183,6 @@
                 try? Windows.Loader.Library.close(handle2)
             }
 
-            // Both should be equal since kernel32 is already loaded
             #expect(handle1 == handle2)
         }
 
@@ -221,8 +194,6 @@
             #expect(handle.rawValue != nil)
         }
     }
-
-    // MARK: - Error Code Tests
 
     extension Windows.Loader.Test.Unit {
         @Test
@@ -256,18 +227,14 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Windows.Loader.Test.EdgeCase {
         @Test
         func `open same library multiple times returns same handle`() throws {
             let handle1 = try Windows.Loader.Library.open(path: "kernel32.dll")
             let handle2 = try Windows.Loader.Library.open(path: "kernel32.dll")
 
-            // Windows uses reference counting, same HMODULE returned
             #expect(handle1 == handle2)
 
-            // Need to close both
             try Windows.Loader.Library.close(handle1)
             try Windows.Loader.Library.close(handle2)
         }

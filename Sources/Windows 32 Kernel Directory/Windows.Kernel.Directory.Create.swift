@@ -1,26 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows CreateDirectoryW syscall
-
     extension Windows.`32`.Kernel.Directory.Create {
-        /// Creates a directory at the specified path.
-        ///
-        /// - Parameters:
-        ///   - path: The path where the directory should be created.
-        ///   - permissions: POSIX permissions (ignored on Windows, uses default security).
-        /// - Throws: `Windows.`32`.Kernel.Directory.Create.Error` on failure.
+
         public static func create(
             path: borrowing Path,
             permissions: Windows.`32`.Kernel.File.Permissions = .standardDirectory
@@ -31,11 +13,6 @@
             }
         }
 
-        /// Creates a directory at the specified path (ISO shape).
-        ///
-        /// Mirrors `ISO_9945.Kernel.Directory.Create.create(_:permissions:)`
-        /// (unlabeled `Path.Borrowed`). Permissions are accepted for signature
-        /// parity; Windows expresses none of the mode bits at creation.
         public static func create(
             _ path: borrowing Path.Borrowed,
             permissions: Windows.`32`.Kernel.File.Permissions = .standardDirectory
@@ -46,12 +23,6 @@
             }
         }
 
-        /// Creates a directory at the specified path using an unsafe wide string.
-        ///
-        /// - Parameters:
-        ///   - unsafePath: The path as a null-terminated wide string.
-        ///   - permissions: POSIX permissions (ignored on Windows).
-        /// - Throws: `Windows.`32`.Kernel.Directory.Create.Error` on failure.
         public static func create(
             unsafePath: UnsafePointer<Path.Char>,
             permissions: Windows.`32`.Kernel.File.Permissions = .standardDirectory
@@ -63,10 +34,8 @@
         }
     }
 
-    // MARK: - Error Construction
-
     extension Windows.`32`.Kernel.Directory.Create.Error {
-        /// Creates an error from the current Win32 last error.
+
         @usableFromInline
         internal static func current() -> Self {
             let code = Error_Primitives.Error.captureLastError()
@@ -76,7 +45,6 @@
             return current(from: win32Code)
         }
 
-        /// Maps a Win32 error code to the semantic error (testing seam).
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
             case Error_Primitives.Error.Code.File.pathNotFound:

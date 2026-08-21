@@ -1,76 +1,40 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 public import Error_Primitives
 
 extension Windows.`32`.Kernel.File {
-    /// File and directory move operations.
-    ///
-    /// Moves (renames) files and directories atomically within the same
-    /// filesystem. Cross-filesystem moves require copy-and-delete.
-    ///
-    /// Mirrors `ISO_9945.Kernel.File.Move`. Wraps `MoveFileExW()`.
+
     public enum Move: Sendable {}
 }
 
-// MARK: - Error
-
 extension Windows.`32`.Kernel.File.Move {
-    /// Errors that can occur during file move operations.
-    ///
-    /// Mirrors `ISO_9945.Kernel.File.Move.Error`, plus `exists` and `busy` —
-    /// unlike POSIX `rename()`, `MoveFileExW` without
-    /// `MOVEFILE_REPLACE_EXISTING` fails when the destination exists, and
-    /// sharing violations surface when either file is open elsewhere.
+
     public enum Error: Swift.Error, Sendable, Equatable {
-        /// The source path does not exist.
+
         case notFound
 
-        /// Permission denied.
         case permission
 
-        /// The destination already exists (Windows only).
         case exists
 
-        /// The file is in use by another process (Windows only).
         case busy
 
-        /// Source and destination are on different filesystems.
         case crossDevice
 
-        /// The destination is a non-empty directory.
         case notEmpty
 
-        /// A path component is not a directory.
         case notDirectory
 
-        /// Attempting to move a directory to a subdirectory of itself.
         case invalidArgument
 
-        /// The source is a directory but destination is a file.
         case isDirectory
 
-        /// The filesystem is read-only.
         case readOnly
 
-        /// Too many symbolic links encountered.
         case loop
 
-        /// Path name is too long.
         case nameTooLong
 
-        /// Not enough space.
         case noSpace
 
-        /// A platform-specific error.
         case platform(Error_Primitives.Error)
     }
 }

@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -25,8 +14,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.IO.Read.Test.Unit {
         @Test
         func `IO.Read namespace exists`() {
@@ -38,8 +25,6 @@
             _ = Windows.`32`.Kernel.IO.Read.Error.self
         }
     }
-
-    // MARK: - Error Tests
 
     extension Windows.`32`.Kernel.IO.Read.Test.Unit {
         @Test
@@ -71,16 +56,13 @@
         }
     }
 
-    // MARK: - Empty Buffer Tests
-
     extension Windows.`32`.Kernel.IO.Read.Test.Unit {
         @Test
         func `read with empty buffer returns zero`() throws {
-            // Create a temporary file
+
             let tempPath = "test_read_empty_\(GetCurrentProcessId()).tmp"
             defer { DeleteFileW(tempPath.withCString(encodedAs: UTF16.self) { $0 }) }
 
-            // Create and write some data
             var utf16Path = Array(tempPath.utf16) + [0]
             let handle = utf16Path.withUnsafeMutableBufferPointer { pathPtr in
                 CreateFileW(
@@ -95,10 +77,8 @@
             }
             guard let handle, handle != INVALID_HANDLE_VALUE else { return }
 
-            // The Descriptor owns the handle; its deinit closes it.
             let descriptor = Kernel.Descriptor(_raw: UInt(bitPattern: handle))
 
-            // Read with empty buffer
             var emptyBuffer: [UInt8] = []
             let bytesRead = try emptyBuffer.withUnsafeMutableBytes { bufferPtr in
                 try Windows.`32`.Kernel.IO.Read.read(descriptor, into: bufferPtr)
@@ -107,8 +87,6 @@
             #expect(bytesRead == 0)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.IO.Read.Test.EdgeCase {
         @Test

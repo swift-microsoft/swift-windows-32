@@ -1,20 +1,7 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
 
-    // MARK: - Windows Error Code Access
-
     extension Windows.`32`.Kernel.File.Flush.Error {
-        /// The underlying Windows error code.
+
         @inlinable
         public var code: Error_Primitives.Error.Code {
             switch self {

@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -24,8 +13,6 @@
             @Suite(.serialized) struct Performance {}
         }
     }
-
-    // MARK: - Unit Tests
 
     extension Kernel.IO.Completion.Port.Key.Test.Unit {
         @Test
@@ -59,7 +46,7 @@
             var set = Set<Kernel.IO.Completion.Port.Key>()
             set.insert(Kernel.IO.Completion.Port.Key(rawValue: 1))
             set.insert(Kernel.IO.Completion.Port.Key(rawValue: 2))
-            set.insert(Kernel.IO.Completion.Port.Key(rawValue: 1))  // duplicate
+            set.insert(Kernel.IO.Completion.Port.Key(rawValue: 1))
             #expect(set.count == 2)
         }
 
@@ -80,8 +67,6 @@
             #expect(key.rawValue == 123)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Kernel.IO.Completion.Port.Key.Test.EdgeCase {
         @Test

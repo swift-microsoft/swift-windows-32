@@ -1,33 +1,10 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import Error_Primitives
     public import Memory_Primitives
     public import WinSDK
 
-    // MARK: - Create/Open Shared Memory
-
     extension Memory.Shared {
-        /// Creates or opens a named shared memory object.
-        ///
-        /// This creates a file mapping backed by the system paging file,
-        /// equivalent to POSIX `shm_open` + `ftruncate` + `mmap`.
-        ///
-        /// - Parameters:
-        ///   - name: The name of the shared memory object (e.g., "Local\\MySharedMem").
-        ///   - size: The size of the shared memory region in bytes.
-        ///   - protection: Memory protection flags.
-        /// - Returns: Handle to the file mapping object.
-        /// - Throws: `Memory.Shared.Error` on failure.
+
         package static func create(
             unsafeName: UnsafePointer<WCHAR>,
             size: UInt64,
@@ -37,8 +14,8 @@
             let sizeLow = DWORD(size & 0xFFFF_FFFF)
 
             let handle = CreateFileMappingW(
-                INVALID_HANDLE_VALUE,  // Use paging file
-                nil,  // Default security
+                INVALID_HANDLE_VALUE,
+                nil,
                 protection.windowsFileMapProtect,
                 sizeHigh,
                 sizeLow,
@@ -52,20 +29,13 @@
             return handle
         }
 
-        /// Opens an existing named shared memory object.
-        ///
-        /// - Parameters:
-        ///   - name: The name of the shared memory object.
-        ///   - access: Desired access (FILE_MAP_READ, FILE_MAP_WRITE, FILE_MAP_ALL_ACCESS).
-        /// - Returns: Handle to the file mapping object.
-        /// - Throws: `Memory.Shared.Error` on failure.
         package static func open(
             unsafeName: UnsafePointer<WCHAR>,
             access: DWORD
         ) throws(Memory.Shared.Error) -> HANDLE {
             let handle = OpenFileMappingW(
                 access,
-                false,  // Don't inherit handle
+                false,
                 unsafeName
             )
 
@@ -76,9 +46,6 @@
             return handle
         }
 
-        /// Closes a shared memory handle.
-        ///
-        /// - Parameter handle: The file mapping handle.
         @inlinable
         package static func close(_ handle: HANDLE) {
             _ = CloseHandle(handle)
@@ -86,12 +53,7 @@
     }
 
     extension Memory.Shared {
-        /// Creates or opens a named shared memory object through the typed
-        /// platform contract.
-        ///
-        /// Creation options are meaningful only when `.create` is present.
-        /// Windows does not truncate an existing page-file mapping; `.truncate`
-        /// is therefore accepted as a portable no-op.
+
         public static func open(
             name: Swift.String,
             size: Windows.`32`.Kernel.File.Size,
@@ -135,8 +97,6 @@
             preconditionFailure("withUnsafeBufferPointer must set handle or openError")
         }
 
-        /// Opens an existing named shared memory object through the typed
-        /// platform contract.
         public static func open(
             name: Swift.String,
             access: Memory.Shared.Access
@@ -169,21 +129,11 @@
         }
     }
 
-    // MARK: - Map/Unmap Shared Memory
-
     extension Memory.Shared {
-        /// Maps a view of the shared memory into the process address space.
-        ///
-        /// - Parameters:
-        ///   - handle: The file mapping handle.
-        ///   - access: Desired access (FILE_MAP_READ, FILE_MAP_WRITE, FILE_MAP_ALL_ACCESS).
-        ///   - offset: Offset into the shared memory to start the view.
-        ///   - size: Size of the view (0 for entire mapping from offset).
-        /// - Returns: Pointer to the mapped view.
-        /// - Throws: `Memory.Shared.Error` on failure.
+
         public static func map(
             _ handle: HANDLE,
-            // FILE_MAP_ALL_ACCESS is a compound macro not importable by Swift; value = SECTION_ALL_ACCESS = 0xF001F
+
             access: DWORD = 0xF001F,
             offset: UInt64 = 0,
             size: Int = 0
@@ -206,10 +156,6 @@
             return ptr
         }
 
-        /// Unmaps a view of shared memory.
-        ///
-        /// - Parameter address: The base address of the mapped view.
-        /// - Returns: True on success, false on failure.
         @inlinable
         @discardableResult
         public static func unmap(_ address: UnsafeMutableRawPointer) -> Bool {
@@ -217,10 +163,8 @@
         }
     }
 
-    // MARK: - Access Flags
-
     extension Memory.Shared {
-        /// Shared memory access flags.
+
         public struct Access: OptionSet, Sendable {
             public let rawValue: UInt32
 
@@ -231,19 +175,17 @@
     }
 
     extension Memory.Shared.Access {
-        /// Whether this mode permits reading.
+
         @inlinable
         public var read: Bool {
             contains(.read)
         }
 
-        /// Whether this mode permits writing.
         @inlinable
         public var write: Bool {
             contains(.write)
         }
 
-        /// Creates an access mode with explicit read/write permissions.
         @inlinable
         public init(read: Bool, write: Bool) {
             self.init(
@@ -257,23 +199,16 @@
             contains(.write) ? .readWrite : .read
         }
 
-        /// Read access.
         public static let read = Self(rawValue: UInt32(FILE_MAP_READ))
 
-        /// Write access.
         public static let write = Self(rawValue: UInt32(FILE_MAP_WRITE))
 
-        /// Read and write access.
         public static let readWrite: Self = [.read, .write]
 
-        // FILE_MAP_ALL_ACCESS is a compound macro not importable by Swift; value = SECTION_ALL_ACCESS = 0xF001F
-        /// All access (read, write, copy).
         public static let all = Self(rawValue: 0xF001F)
 
-        /// Copy-on-write access.
         public static let copy = Self(rawValue: UInt32(FILE_MAP_COPY))
 
-        /// Execute access (requires PAGE_EXECUTE_* protection).
         public static let execute = Self(rawValue: UInt32(FILE_MAP_EXECUTE))
     }
 

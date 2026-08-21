@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -26,8 +15,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Memory.Allocation.Test.Unit {
         @Test
         func `Memory.Allocation namespace exists`() {
@@ -40,8 +27,6 @@
         }
     }
 
-    // MARK: - System Info Tests
-
     extension Memory.Allocation.Test.Unit {
         @Test
         func `systemPageSize returns non-zero`() {
@@ -52,9 +37,9 @@
         @Test
         func `systemPageSize is typically 4096`() {
             let pageSize = Memory.Allocation.systemPageSize()
-            // Common page sizes are 4096 or 8192
+
             #expect(pageSize >= 4096)
-            #expect(pageSize <= 65536)  // Reasonable upper bound
+            #expect(pageSize <= 65536)
         }
 
         @Test
@@ -63,8 +48,6 @@
             #expect(granularity.underlying >= .byte)
         }
     }
-
-    // MARK: - Allocation Tests
 
     extension Memory.Allocation.Test.Unit {
         @Test
@@ -85,7 +68,6 @@
                 protection: .readWrite
             )
 
-            // Cleanup
             try Memory.Allocation.free(addr: addr)
         }
 
@@ -103,8 +85,6 @@
         }
     }
 
-    // MARK: - Error Tests
-
     extension Memory.Allocation.Test.Unit {
         @Test
         func `Error.exhausted exists`() {
@@ -113,19 +93,16 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Memory.Allocation.Test.EdgeCase {
         @Test
         func `allocate large size`() throws {
-            // Allocate 1MB
+
             let size = 1024 * 1024
             let addr = try Memory.Allocation.allocate(
                 size: size,
                 protection: .readWrite
             )
 
-            // Cleanup
             try Memory.Allocation.free(addr: addr)
         }
     }

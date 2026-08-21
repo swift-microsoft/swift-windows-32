@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -24,8 +13,6 @@
             @Suite(.serialized) struct Performance {}
         }
     }
-
-    // MARK: - Case Existence Tests
 
     extension Kernel.IO.Completion.Port.Error.Test.Unit {
         @Test
@@ -109,14 +96,12 @@
         func `timeout case exists`() {
             let error = Kernel.IO.Completion.Port.Error.timeout
             if case .timeout = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .timeout case")
             }
         }
     }
-
-    // MARK: - Conformance Tests
 
     extension Kernel.IO.Completion.Port.Error.Test.Unit {
         @Test
@@ -145,12 +130,10 @@
             var set = Set<Kernel.IO.Completion.Port.Error>()
             set.insert(.timeout)
             set.insert(.create(.win32(1)))
-            set.insert(.timeout)  // duplicate
+            set.insert(.timeout)
             #expect(set.count == 2)
         }
     }
-
-    // MARK: - Description Tests
 
     extension Kernel.IO.Completion.Port.Error.Test.Unit {
         @Test
@@ -202,8 +185,6 @@
         }
     }
 
-    // MARK: - last() Helper Tests
-
     extension Kernel.IO.Completion.Port.Error.Test.Unit {
         @Test
         func `last returns UInt32`() {
@@ -211,8 +192,6 @@
             #expect(lastError is UInt32)
         }
     }
-
-    // MARK: - Code Constants Tests
 
     extension Kernel.IO.Completion.Port.Error.Test.Unit {
         @Test
@@ -245,8 +224,6 @@
             #expect(infinite is UInt32)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Kernel.IO.Completion.Port.Error.Test.EdgeCase {
         @Test

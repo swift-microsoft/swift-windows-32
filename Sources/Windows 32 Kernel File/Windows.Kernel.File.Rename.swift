@@ -1,31 +1,13 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows.`32`.Kernel.File.Rename Namespace
-
     extension Windows.`32`.Kernel.File {
-        /// Atomic file rename operations using SetFileInformationByHandle.
-        ///
-        /// This provides more control over rename semantics than MoveFileExW,
-        /// including atomic replace-if-exists behavior without race conditions.
+
         public enum Rename {}
     }
 
-    // MARK: - Rename Error
-
     extension Windows.`32`.Kernel.File.Rename {
-        /// Error type for rename operations.
+
         public struct Error: Swift.Error, Sendable {
             public let code: Error_Primitives.Error.Code
 
@@ -36,36 +18,26 @@
     }
 
     extension Windows.`32`.Kernel.File.Rename.Error {
-        /// Destination file already exists.
+
         public static let destinationExists = Self(
             code: .win32(Error_Primitives.Error.Code.File.alreadyExists)
         )
 
-        /// Permission denied.
         public static let permissionDenied = Self(
             code: .win32(Error_Primitives.Error.Code.Access.denied)
         )
 
-        /// File is in use by another process.
         public static let sharingViolation = Self(
             code: .win32(Error_Primitives.Error.Code.Access.sharingViolation)
         )
 
-        /// The operation is not supported (e.g., struct layout unavailable).
-        public static let notSupported = Self(code: .win32(0x32))  // ERROR_NOT_SUPPORTED
+        public static let notSupported = Self(code: .win32(0x32))
 
-        /// Creates an error from the current Win32 last error.
         @usableFromInline
         internal static func current() -> Self {
             Self(code: Error_Primitives.Error.captureLastError())
         }
 
-        /// Whether this error represents a transient condition that may succeed on retry.
-        ///
-        /// Transient errors include:
-        /// - Access denied (another process may have the file open temporarily)
-        /// - Sharing violation (file open with incompatible share mode)
-        /// - Lock violation (file region is locked)
         public var isTransient: Bool {
             guard let win32 = code.win32 else { return false }
             switch win32 {
@@ -79,7 +51,6 @@
             }
         }
 
-        /// Whether this error indicates the destination already exists.
         public var isDestinationExists: Bool {
             guard let win32 = code.win32 else { return false }
             switch win32 {
@@ -93,28 +64,8 @@
         }
     }
 
-    // MARK: - Atomic Rename
-
     extension Windows.`32`.Kernel.File.Rename {
-        /// Atomically renames a file using SetFileInformationByHandle.
-        ///
-        /// This method opens the source file with DELETE permission, then uses
-        /// SetFileInformationByHandle with FileRenameInfoEx to perform an atomic
-        /// rename. This is more robust than MoveFileExW for atomic write patterns.
-        ///
-        /// ## Threading
-        /// This call blocks until the rename completes.
-        ///
-        /// ## Errors
-        /// - Destination exists and replaceExisting is false
-        /// - Permission denied
-        /// - Sharing violation (file in use)
-        ///
-        /// - Parameters:
-        ///   - source: Path to the source file.
-        ///   - destination: Path to the destination.
-        ///   - replaceExisting: If true, replaces existing destination file.
-        /// - Throws: `Windows.`32`.Kernel.File.Rename.Error` on failure.
+
         public static func atomic(
             from source: borrowing Path,
             to destination: borrowing Path,
@@ -131,13 +82,6 @@
             }
         }
 
-        /// Atomically renames a file using unsafe wide string pointers.
-        ///
-        /// - Parameters:
-        ///   - source: Source path as null-terminated wide string.
-        ///   - destination: Destination path as null-terminated wide string.
-        ///   - replaceExisting: If true, replaces existing destination file.
-        /// - Throws: `Windows.`32`.Kernel.File.Rename.Error` on failure.
         public static func atomic(
             from source: UnsafePointer<Path.Char>,
             to destination: UnsafePointer<Path.Char>,
@@ -146,7 +90,6 @@
             let wSource = UnsafeRawPointer(source).assumingMemoryBound(to: WCHAR.self)
             let wDest = UnsafeRawPointer(destination).assumingMemoryBound(to: WCHAR.self)
 
-            // Open source file with DELETE and SYNCHRONIZE permissions
             let handle = CreateFileW(
                 wSource,
                 DWORD(DELETE) | DWORD(SYNCHRONIZE),
@@ -162,7 +105,6 @@
             }
             defer { _ = CloseHandle(handle) }
 
-            // Calculate destination path length
             var destLength = 0
             var ptr = wDest
             while ptr.pointee != 0 {
@@ -170,7 +112,6 @@
                 ptr += 1
             }
 
-            // Calculate struct offset - if unavailable, we can't proceed
             guard let fileNameOffset = MemoryLayout<FILE_RENAME_INFO>.offset(of: \.FileName) else {
                 throw .notSupported
             }
@@ -178,7 +119,6 @@
             let nameByteCount = (destLength + 1) * MemoryLayout<WCHAR>.size
             let totalSize = fileNameOffset + nameByteCount
 
-            // Allocate buffer with proper alignment
             let alignment = max(
                 MemoryLayout<FILE_RENAME_INFO>.alignment,
                 MemoryLayout<WCHAR>.alignment
@@ -189,7 +129,6 @@
             )
             defer { buffer.deallocate() }
 
-            // Initialize header portion
             let headerSize = MemoryLayout<FILE_RENAME_INFO>.size
             buffer.initializeMemory(
                 as: UInt8.self,
@@ -197,13 +136,11 @@
                 count: min(headerSize, totalSize)
             )
 
-            // Fill in the structure
             let info = buffer.assumingMemoryBound(to: FILE_RENAME_INFO.self)
             info.pointee.Flags = replaceExisting ? DWORD(FILE_RENAME_FLAG_REPLACE_IF_EXISTS) : 0
             info.pointee.RootDirectory = nil
             info.pointee.FileNameLength = DWORD(nameByteCount - MemoryLayout<WCHAR>.size)
 
-            // Copy destination path into struct tail
             let fileNamePtr = buffer.advanced(by: fileNameOffset).assumingMemoryBound(
                 to: WCHAR.self
             )
@@ -214,9 +151,8 @@
                 srcPtr += 1
                 dstIdx += 1
             }
-            fileNamePtr[dstIdx] = 0  // null terminator
+            fileNamePtr[dstIdx] = 0
 
-            // Perform the rename
             let success = SetFileInformationByHandle(
                 handle,
                 FileRenameInfoEx,

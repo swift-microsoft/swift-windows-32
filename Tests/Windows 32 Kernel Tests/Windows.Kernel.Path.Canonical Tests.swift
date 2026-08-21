@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -30,8 +19,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Path.Canonical.Test.Unit {
         @Test
         func `Path.Canonical namespace exists`() {
@@ -50,8 +37,6 @@
             )
         }
     }
-
-    // MARK: - Resolve Tests
 
     extension Path.Canonical.Test.Unit {
         @Test
@@ -307,8 +292,6 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Path.Canonical.Test.`Edge Case` {
         @Test
         func `physical canonicalization reports a symbolic-link loop`() throws {
@@ -370,7 +353,7 @@
         @Test
         func `lexical resolve with small buffer throws`() {
             var path = Array("C:\\Windows\\System32".utf16) + [0]
-            var buffer = [UInt16](repeating: 0, count: 5)  // Too small
+            var buffer = [UInt16](repeating: 0, count: 5)
 
             #expect(throws: Path.Canonical.Error.self) {
                 try path.withUnsafeBufferPointer { pathPtr in

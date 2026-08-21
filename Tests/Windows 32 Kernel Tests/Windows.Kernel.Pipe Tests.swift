@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Pipe.Test.Unit {
         @Test
         func `Pipe namespace exists`() {
@@ -42,8 +29,6 @@
             _ = Windows.`32`.Kernel.Pipe.Descriptors.self
         }
     }
-
-    // MARK: - Pipe Creation Tests
 
     extension Windows.`32`.Kernel.Pipe.Test.Unit {
         @Test
@@ -57,15 +42,12 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Windows.`32`.Kernel.Pipe.Test.EdgeCase {
         @Test
         func `create and close many pipes`() throws {
             for _ in 0..<100 {
                 _ = try Windows.`32`.Kernel.Pipe.pipe()
-                // descriptors deinit closes both handles via the ~Copyable
-                // Descriptor's CloseHandle path.
+
             }
         }
     }

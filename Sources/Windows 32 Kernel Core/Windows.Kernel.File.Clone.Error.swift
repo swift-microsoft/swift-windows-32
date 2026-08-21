@@ -1,44 +1,19 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Windows.`32`.Kernel.File.Clone {
-    /// Errors that can occur during clone operations.
+
     public enum Error: Swift.Error, Sendable, Equatable {
-        /// Reflink is not supported on this filesystem.
-        ///
-        /// Returned by `.reflinkOrFail` when the filesystem doesn't support CoW.
+
         case notSupported
 
-        /// Source and destination are on different filesystems/volumes.
-        ///
-        /// Reflink requires both paths to be on the same volume.
         case crossDevice
 
-        /// The source file does not exist.
         case sourceNotFound
 
-        /// The destination already exists.
-        ///
-        /// Clone operations do not overwrite by default.
         case destinationExists
 
-        /// Permission denied for source or destination.
         case permissionDenied
 
-        /// The source is a directory, not a regular file.
-        ///
-        /// Use a recursive directory clone for directories.
         case isDirectory
 
-        /// A platform-specific error occurred.
         case platform(code: Error_Primitives.Error.Code, operation: Operation)
     }
 }

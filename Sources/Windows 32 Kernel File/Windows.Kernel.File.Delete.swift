@@ -1,27 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows DeleteFileW syscall
-
     extension Windows.`32`.Kernel.File.Delete {
-        /// Deletes a file.
-        ///
-        /// On Windows, the file may not be immediately deleted if other processes
-        /// have the file open. The file will be deleted when the last handle is closed.
-        ///
-        /// - Parameter path: The path of the file to delete.
-        /// - Throws: `Windows.`32`.Kernel.File.Delete.Error` on failure.
+
         public static func delete(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.File.Delete.Error) {
@@ -31,10 +12,6 @@
             }
         }
 
-        /// Deletes a file using an unsafe wide string.
-        ///
-        /// - Parameter unsafePath: The path as a null-terminated wide string.
-        /// - Throws: `Windows.`32`.Kernel.File.Delete.Error` on failure.
         public static func delete(
             unsafePath: UnsafePointer<Path.Char>
         ) throws(Windows.`32`.Kernel.File.Delete.Error) {
@@ -45,10 +22,8 @@
         }
     }
 
-    // MARK: - Error Construction
-
     extension Windows.`32`.Kernel.File.Delete.Error {
-        /// Creates an error from the current Win32 last error.
+
         @usableFromInline
         internal static func current() -> Self {
             let code = Error_Primitives.Error.captureLastError()
@@ -58,7 +33,6 @@
             return current(from: win32Code)
         }
 
-        /// Maps a Win32 error code to the semantic error (testing seam).
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
             case Error_Primitives.Error.Code.File.notFound,

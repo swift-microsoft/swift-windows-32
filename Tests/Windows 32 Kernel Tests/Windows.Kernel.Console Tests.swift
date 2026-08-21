@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -28,8 +17,6 @@
             @Suite(.serialized) struct Performance {}
         }
     }
-
-    // MARK: - Namespace Tests
 
     extension Windows.`32`.Kernel.Console.Test.Unit {
         @Test
@@ -53,12 +40,10 @@
         }
     }
 
-    // MARK: - Standard Handle Tests
-
     extension Windows.`32`.Kernel.Console.Test.Unit {
         @Test
         func `standardInput returns handle`() {
-            // May be nil if not running in console
+
             _ = Windows.`32`.Kernel.Console.standardInput()
         }
 
@@ -72,8 +57,6 @@
             _ = Windows.`32`.Kernel.Console.standardError()
         }
     }
-
-    // MARK: - Input Mode Tests
 
     extension Windows.`32`.Kernel.Console.Test.Unit {
         @Test
@@ -115,8 +98,6 @@
         }
     }
 
-    // MARK: - Output Mode Tests
-
     extension Windows.`32`.Kernel.Console.Test.Unit {
         @Test
         func `OutputMode.enableProcessedOutput exists`() {
@@ -149,8 +130,6 @@
             #expect(mode.contains(.enableVirtualTerminalProcessing))
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Console.Test.EdgeCase {
         @Test

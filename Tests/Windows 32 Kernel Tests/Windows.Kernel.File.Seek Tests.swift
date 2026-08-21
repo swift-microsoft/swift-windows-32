@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -26,8 +15,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.File.Seek.Test.Unit {
         @Test
         func `Seek namespace exists`() {
@@ -44,8 +31,6 @@
             _ = Windows.`32`.Kernel.File.Seek.Origin.self
         }
     }
-
-    // MARK: - Origin Tests
 
     extension Windows.`32`.Kernel.File.Seek.Test.Unit {
         @Test
@@ -67,8 +52,6 @@
         }
     }
 
-    // MARK: - Windows Conversion Tests
-
     extension Windows.`32`.Kernel.File.Seek.Test.Unit {
         @Test
         func `Origin.start converts to FILE_BEGIN`() {
@@ -89,8 +72,6 @@
         }
     }
 
-    // MARK: - Error Tests
-
     extension Windows.`32`.Kernel.File.Seek.Test.Unit {
         @Test
         func `seek with invalid descriptor throws`() {
@@ -110,8 +91,6 @@
             }
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.File.Seek.Test.EdgeCase {
         @Test

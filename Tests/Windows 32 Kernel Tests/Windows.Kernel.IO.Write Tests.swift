@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -25,8 +14,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.IO.Write.Test.Unit {
         @Test
         func `IO.Write namespace exists`() {
@@ -38,8 +25,6 @@
             _ = Windows.`32`.Kernel.IO.Write.Error.self
         }
     }
-
-    // MARK: - Error Tests
 
     extension Windows.`32`.Kernel.IO.Write.Test.Unit {
         @Test
@@ -71,12 +56,10 @@
         }
     }
 
-    // MARK: - Empty Buffer Tests
-
     extension Windows.`32`.Kernel.IO.Write.Test.Unit {
         @Test
         func `write with empty buffer returns zero`() throws {
-            // Create a temporary file
+
             let tempPath = "test_write_empty_\(GetCurrentProcessId()).tmp"
             defer { DeleteFileW(tempPath.withCString(encodedAs: UTF16.self) { $0 }) }
 
@@ -94,10 +77,8 @@
             }
             guard let handle, handle != INVALID_HANDLE_VALUE else { return }
 
-            // The Descriptor owns the handle; its deinit closes it.
             let descriptor = Kernel.Descriptor(_raw: UInt(bitPattern: handle))
 
-            // Write with empty buffer
             let emptyData: [UInt8] = []
             let bytesWritten = try emptyData.withUnsafeBytes { bufferPtr in
                 try Windows.`32`.Kernel.IO.Write.write(descriptor, from: bufferPtr)
@@ -106,8 +87,6 @@
             #expect(bytesWritten == 0)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.IO.Write.Test.EdgeCase {
         @Test

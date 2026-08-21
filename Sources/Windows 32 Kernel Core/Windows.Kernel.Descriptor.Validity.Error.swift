@@ -1,21 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Windows.`32`.Kernel.Descriptor.Validity {
-    /// Windows handle validity errors.
+
     public enum Error: Swift.Error, Sendable, Equatable, Hashable {
-        /// The handle is invalid (`ERROR_INVALID_HANDLE`).
+
         case invalid
 
-        /// Handle exhaustion (`ERROR_TOO_MANY_OPEN_FILES`).
         case limit(Limit)
     }
 }

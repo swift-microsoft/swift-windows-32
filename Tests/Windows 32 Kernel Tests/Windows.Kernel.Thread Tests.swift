@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Thread.Test.Unit {
         @Test
         func `Thread namespace exists`() {
@@ -42,8 +29,6 @@
             _ = Kernel.Thread.Handle.self
         }
     }
-
-    // MARK: - Current Thread Tests
 
     extension Windows.`32`.Kernel.Thread.Test.Unit {
         @Test
@@ -66,12 +51,10 @@
         }
     }
 
-    // MARK: - Yield Tests
-
     extension Windows.`32`.Kernel.Thread.Test.Unit {
         @Test
         func `yield completes without error`() {
-            // yield() is a hint, should never fail
+
             Windows.`32`.Kernel.Thread.yield()
         }
 
@@ -82,8 +65,6 @@
             }
         }
     }
-
-    // MARK: - Thread Creation Tests
 
     extension Windows.`32`.Kernel.Thread.Test.Unit {
         @Test
@@ -99,7 +80,7 @@
             Windows.`32`.Kernel.Thread.close(handle)
 
             #expect(joined)
-            // Note: flag.value may be false due to race, but thread should complete
+
         }
 
         @Test
@@ -108,20 +89,17 @@
 
             for _ in 0..<5 {
                 let handle = try Windows.`32`.Kernel.Thread.create {
-                    // Do nothing
+
                 }
                 handles.append(handle)
             }
 
-            // Join all
             for handle in handles {
                 _ = Windows.`32`.Kernel.Thread.join(handle)
                 Windows.`32`.Kernel.Thread.close(handle)
             }
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Thread.Test.EdgeCase {
         @Test
@@ -133,16 +111,14 @@
 
         @Test
         func `join with timeout returns false on timeout`() throws {
-            // Create a thread that takes a long time
+
             let handle = try Windows.`32`.Kernel.Thread.create {
-                Sleep(5000)  // Sleep 5 seconds
+                Sleep(5000)
             }
 
-            // Try to join with very short timeout
             let joined = Windows.`32`.Kernel.Thread.join(handle, timeout: 1)
             #expect(!joined)
 
-            // Clean up - wait for thread to finish
             _ = Windows.`32`.Kernel.Thread.join(handle)
             Windows.`32`.Kernel.Thread.close(handle)
         }

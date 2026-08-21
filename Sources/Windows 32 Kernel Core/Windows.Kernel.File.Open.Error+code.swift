@@ -1,20 +1,7 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
 
-    // MARK: - Windows Error Code Mapping
-
     extension Windows.`32`.Kernel.File.Open.Error {
-        /// Creates an error by mapping a Windows error code to the appropriate case.
+
         @inlinable
         package init(code: Error_Primitives.Error.Code) {
             if let e = Path.Resolution.Error(code: code) {

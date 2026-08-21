@@ -1,25 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows Working Directory Operations
-
     extension Windows.`32`.Kernel.Directory.Working {
-        /// Gets the current working directory.
-        ///
-        /// - Parameter buffer: Buffer to receive the path (UTF-16).
-        /// - Returns: The number of characters written (excluding null terminator).
-        /// - Throws: `Windows.`32`.Kernel.Directory.Working.Error` on failure.
+
         public static func get(
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Windows.`32`.Kernel.Directory.Working.Error) -> Int {
@@ -32,7 +15,6 @@
                 throw .current()
             }
 
-            // If result > buffer.count, the buffer was too small
             if result > buffer.count {
                 throw .platform(
                     Error_Primitives.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER)))
@@ -42,33 +24,23 @@
             return Int(result)
         }
 
-        /// Gets the current working directory into an array.
-        ///
-        /// - Returns: The current directory path as UTF-16 code units.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Working.Error` on failure.
         public static func get() throws(Windows.`32`.Kernel.Directory.Working.Error) -> [UInt16] {
-            // First call to get required size
+
             let requiredSize = GetCurrentDirectoryW(0, nil)
             guard requiredSize > 0 else {
                 throw .current()
             }
 
             var buffer = [UInt16](repeating: 0, count: Int(requiredSize))
-            // Call GetCurrentDirectoryW directly: routing through get(into:) inside
-            // withUnsafeMutableBufferPointer erases the typed throw to any Error.
+
             let written = GetCurrentDirectoryW(requiredSize, &buffer)
             guard written > 0, written < requiredSize else {
                 throw .current()
             }
 
-            // Trim to actual length (excluding null terminator)
             return Array(buffer.prefix(Int(written)))
         }
 
-        /// Sets the current working directory.
-        ///
-        /// - Parameter path: The new working directory path.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Working.Error` on failure.
         public static func set(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.Directory.Working.Error) {
@@ -78,10 +50,6 @@
             }
         }
 
-        /// Sets the current working directory using an unsafe wide string.
-        ///
-        /// - Parameter unsafePath: The path as a null-terminated wide string.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Working.Error` on failure.
         public static func set(
             unsafePath: UnsafePointer<Path.Char>
         ) throws(Windows.`32`.Kernel.Directory.Working.Error) {
@@ -92,10 +60,8 @@
         }
     }
 
-    // MARK: - Error Construction
-
     extension Windows.`32`.Kernel.Directory.Working.Error {
-        /// Creates an error from the current Win32 last error.
+
         @usableFromInline
         internal static func current() -> Self {
             Self(code: Error_Primitives.Error.captureLastError())

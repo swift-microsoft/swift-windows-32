@@ -1,36 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows Directory Iteration
-
     extension Windows.`32`.Kernel.Directory {
-        /// A handle for iterating over directory contents.
-        ///
-        /// Use `open(path:)` to create an iterator, then call `next()` repeatedly
-        /// until it returns `nil`. Always call `close()` when done.
-        ///
-        /// ## Usage
-        ///
-        /// ```swift
-        /// var iterator = try Windows.`32`.Kernel.Directory.Iterator.open(path: dirPath)
-        /// defer { iterator.close() }
-        ///
-        /// while let entry = try iterator.next() {
-        ///     guard !entry.isDotOrDotDot else { continue }
-        ///     print(entry.name ?? "<invalid name>")
-        /// }
-        /// ```
+
         public struct Iterator: ~Copyable {
             @usableFromInline
             internal var handle: HANDLE
@@ -54,14 +26,8 @@
         }
     }
 
-    // MARK: - Iterator Operations
-
     extension Windows.`32`.Kernel.Directory.Iterator {
-        /// Opens a directory for iteration.
-        ///
-        /// - Parameter path: The directory path to iterate.
-        /// - Returns: An iterator for the directory contents.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Error` on failure.
+
         public static func open(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.Directory.Error) -> Self {
@@ -71,11 +37,6 @@
             }
         }
 
-        /// Opens a directory for iteration using an unsafe wide string.
-        ///
-        /// - Parameter unsafePath: The directory path as a null-terminated wide string.
-        /// - Returns: An iterator for the directory contents.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Error` on failure.
         public static func open(
             unsafePath: UnsafePointer<Path.Char>
         ) throws(Windows.`32`.Kernel.Directory.Error) -> Self {
@@ -90,35 +51,29 @@
             return Self(handle: handle, findData: findData)
         }
 
-        /// Builds the `path\*` search pattern and issues `FindFirstFileW`.
-        ///
-        /// Shared by ``open(unsafePath:)`` and the ISO-parity
-        /// ``Windows/32/Kernel/Directory/Stream``. On failure returns the
-        /// handle as-is; the caller captures `GetLastError()`.
         internal static func _findFirst(
             unsafePath: UnsafePointer<Path.Char>,
             findData: inout WIN32_FIND_DATAW
         ) -> HANDLE? {
-            // Append \* to the path for FindFirstFileW pattern
+
             let pathChars = unsafePath
             var length = 0
             while pathChars[length] != 0 { length += 1 }
 
-            // Build pattern: path + \* + null
             var pattern = [UInt16](repeating: 0, count: length + 3)
             for i in 0..<length {
                 pattern[i] = pathChars[i]
             }
-            // Add \* if path doesn't end with \ or /
+
             let lastChar = length > 0 ? pattern[length - 1] : 0
             var patternLength = length
-            if lastChar != 0x5C && lastChar != 0x2F {  // \ and /
-                pattern[patternLength] = 0x5C  // \
+            if lastChar != 0x5C && lastChar != 0x2F {
+                pattern[patternLength] = 0x5C
                 patternLength += 1
             }
-            pattern[patternLength] = 0x2A  // *
+            pattern[patternLength] = 0x2A
             patternLength += 1
-            pattern[patternLength] = 0  // null terminator
+            pattern[patternLength] = 0
 
             return pattern.withUnsafeBufferPointer { patternBuffer in
                 let wpath = UnsafeRawPointer(patternBuffer.baseAddress!).assumingMemoryBound(
@@ -128,10 +83,6 @@
             }
         }
 
-        /// Returns the next directory entry, or `nil` if iteration is complete.
-        ///
-        /// - Returns: The next entry, or `nil` at end of directory.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Error` on I/O failure.
         public mutating func next() throws(Windows.`32`.Kernel.Directory.Error) -> Windows.`32`
             .Kernel.Directory.Entry?
         {
@@ -151,36 +102,23 @@
             return entryFromFindData()
         }
 
-        /// Closes the directory iterator.
-        ///
-        /// Must be called when iteration is complete or abandoned.
         public consuming func close() {
             if handle != INVALID_HANDLE_VALUE {
                 _ = FindClose(handle)
-                // Disarm the deinit: it also `FindClose`s when the handle is not
-                // the sentinel, so nil it here to avoid a double close (a Win32
-                // handle-recycling hazard) when the consumed value is destroyed
-                // at return — mirrors `Directory.Stream.close()`'s `handle = nil`.
+
                 handle = INVALID_HANDLE_VALUE
             }
         }
 
-        /// Converts current findData to a Directory.Entry.
         @usableFromInline
         internal func entryFromFindData() -> Windows.`32`.Kernel.Directory.Entry {
             Self._entry(from: findData)
         }
 
-        /// Converts a `WIN32_FIND_DATAW` to a Directory.Entry.
-        ///
-        /// Shared by ``next()`` and the ISO-parity
-        /// ``Windows/32/Kernel/Directory/Stream``.
         internal static func _entry(
             from findData: WIN32_FIND_DATAW
         ) -> Windows.`32`.Kernel.Directory.Entry {
-            // Extract the name from cFileName. Entry's rawName contract is
-            // null-terminated ("." is [0x2E, 0x0000]) — its isDotOrDotDot and
-            // name accessor both depend on the terminator, so append it.
+
             var nameChars = withUnsafeBytes(of: findData.cFileName) { buffer in
                 let ptr = buffer.baseAddress!.assumingMemoryBound(to: UInt16.self)
                 let capacity =
@@ -193,7 +131,6 @@
             }
             nameChars.append(0)
 
-            // Determine type from attributes
             let type: Windows.`32`.Kernel.File.Stats.Kind?
             if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
                 type = .directory
@@ -207,10 +144,8 @@
         }
     }
 
-    // MARK: - Error Mapping
-
     extension Windows.`32`.Kernel.Directory.Error {
-        /// Creates an error from a Windows error code.
+
         package init(_windowsError error: DWORD) {
             switch error {
             case Error_Primitives.Error.Code.File.notFound,
@@ -221,11 +156,7 @@
                 self = .permission
 
             case Error_Primitives.Error.Code.Directory.invalidName:
-                // ERROR_DIRECTORY (267): "The directory name is invalid" —
-                // the path exists but is not a directory (ENOTDIR analog).
-                // The previous ERROR_DIR_NOT_EMPTY mapping was wrong: 145
-                // means a REMOVE failed on a non-empty directory, which is
-                // not this enum's vocabulary.
+
                 self = .notDirectory
 
             default:

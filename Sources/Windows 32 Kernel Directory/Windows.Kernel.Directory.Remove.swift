@@ -1,24 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows RemoveDirectoryW syscall
-
     extension Windows.`32`.Kernel.Directory.Remove {
-        /// Removes an empty directory.
-        ///
-        /// - Parameter path: The path of the directory to remove.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Remove.Error` on failure.
+
         public static func remove(
             path: borrowing Path
         ) throws(Windows.`32`.Kernel.Directory.Remove.Error) {
@@ -28,10 +12,6 @@
             }
         }
 
-        /// Removes an empty directory (ISO shape).
-        ///
-        /// Mirrors `ISO_9945.Kernel.Directory.Remove.remove(_:)`
-        /// (unlabeled `Path.Borrowed`).
         public static func remove(
             _ path: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.Directory.Remove.Error) {
@@ -41,10 +21,6 @@
             }
         }
 
-        /// Removes an empty directory using an unsafe wide string.
-        ///
-        /// - Parameter unsafePath: The path as a null-terminated wide string.
-        /// - Throws: `Windows.`32`.Kernel.Directory.Remove.Error` on failure.
         public static func remove(
             unsafePath: UnsafePointer<Path.Char>
         ) throws(Windows.`32`.Kernel.Directory.Remove.Error) {
@@ -55,10 +31,8 @@
         }
     }
 
-    // MARK: - Error Construction
-
     extension Windows.`32`.Kernel.Directory.Remove.Error {
-        /// Creates an error from the current Win32 last error.
+
         @usableFromInline
         internal static func current() -> Self {
             let code = Error_Primitives.Error.captureLastError()
@@ -68,7 +42,6 @@
             return current(from: win32Code)
         }
 
-        /// Maps a Win32 error code to the semantic error (testing seam).
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
             case Error_Primitives.Error.Code.File.notFound,

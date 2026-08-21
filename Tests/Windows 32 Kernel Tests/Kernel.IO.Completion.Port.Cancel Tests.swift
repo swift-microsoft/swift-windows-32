@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import Testing
 
@@ -24,8 +13,6 @@
         }
     }
 
-    // MARK: - Unit Tests
-
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
         func `Cancel namespace exists`() {
@@ -38,24 +25,20 @@
         }
     }
 
-    // MARK: - all() Tests
-
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
         func `all does not crash with invalid descriptor`() {
-            // Should not crash - errors are silently ignored
+
             Kernel.IO.Completion.Port.Cancel.all(Kernel.Descriptor.invalid)()
         }
 
         @Test
         func `all is fire-and-forget`() {
-            // all() returns Void via callAsFunction, so it's truly fire-and-forget
+
             Kernel.IO.Completion.Port.Cancel.all(Kernel.Descriptor.invalid)()
-            // No return value to check - this is intentional
+
         }
     }
-
-    // MARK: - all.status Tests
 
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
@@ -67,18 +50,16 @@
         @Test
         func `all.status with invalid descriptor returns appropriate value`() {
             let result = Kernel.IO.Completion.Port.Cancel.all(Kernel.Descriptor.invalid).status
-            // With invalid descriptor, CancelIoEx fails
+
             #expect(result == true || result == false)
         }
     }
-
-    // MARK: - pending() Tests
 
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
         func `pending does not crash with invalid descriptor`() {
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
-            // Should not crash - errors are silently ignored
+
             Kernel.IO.Completion.Port.Cancel.pending(
                 Kernel.Descriptor.invalid,
                 overlapped: &overlapped
@@ -92,11 +73,9 @@
                 Kernel.Descriptor.invalid,
                 overlapped: &overlapped
             )()
-            // No return value to check - this is intentional
+
         }
     }
-
-    // MARK: - pending.status Tests
 
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
@@ -116,21 +95,10 @@
                 Kernel.Descriptor.invalid,
                 overlapped: &overlapped
             ).status
-            // With invalid descriptor, CancelIoEx fails
+
             #expect(result == true || result == false)
         }
     }
-
-    // MARK: - pending(_:overlapped:) Result-Type Tests (F-001 regression)
-    //
-    // The safe, `inout`-taking `pending(_:overlapped:)` overload used to
-    // return `Pending` — an accessor storing an `UnsafeMutablePointer`
-    // obtained from `withUnsafeMutablePointer(to: &overlapped)`, valid only
-    // for that closure's duration, and dereferenced later from
-    // `callAsFunction()`/`status`. That is undefined behavior: the pointer
-    // escapes its only guaranteed-valid scope. It now returns
-    // `Pending.Result`, computed eagerly inside the pointer-safe scope, with
-    // no stored pointer at all.
 
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
@@ -138,9 +106,7 @@
             `pending(_:overlapped:) returns Pending Result, not the pointer-storing Pending accessor`()
         {
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
-            // This explicit annotation only compiles against the fixed API:
-            // pre-fix, `pending(_:overlapped:)` returned `Pending` (no
-            // nested `Result` type existed at all).
+
             let result: Kernel.IO.Completion.Port.Cancel.Pending.Result = Kernel.IO.Completion.Port
                 .Cancel.pending(
                     Kernel.Descriptor.invalid,
@@ -151,11 +117,7 @@
 
         @Test
         func `pending(_:overlapped:).status is stable across repeated reads`() {
-            // Unlike the old `Pending.status`, which re-ran `CancelIoEx`
-            // against a (potentially already-invalid) stored pointer on
-            // every access, `Pending.Result.status` reads only
-            // already-computed state and is therefore idempotent by
-            // construction.
+
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
             let result = Kernel.IO.Completion.Port.Cancel.pending(
                 Kernel.Descriptor.invalid,
@@ -167,19 +129,15 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Kernel.IO.Completion.Port.Cancel.Test.EdgeCase {
         @Test
         func `Cancel operations are safe to call multiple times`() {
             var overlapped = Kernel.IO.Completion.Port.Overlapped()
 
-            // Call all multiple times - should be safe
             for _ in 0..<3 {
                 Kernel.IO.Completion.Port.Cancel.all(Kernel.Descriptor.invalid)()
             }
 
-            // Call pending multiple times - should be safe
             for _ in 0..<3 {
                 Kernel.IO.Completion.Port.Cancel.pending(
                     Kernel.Descriptor.invalid,
@@ -187,7 +145,6 @@
                 )()
             }
 
-            // Call pending.status multiple times - should be safe
             for _ in 0..<3 {
                 _ =
                     Kernel.IO.Completion.Port.Cancel.pending(
@@ -218,14 +175,12 @@
         }
     }
 
-    // MARK: - Error Integration Tests
-
     extension Kernel.IO.Completion.Port.Cancel.Test.Unit {
         @Test
         func `Cancel uses Error.Code.Lookup.notFound for comparison`() {
-            // Verify that the implementation checks against ERROR_NOT_FOUND
+
             let notFound = Kernel.IO.Completion.Port.Error.Code.Lookup.notFound
-            #expect(notFound == 1168)  // ERROR_NOT_FOUND
+            #expect(notFound == 1168)
         }
     }
 

@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import Testing
 
@@ -24,8 +13,6 @@
         }
     }
 
-    // MARK: - Unit Tests
-
     extension Kernel.IO.Completion.Port.Read.Result.Test.Unit {
         @Test
         func `Result type exists`() {
@@ -36,7 +23,7 @@
         func `Result has pending case`() {
             let result = Kernel.IO.Completion.Port.Read.Result.pending
             if case .pending = result {
-                // Expected
+
             } else {
                 Issue.record("Expected .pending case")
             }

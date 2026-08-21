@@ -1,89 +1,20 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     internal import WinSDK
 #endif
 
-// MARK: - Process.Spawn.Actions
-
 extension Windows.`32`.Kernel.Process.Spawn {
-    /// Builder for `CreateProcessW` child-process actions: stdio handle
-    /// inheritance and the `STARTUPINFOEX` attribute list for precise
-    /// `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` control.
-    ///
-    /// Mirrors the POSIX iso-9945 ``ISO_9945/Kernel/Process/Spawn/Actions``
-    /// builder so the L3-unifier `swift-process` constructs an Actions
-    /// equivalent regardless of platform (OQ 1 disposition).
-    ///
-    /// ## Lifecycle
-    ///
-    /// `Actions` is `~Copyable`: each builder owns a heap-allocated
-    /// `LPPROC_THREAD_ATTRIBUTE_LIST` plus a heap-allocated array of the
-    /// inheritable HANDLE values that the attribute list references. Both
-    /// allocations are freed by `deinit` via
-    /// `DeleteProcThreadAttributeList` and `UnsafeMutableRawPointer.deallocate()`.
-    ///
-    /// ## Stdio Handle Targets
-    ///
-    /// `Actions` records the stdin / stdout / stderr handles directly so
-    /// the spawn entry point can wire them into `STARTUPINFOEX` via
-    /// `STARTF_USESTDHANDLES`. To not redirect a particular slot, leave
-    /// it `nil` — the child will inherit the parent's stdio for that slot.
-    ///
-    /// ## Usage
-    ///
-    /// ```swift
-    /// var actions = try Windows.`32`.Kernel.Process.Spawn.Actions()
-    /// let pipe = try Windows.`32`.Kernel.Pipe.pipe()
-    /// try actions.setStdout(pipe.write)
-    /// try actions.markHandleInheritable(pipe.write)
-    /// let result = try unsafe Windows.`32`.Kernel.Process.Spawn.spawn(
-    ///     executable: pathPtr,
-    ///     commandLine: cmdLinePtr,
-    ///     environment: envPtr,
-    ///     workingDirectory: nil,
-    ///     actions: actions
-    /// )
-    /// ```
+
     public struct Actions: ~Copyable {
         #if os(Windows)
-            /// Heap-allocated buffer holding the LPPROC_THREAD_ATTRIBUTE_LIST.
-            ///
-            /// Allocated via the two-pass
-            /// `InitializeProcThreadAttributeList(nil, …, &size)` +
-            /// `malloc(size)` +
-            /// `InitializeProcThreadAttributeList(buf, …, &size)` shape.
+
             internal var _attributeListRaw: UnsafeMutableRawPointer?
 
-            /// Heap-allocated array of inheritable HANDLEs referenced by the
-            /// attribute list. Lifetime is bound to `self`; the array is freed
-            /// by `deinit`.
             internal var _inheritHandlesRaw: UnsafeMutablePointer<HANDLE?>?
 
-            /// Number of HANDLEs allocated at `_inheritHandlesRaw`.
             internal var _inheritHandlesCount: Int = 0
 
-            /// Byte size of the buffer at `_attributeListRaw`, as reported by
-            /// the `InitializeProcThreadAttributeList` size query in `init`.
-            ///
-            /// Kept so ``markHandleInheritable(_:)`` can re-initialize the
-            /// attribute list in place: `UpdateProcThreadAttribute` appends an
-            /// entry rather than replacing a same-attribute entry, so wiring
-            /// `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` for a grown handle array
-            /// requires resetting the one-attribute list first.
             internal var _attributeListSize: SIZE_T = 0
 
-            /// Stdin / stdout / stderr override handles (only set when the
-            /// caller explicitly redirected the slot).
             internal var _stdinHandle: HANDLE?
 
             internal var _stdoutHandle: HANDLE?
@@ -91,25 +22,17 @@ extension Windows.`32`.Kernel.Process.Spawn {
             internal var _stderrHandle: HANDLE?
         #endif
 
-        /// Allocate a new actions builder.
-        ///
-        /// - Throws: ``Windows/32/Kernel/Process/Error/create(_:)`` on
-        ///   `InitializeProcThreadAttributeList` failure.
         public init() throws(Windows.`32`.Kernel.Process.Error) {
             #if os(Windows)
-                // First pass: query required attribute list size.
+
                 var size: SIZE_T = 0
-                // 1 attribute (PROC_THREAD_ATTRIBUTE_HANDLE_LIST) is supported.
-                // `InitializeProcThreadAttributeList` is documented to return
-                // false on the first call (it's a size query); we capture the
-                // size and ignore the false return on this call only.
+
                 _ = unsafe InitializeProcThreadAttributeList(nil, 1, 0, &size)
                 let lastError = unsafe GetLastError()
                 guard lastError == ERROR_INSUFFICIENT_BUFFER else {
                     throw .create(.win32(lastError))
                 }
 
-                // Second pass: allocate buffer and initialize for real.
                 let raw = unsafe UnsafeMutableRawPointer.allocate(
                     byteCount: Int(size),
                     alignment: MemoryLayout<HANDLE>.alignment
@@ -136,8 +59,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 unsafe (self._stdoutHandle = nil)
                 unsafe (self._stderrHandle = nil)
             #else
-                // Non-Windows builds: the namespace is reachable cross-platform
-                // for typealias chains but no init body is needed.
+
                 throw .create(.win32(0))
             #endif
         }
@@ -159,22 +81,14 @@ extension Windows.`32`.Kernel.Process.Spawn {
 
 #if os(Windows)
 
-    /// `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` is a C macro
-    /// (`ProcThreadAttributeValue(ProcThreadAttributeHandleList, FALSE, TRUE,
-    /// FALSE)`), so WinSDK does not import it — the composed value is
-    /// `2 | PROC_THREAD_ATTRIBUTE_INPUT` (0x20002).
     private let processThreadAttributeHandleList: DWORD = 0x20002
 
-    // MARK: - Internal accessors used by spawn
-
     extension Windows.`32`.Kernel.Process.Spawn.Actions {
-        /// The LPPROC_THREAD_ATTRIBUTE_LIST for `STARTUPINFOEX.lpAttributeList`.
+
         internal var _attributeList: LPPROC_THREAD_ATTRIBUTE_LIST? {
             unsafe (_attributeListRaw.map { LPPROC_THREAD_ATTRIBUTE_LIST($0) })
         }
 
-        /// Stdio handle triple if any slot was overridden; `nil` if no slots
-        /// were redirected (child inherits parent stdio).
         internal var _stdioHandles: (stdin: HANDLE?, stdout: HANDLE?, stderr: HANDLE?)? {
             let standardInput = unsafe _stdinHandle
             let standardOutput = unsafe _stdoutHandle
@@ -186,45 +100,23 @@ extension Windows.`32`.Kernel.Process.Spawn {
         }
     }
 
-    // MARK: - Stdio Slot Configuration
-
     extension Windows.`32`.Kernel.Process.Spawn.Actions {
-        /// Redirect the child's stdin to the given parent-side descriptor.
-        ///
-        /// The descriptor MUST be marked inheritable; the spawn entry point
-        /// passes it through `STARTUPINFOEX.hStdInput`.
-        ///
-        /// - Parameter descriptor: Parent-owned handle whose underlying HANDLE
-        ///   is propagated as the child's stdin.
+
         public mutating func setStdin(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) {
             unsafe (_stdinHandle = UnsafeMutableRawPointer(bitPattern: descriptor._raw))
         }
 
-        /// Redirect the child's stdout to the given parent-side descriptor.
         public mutating func setStdout(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) {
             unsafe (_stdoutHandle = UnsafeMutableRawPointer(bitPattern: descriptor._raw))
         }
 
-        /// Redirect the child's stderr to the given parent-side descriptor.
         public mutating func setStderr(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) {
             unsafe (_stderrHandle = UnsafeMutableRawPointer(bitPattern: descriptor._raw))
         }
     }
 
-    // MARK: - Handle Inheritance List
-
     extension Windows.`32`.Kernel.Process.Spawn.Actions {
-        /// Marks a specific descriptor's HANDLE as inheritable and appends it
-        /// to the inheritance list for `PROC_THREAD_ATTRIBUTE_HANDLE_LIST`.
-        ///
-        /// MUST be called for every parent handle the child will receive
-        /// (stdio redirects + any other inheritable HANDLEs). Without
-        /// inclusion in the attribute list, the child will not see the
-        /// handle even with `bInheritHandles = true`.
-        ///
-        /// - Parameter descriptor: Parent-owned handle to mark inheritable.
-        /// - Throws: ``Windows/32/Kernel/Process/Error/create(_:)`` on
-        ///   `SetHandleInformation` or `UpdateProcThreadAttribute` failure.
+
         public mutating func markHandleInheritable(
             _ descriptor: borrowing Windows.`32`.Kernel.Descriptor
         ) throws(Windows.`32`.Kernel.Process.Error) {
@@ -241,7 +133,6 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 throw .create(Error_Primitives.Error.captureLastError())
             }
 
-            // Append to inheritance list. Grow the buffer if needed.
             let newCount = _inheritHandlesCount + 1
             let newRaw = unsafe UnsafeMutablePointer<HANDLE?>.allocate(capacity: newCount)
             if let old = _inheritHandlesRaw {
@@ -253,16 +144,6 @@ extension Windows.`32`.Kernel.Process.Spawn {
             unsafe (self._inheritHandlesRaw = newRaw)
             self._inheritHandlesCount = newCount
 
-            // Re-wire the attribute list to point at the updated array.
-            //
-            // `UpdateProcThreadAttribute` appends an entry; it does not
-            // replace a same-attribute entry. The list was initialized with
-            // room for exactly one attribute, so a second update against it
-            // (the second `markHandleInheritable` call — e.g. spawning with
-            // both stdout and stderr piped) fails with `ERROR_GEN_FAILURE`
-            // (win32 error 31). Reset the list in place first, then wire
-            // `PROC_THREAD_ATTRIBUTE_HANDLE_LIST` exactly once with the
-            // complete array.
             guard let attrList = unsafe _attributeListRaw else {
                 throw .create(.win32(UInt32(ERROR_INVALID_HANDLE)))
             }
@@ -277,9 +158,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                     &size
                 )
             else {
-                // The list is no longer initialized: detach the buffer so
-                // `deinit` does not call `DeleteProcThreadAttributeList` on
-                // an uninitialized list.
+
                 let err = Error_Primitives.Error.captureLastError()
                 unsafe attrList.deallocate()
                 unsafe (self._attributeListRaw = nil)

@@ -1,26 +1,12 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Windows.`32`.Kernel.Directory.Working {
-    /// Errors from working directory operations.
+
     public enum Error: Swift.Error, Sendable {
-        /// Path resolution error (directory not found, etc.).
+
         case path(Path.Resolution.Error)
 
-        /// Platform-specific error.
         case platform(Error_Primitives.Error)
     }
 }
-
-// MARK: - Equatable
 
 extension Windows.`32`.Kernel.Directory.Working.Error: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -31,8 +17,6 @@ extension Windows.`32`.Kernel.Directory.Working.Error: Equatable {
         }
     }
 }
-
-// MARK: - CustomStringConvertible
 
 extension Windows.`32`.Kernel.Directory.Working.Error: CustomStringConvertible {
     public var description: Swift.String {

@@ -12,7 +12,7 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        // MARK: - Kernel
+
         .library(
             name: "Windows 32 Kernel",
             targets: ["Windows 32 Kernel"]
@@ -73,7 +73,7 @@ let package = Package(
             name: "Windows 32 Kernel Time",
             targets: ["Windows 32 Kernel Time"]
         ),
-        // MARK: - Other
+
         .library(
             name: "Windows 32 Identity",
             targets: ["Windows 32 Identity"]
@@ -90,7 +90,7 @@ let package = Package(
             name: "Windows 32 Memory",
             targets: ["Windows 32 Memory"]
         ),
-        // MARK: - Test Support
+
         .library(
             name: "Windows 32 Kernel Test Support",
             targets: ["Windows 32 Kernel Test Support"]
@@ -195,7 +195,7 @@ let package = Package(
         ),
     ],
     targets: [
-        // MARK: - Core
+
         .target(
             name: "Windows 32 Core",
             dependencies: []
@@ -205,7 +205,6 @@ let package = Package(
             dependencies: []
         ),
 
-        // MARK: - Kernel Core
         .target(
             name: "Windows 32 Kernel Core",
             dependencies: [
@@ -230,7 +229,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Clock
         .target(
             name: "Windows 32 Kernel Clock",
             dependencies: [
@@ -239,15 +237,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Lock
-        //
-        // Separate from "Windows 32 Kernel Core" per [PLAT-ARCH-008k] parity
-        // with ISO_9945's "ISO 9945 Kernel Lock" target: Token's deadline
-        // acquisition polls `Clock.Continuous.now`, whose Windows
-        // implementation (`QueryPerformanceCounter`) lives in
-        // "Windows 32 Kernel Clock". Core cannot depend on Clock (Clock
-        // already depends on Core), so Lock's deadline-polling surface
-        // needs its own target depending on both.
         .target(
             name: "Windows 32 Kernel Lock",
             dependencies: [
@@ -257,7 +246,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Console
         .target(
             name: "Windows 32 Kernel Console",
             dependencies: [
@@ -265,7 +253,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Directory
         .target(
             name: "Windows 32 Kernel Directory",
             dependencies: [
@@ -274,7 +261,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Environment
         .target(
             name: "Windows 32 Kernel Environment",
             dependencies: [
@@ -285,7 +271,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel File
         .target(
             name: "Windows 32 Kernel File",
             dependencies: [
@@ -299,7 +284,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel IO
         .target(
             name: "Windows 32 Kernel IO",
             dependencies: [
@@ -308,7 +292,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Terminal
         .target(
             name: "Windows 32 Kernel Terminal",
             dependencies: [
@@ -318,7 +301,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Memory Map
         .target(
             name: "Windows 32 Kernel Memory Map",
             dependencies: [
@@ -337,7 +319,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Process
         .target(
             name: "Windows 32 Kernel Process",
             dependencies: [
@@ -347,7 +328,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Socket
         .target(
             name: "Windows 32 Kernel Socket",
             dependencies: [
@@ -355,7 +335,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel System
         .target(
             name: "Windows 32 Kernel System",
             dependencies: [
@@ -365,7 +344,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Thread
         .target(
             name: "Windows 32 Kernel Thread",
             dependencies: [
@@ -374,15 +352,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Time
-        //
-        // Depends on "Windows 32 Kernel Clock" in addition to Core: this
-        // target's Windows.Kernel.Time.swift uses Clock.Continuous.now,
-        // whose Windows implementation (QueryPerformanceCounter) lives in
-        // Kernel Clock. Core alone cannot see it (Core cannot depend on
-        // Clock — Clock already depends on Core), same defect class fixed
-        // for "Windows 32 Kernel Lock" — see Package.swift's Kernel Lock
-        // target comment.
         .target(
             name: "Windows 32 Kernel Time",
             dependencies: [
@@ -391,7 +360,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Kernel Umbrella
         .target(
             name: "Windows 32 Kernel",
             dependencies: [
@@ -413,7 +381,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Identity
         .target(
             name: "Windows 32 Identity",
             dependencies: [
@@ -421,7 +388,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Interop
         .target(
             name: "Windows 32 Interop",
             dependencies: [
@@ -429,7 +395,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Loader
         .target(
             name: "Windows 32 Loader",
             dependencies: [
@@ -438,7 +403,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Memory
         .target(
             name: "Windows 32 Memory",
             dependencies: [
@@ -447,7 +411,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Test Support
         .target(
             name: "Windows 32 Kernel Test Support",
             dependencies: [
@@ -457,7 +420,6 @@ let package = Package(
             path: "Tests/Support"
         ),
 
-        // MARK: - Tests
         .testTarget(
             name: "Windows 32 Kernel Tests",
             dependencies: [

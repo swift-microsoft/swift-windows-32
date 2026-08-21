@@ -1,60 +1,34 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 public import Error_Primitives
 
 extension Windows.`32`.Kernel.Link {
-    /// Symbolic link operations.
-    ///
-    /// Mirrors `ISO_9945.Kernel.Link.Symbolic`. Wraps
-    /// `CreateSymbolicLinkW()`.
+
     public enum Symbolic: Sendable {}
 }
 
-// MARK: - Error
-
 extension Windows.`32`.Kernel.Link.Symbolic {
-    /// Errors that can occur during symbolic link operations.
+
     public enum Error: Swift.Error, Sendable, Equatable {
-        /// A component of the path does not exist.
+
         case notFound
 
-        /// Permission denied.
         case permission
 
-        /// The path already exists.
         case exists
 
-        /// A component of the path is not a directory.
         case notDirectory
 
-        /// The filesystem is read-only.
         case readOnly
 
-        /// Not enough space.
         case noSpace
 
-        /// Too many symbolic links encountered.
         case loop
 
-        /// Path name is too long.
         case nameTooLong
 
-        /// The path is not a symbolic link (for readlink).
         case notSymbolicLink
 
-        /// The buffer is too small (for readlink).
         case bufferTooSmall
 
-        /// A platform-specific error.
         case platform(Error_Primitives.Error)
     }
 }

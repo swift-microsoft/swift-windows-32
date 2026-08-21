@@ -1,54 +1,24 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows System Information
-
     extension System {
-        /// Platform path length limit.
-        ///
-        /// Windows has MAX_PATH (260) for legacy APIs, but modern APIs support
-        /// longer paths (up to 32,767 characters with \\?\ prefix).
-        /// Returns the legacy limit for compatibility.
+
         public static var pathMax: System.Path.Length {
-            System.Path.Length(_unchecked: Cardinal(UInt(260)))  // MAX_PATH
+            System.Path.Length(_unchecked: Cardinal(UInt(260)))
         }
 
-        /// Memory page size in bytes.
-        ///
-        /// This is the fundamental unit of memory management.
-        /// Typically 4096 bytes on Windows (both x86 and ARM).
         public static var pageSize: System.Page.Size {
             var sysInfo = SYSTEM_INFO()
             GetSystemInfo(&sysInfo)
             return System.Page.Size(_unchecked: Cardinal(UInt(sysInfo.dwPageSize)))
         }
 
-        /// Number of active/online processors.
-        ///
-        /// Uses GetSystemInfo to get the number of logical processors.
         public static var processorCount: System.Processor.Count {
             var sysInfo = SYSTEM_INFO()
             GetSystemInfo(&sysInfo)
             return System.Processor.Count(_unchecked: Cardinal(UInt(sysInfo.dwNumberOfProcessors)))
         }
 
-        /// Sleeps for the specified duration.
-        ///
-        /// Note: Windows Sleep() has millisecond granularity.
-        /// Sub-millisecond sleeps are rounded up to 1ms minimum.
-        ///
-        /// - Parameter duration: The duration to sleep.
         @inlinable
         public static func sleep(_ duration: Duration) {
             let (seconds, attoseconds) = duration.components

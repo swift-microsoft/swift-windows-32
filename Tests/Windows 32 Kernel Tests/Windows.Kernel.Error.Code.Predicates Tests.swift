@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import Testing
 
@@ -21,8 +10,6 @@
             @Suite struct Unit {}
         }
     }
-
-    // MARK: - Predicate Unit Tests (Windows)
 
     extension Error_Primitives.Error.Code.Test.Unit {
         @Test

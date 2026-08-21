@@ -1,23 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import Error_Primitives
 
     extension Windows.`32`.Kernel.IO.Completion.Port {
-        /// Namespace for write operation types.
-        ///
-        /// ## See Also
-        ///
-        /// - ``Kernel/IO/Completion/Port/Write/Result``
+
         public enum Write {}
     }
 

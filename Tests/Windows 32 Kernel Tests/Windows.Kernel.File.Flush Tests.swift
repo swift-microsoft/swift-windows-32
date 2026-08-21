@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -26,16 +15,12 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.File.Flush.Test.Unit {
         @Test
         func `Sync namespace exists`() {
             _ = Windows.`32`.Kernel.File.Flush.self
         }
     }
-
-    // MARK: - Error Tests
 
     extension Windows.`32`.Kernel.File.Flush.Test.Unit {
         @Test
@@ -57,14 +42,10 @@
         }
     }
 
-    // MARK: - Edge Cases
-
     extension Windows.`32`.Kernel.File.Flush.Test.EdgeCase {
         @Test
         func `flushData is alias for flush on Windows`() {
-            // On Windows, flushData and flush are the same operation
-            // (FlushFileBuffers has no data-only form); both throw on an
-            // invalid descriptor.
+
             let invalid = Kernel.Descriptor.invalid
             #expect(throws: Kernel.File.Flush.Error.self) {
                 try Windows.`32`.Kernel.File.Flush.flush(invalid)

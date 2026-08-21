@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Error_Primitives.Error.Test.Unit {
         @Test
         func `Error_Primitives.Error namespace exists`() {
@@ -43,12 +30,10 @@
         }
     }
 
-    // MARK: - Capture Tests
-
     extension Error_Primitives.Error.Test.Unit {
         @Test
         func `captureLastError returns Code`() {
-            // Set a known error
+
             SetLastError(DWORD(ERROR_FILE_NOT_FOUND))
 
             let code = Error_Primitives.Error.captureLastError()
@@ -57,14 +42,12 @@
 
         @Test
         func `captureLastError with no error returns success`() {
-            SetLastError(0)  // ERROR_SUCCESS
+            SetLastError(0)
 
             let code = Error_Primitives.Error.captureLastError()
             #expect(code.win32 == 0)
         }
     }
-
-    // MARK: - Error Code Constants Tests
 
     extension Error_Primitives.Error.Test.Unit {
         @Test
@@ -92,8 +75,6 @@
         }
     }
 
-    // MARK: - Error Code Conversion Tests
-
     extension Error_Primitives.Error.Test.Unit {
         @Test
         func `Code.win32 creates correct code`() {
@@ -101,8 +82,6 @@
             #expect(code.win32 == DWORD(ERROR_FILE_NOT_FOUND))
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Error_Primitives.Error.Test.EdgeCase {
         @Test
@@ -112,8 +91,6 @@
             let code1 = Error_Primitives.Error.captureLastError()
             let code2 = GetLastError()
 
-            // GetLastError should still return the same value
-            // (captureLastError doesn't reset it)
             #expect(code1.win32 == code2)
         }
     }

@@ -1,30 +1,13 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 public import Path_Primitives
 
 extension Windows.`32`.Kernel.Directory {
-    /// A directory entry returned by iteration.
-    ///
-    /// Mirrors the Windows branch of `ISO_9945.Kernel.Directory.Entry`:
-    /// preserves raw UTF-16 code units to support names that cannot be
-    /// decoded to valid Unicode.
+
     public struct Entry: Sendable {
-        /// Raw UTF-16 code units of the name, null-terminated.
+
         public let rawName: [UInt16]
 
-        /// The inode number (POSIX only, nil on Windows).
         public let inode: Windows.`32`.Kernel.Inode?
 
-        /// The type of entry, if known.
         public let type: Windows.`32`.Kernel.File.Stats.Kind?
 
         public init(
@@ -45,20 +28,13 @@ extension Windows.`32`.Kernel.Directory {
 }
 
 extension Windows.`32`.Kernel.Directory.Entry {
-    /// Returns true if this entry is "." or "..".
-    ///
-    /// `rawName` is null-terminated, so "." is `[0x002E, 0x0000]`
-    /// and ".." is `[0x002E, 0x002E, 0x0000]`.
+
     public var isDotOrDotDot: Bool {
         rawName == [0x002E, 0x0000] || rawName == [0x002E, 0x002E, 0x0000]
     }
 
     #if os(Windows)
-        /// Calls `body` with the entry name as a `Path.Borrowed`. Zero allocation.
-        ///
-        /// The borrowed view is valid only for the duration of `body`.
-        /// Its pointer references `rawName` directly and excludes the null
-        /// terminator.
+
         public func withName<R, E: Swift.Error>(
             _ body: (borrowing Path.Borrowed) throws(E) -> R
         ) throws(E) -> R {
@@ -73,16 +49,6 @@ extension Windows.`32`.Kernel.Directory.Entry {
             return try result.get()
         }
 
-        /// The entry name as a `Path.Borrowed`. Zero allocation.
-        ///
-        /// `rawName` is null-terminated. This property borrows the array's
-        /// heap buffer directly — the view cannot outlive `self`. Consumers
-        /// reach content via `name.span` (Swift.Span<Path.Char>) or
-        /// `name.pointer` (UnsafePointer<Path.Char>).
-        ///
-        /// Windows-only: relies on `Path.Char == UInt16`, which holds only
-        /// on Windows; on other platforms the raw UTF-16 units remain
-        /// accessible via ``rawName``.
         public var name: Path.Borrowed {
             @_lifetime(borrow self)
             borrowing get {

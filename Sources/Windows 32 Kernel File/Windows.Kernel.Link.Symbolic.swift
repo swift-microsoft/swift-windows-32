@@ -1,30 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows CreateSymbolicLinkW syscall
-
     extension Windows.`32`.Kernel.Link.Symbolic {
-        /// Creates a symbolic link.
-        ///
-        /// On Windows, creating symbolic links typically requires administrator
-        /// privileges or Developer Mode to be enabled.
-        ///
-        /// - Parameters:
-        ///   - target: The path the symlink points to.
-        ///   - linkPath: The path of the symbolic link to create.
-        ///   - isDirectory: If true, creates a directory symlink.
-        /// - Throws: `Windows.`32`.Kernel.Link.Symbolic.Error` on failure.
+
         public static func create(
             target: borrowing Path,
             linkPath: borrowing Path,
@@ -43,13 +21,6 @@
             }
         }
 
-        /// Creates a symbolic link using unsafe wide strings.
-        ///
-        /// - Parameters:
-        ///   - target: The target path as a null-terminated wide string.
-        ///   - linkPath: The link path as a null-terminated wide string.
-        ///   - isDirectory: If true, creates a directory symlink.
-        /// - Throws: `Windows.`32`.Kernel.Link.Symbolic.Error` on failure.
         public static func create(
             target: UnsafePointer<Path.Char>,
             linkPath: UnsafePointer<Path.Char>,
@@ -68,19 +39,6 @@
             }
         }
 
-        /// Reads the fully-resolved target of a symbolic link into `buffer`.
-        ///
-        /// Writes the normalized absolute path of what the link resolves to, via
-        /// `GetFinalPathNameByHandleW` (the raw `\\?\`-prefixed NT form). This
-        /// DIFFERS from POSIX `readlink` / ISO stored-link-text semantics, which
-        /// return the link text verbatim. A dangling link throws `.notFound`. The
-        /// stored-text `FSCTL_GET_REPARSE_POINT` rewrite is a tracked follow-up.
-        ///
-        /// - Parameters:
-        ///   - path: The path of the symbolic link.
-        ///   - buffer: Buffer to receive the resolved path (UTF-16).
-        /// - Returns: The number of characters written (excluding null terminator).
-        /// - Throws: `Windows.`32`.Kernel.Link.Symbolic.Error` on failure.
         public static func readTarget(
             path: borrowing Path,
             into buffer: UnsafeMutableBufferPointer<UInt16>
@@ -91,26 +49,15 @@
             }
         }
 
-        /// Reads the target of a symbolic link using an unsafe wide string.
-        ///
-        /// - Parameters:
-        ///   - unsafePath: The symlink path as a null-terminated wide string.
-        ///   - buffer: Buffer to receive the target path (UTF-16).
-        /// - Returns: The number of characters written (excluding null terminator).
-        /// - Throws: `Windows.`32`.Kernel.Link.Symbolic.Error` on failure.
         public static func readTarget(
             unsafePath: UnsafePointer<Path.Char>,
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Windows.`32`.Kernel.Link.Symbolic.Error) -> Int {
             let wpath = UnsafeRawPointer(unsafePath).assumingMemoryBound(to: WCHAR.self)
 
-            // Open FOLLOWING the symlink (no FILE_FLAG_OPEN_REPARSE_POINT):
-            // GetFinalPathNameByHandleW reports the path of what the handle
-            // refers to, so an unfollowed reparse-point handle would yield
-            // the link itself rather than its target.
             let handle = CreateFileW(
                 wpath,
-                0,  // No access needed, just resolving the path
+                0,
                 DWORD(FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE),
                 nil,
                 DWORD(OPEN_EXISTING),
@@ -123,7 +70,6 @@
             }
             defer { _ = CloseHandle(handle) }
 
-            // Get the final path name which resolves the symlink
             let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
                 to: WCHAR.self
             )
@@ -146,10 +92,8 @@
         }
     }
 
-    // MARK: - Error Construction
-
     extension Windows.`32`.Kernel.Link.Symbolic.Error {
-        /// Creates an error from the current Win32 last error.
+
         @usableFromInline
         internal static func current() -> Self {
             let code = Error_Primitives.Error.captureLastError()
@@ -159,7 +103,6 @@
             return current(from: win32Code)
         }
 
-        /// Maps a Win32 error code to the semantic error (testing seam).
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
             case Error_Primitives.Error.Code.File.notFound,

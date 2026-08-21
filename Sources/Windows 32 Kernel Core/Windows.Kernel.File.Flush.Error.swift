@@ -1,21 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Windows.`32`.Kernel.File.Flush {
-    /// Errors that can occur during file flush operations.
+
     public enum Error: Swift.Error, Sendable {
-        /// The file descriptor is invalid.
+
         case handle(Windows.`32`.Kernel.Descriptor.Validity.Error)
 
-        /// Platform-specific error.
         case platform(Error_Primitives.Error)
     }
 }

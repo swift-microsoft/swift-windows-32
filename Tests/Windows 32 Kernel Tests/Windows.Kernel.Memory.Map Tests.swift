@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -27,8 +16,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Memory.Map.Test.Unit {
         @Test
         func `Memory.Map namespace exists`() {
@@ -45,8 +32,6 @@
             _ = Memory.Map.Options.self
         }
     }
-
-    // MARK: - Protection Tests
 
     extension Memory.Map.Test.Unit {
         @Test
@@ -82,8 +67,6 @@
         }
     }
 
-    // MARK: - Windows Protection Conversion Tests
-
     extension Memory.Map.Test.Unit {
         @Test
         func `Protection.read converts to PAGE_READONLY`() {
@@ -116,8 +99,6 @@
         }
     }
 
-    // MARK: - Anonymous Mapping Tests
-
     extension Memory.Map.Test.Unit {
         @Test
         func `mapAnonymous with zero length throws`() {
@@ -137,7 +118,6 @@
                 protection: .readWrite
             )
 
-            // Cleanup
             try Memory.Map.unmap(
                 addr: addr,
                 length: Memory.Address.Count(pageSize),
@@ -145,17 +125,6 @@
             )
         }
     }
-
-    // MARK: - Private (Copy-on-Write) Flag Conversion Tests (F-003 regression)
-    //
-    // `map(fd:...)` used to compute `fileMappingProtect`/`desiredAccess`
-    // from `protection` alone — `flags` was accepted but never read, so a
-    // `.private` request silently produced the same shared, write-through
-    // mapping as `.shared`. These properties are the corrected,
-    // `.private`-specific conversions `map(fd:...)` now selects via
-    // `flags.isPrivate`; they mirror the existing
-    // `windowsFileMapProtect`/`windowsMapViewAccess` conversion tests above,
-    // which cover the pre-existing `.shared` path.
 
     extension Memory.Map.Test.Unit {
         @Test
@@ -188,17 +157,12 @@
 
         @Test
         func `Private mapping conversion differs from shared for the same protection`() {
-            // The actual F-003 bug: `.private` and `.shared` produced
-            // identical Windows flags because `map(fd:...)` never
-            // consulted `flags` at all. Post-fix, the two conversion paths
-            // for the same `Protection` value must diverge.
+
             let prot = Memory.Map.Protection.readWrite
             #expect(prot.windowsFileMapProtect != prot.windowsFileMapProtectCopyOnWrite)
             #expect(prot.windowsMapViewAccess != prot.windowsMapViewAccessCopyOnWrite)
         }
     }
-
-    // MARK: - Options.private / .isPrivate Wiring Tests
 
     extension Memory.Map.Test.Unit {
         @Test
@@ -215,8 +179,6 @@
             #expect(!flags.isPrivate)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Memory.Map.Test.EdgeCase {
         @Test
@@ -240,7 +202,7 @@
                 Issue.record("Expected error")
             } catch let error as Memory.Map.Error {
                 if case .invalid(.length) = error {
-                    // Expected
+
                 } else {
                     Issue.record("Expected .invalid(.length), got \(error)")
                 }

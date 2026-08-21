@@ -1,24 +1,7 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
 
-    // MARK: - Windows Error Conversion
-
     extension Windows.`32`.Kernel.File.Clone.Error {
-        /// Maps a Windows error code to a semantic error.
-        ///
-        /// - Note: This is SPI for platform-specific packages.
-        /// Maps a raw syscall failure to the semantic error. Mirrors
-        /// `ISO_9945.Kernel.File.Clone.Error.init(from:)` per [PLAT-ARCH-008c].
+
         public init(from syscall: Syscall) {
             switch syscall {
             case .notSupported:

@@ -1,39 +1,19 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #ifndef CWINDOWS_MEMORY_SHIM_H
 #define CWINDOWS_MEMORY_SHIM_H
 
 #if defined(_WIN32)
 
 #include <windows.h>
-// PROCESS_MEMORY_COUNTERS_EX and GetProcessMemoryInfo are declared in <psapi.h>,
-// which must be included after <windows.h> (it depends on its types).
-//
-// PSAPI_VERSION 2 remaps GetProcessMemoryInfo to K32GetProcessMemoryInfo, which
-// is exported directly from kernel32.dll (Windows 7+). kernel32 is always in the
-// default link set, so no separate Psapi.lib link is required.
+
 #define PSAPI_VERSION 2
 #include <psapi.h>
 
-/// Memory statistics structure for Windows.
 typedef struct {
     SIZE_T allocations;
     SIZE_T deallocations;
     SIZE_T bytes_allocated;
 } WindowsMemoryStats;
 
-/// Query Windows heap memory statistics.
-///
-/// Uses GetProcessHeaps and HeapWalk to gather memory information.
 static inline WindowsMemoryStats windows_heap_statistics(void) {
     WindowsMemoryStats stats = {0, 0, 0};
 
@@ -46,6 +26,6 @@ static inline WindowsMemoryStats windows_heap_statistics(void) {
     return stats;
 }
 
-#endif /* _WIN32 */
+#endif
 
-#endif /* CWINDOWS_MEMORY_SHIM_H */
+#endif

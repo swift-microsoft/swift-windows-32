@@ -1,20 +1,7 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 public import Error_Primitives
 
 extension Windows.`32`.Kernel.Environment {
-    /// Errors that can occur during environment operations.
-    ///
-    /// Mirrors `ISO_9945.Kernel.Environment.Error`.
+
     public enum Error: Swift.Error, Sendable {
         case permission(Windows.`32`.Kernel.Permission.Error)
         case invalid(Invalid)
@@ -22,28 +9,19 @@ extension Windows.`32`.Kernel.Environment {
     }
 }
 
-// MARK: - Invalid
-
 extension Windows.`32`.Kernel.Environment.Error {
-    /// Invalid argument errors specific to environment operations.
+
     public enum Invalid: Swift.Error, Sendable, Equatable, Hashable {
-        /// The variable name is empty.
+
         case emptyName
-        /// The variable name contains an equals sign.
+
         case nameContainsEquals
     }
 }
 
-// MARK: - Code Mapping
-
-// Windows-only: `Permission.Error(code:)` maps Win32 constants that
-// Error_Primitives declares only on Windows.
 #if os(Windows)
     extension Windows.`32`.Kernel.Environment.Error {
-        /// Creates an error from a canonical error code.
-        ///
-        /// Maps permission codes to the semantic `permission` case; everything
-        /// else lands in `platform`.
+
         public init(code: Error_Primitives.Error.Code) {
             if let permission = Windows.`32`.Kernel.Permission.Error(code: code) {
                 self = .permission(permission)
@@ -53,8 +31,6 @@ extension Windows.`32`.Kernel.Environment.Error {
         }
     }
 #endif
-
-// MARK: - Equatable
 
 extension Windows.`32`.Kernel.Environment.Error: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -66,8 +42,6 @@ extension Windows.`32`.Kernel.Environment.Error: Equatable {
         }
     }
 }
-
-// MARK: - CustomStringConvertible
 
 extension Windows.`32`.Kernel.Environment.Error: CustomStringConvertible {
     public var description: Swift.String {

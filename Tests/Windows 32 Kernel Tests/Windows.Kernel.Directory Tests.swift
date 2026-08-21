@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Directory.Test.Unit {
         @Test
         func `Directory namespace exists`() {
@@ -43,18 +30,13 @@
         }
     }
 
-    // MARK: - Iterator Tests
-
     extension Windows.`32`.Kernel.Directory.Test.Unit {
         @Test
         func `Iterator type exists`() {
-            // Type check only — Iterator is ~Copyable (key paths are
-            // unsupported) and cannot be created without a real directory.
+
             _ = Windows.`32`.Kernel.Directory.Iterator.self
         }
     }
-
-    // MARK: - Error Mapping Tests
 
     extension Windows.`32`.Kernel.Directory.Test.Unit {
         @Test
@@ -63,7 +45,7 @@
                 _windowsError: Error_Primitives.Error.Code.File.notFound
             )
             if case .notFound = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .notFound, got \(error)")
             }
@@ -75,7 +57,7 @@
                 _windowsError: Error_Primitives.Error.Code.File.pathNotFound
             )
             if case .notFound = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .notFound, got \(error)")
             }
@@ -87,14 +69,12 @@
                 _windowsError: Error_Primitives.Error.Code.Access.denied
             )
             if case .permission = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .permission, got \(error)")
             }
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Directory.Test.EdgeCase {
         @Test
@@ -132,7 +112,7 @@
                     Issue.record("Expected .closed")
                 } catch {
                     if case Windows.`32`.Kernel.Directory.Error.closed = error {
-                        // Expected
+
                     } else {
                         Issue.record("Expected .closed, got \(error)")
                     }
@@ -142,20 +122,20 @@
 
         @Test
         func `Entry type has name, inode, type`() {
-            // Check Kernel.Directory.Entry exists with expected properties
-            let nameChars: [UInt16] = [0x74, 0x65, 0x73, 0x74, 0x0000]  // "test" (null-terminated)
+
+            let nameChars: [UInt16] = [0x74, 0x65, 0x73, 0x74, 0x0000]
             let entry = Kernel.Directory.Entry(rawName: nameChars, inode: nil, type: .regular)
             #expect(entry.type == .regular)
         }
 
         @Test
         func `Entry.isDotOrDotDot detects dot entries`() {
-            // rawName is null-terminated (mirrors ISO_9945.Kernel.Directory.Entry)
-            let dotName: [UInt16] = [0x2E, 0x0000]  // "."
+
+            let dotName: [UInt16] = [0x2E, 0x0000]
             let dotEntry = Kernel.Directory.Entry(rawName: dotName, inode: nil, type: .directory)
             #expect(dotEntry.isDotOrDotDot)
 
-            let dotDotName: [UInt16] = [0x2E, 0x2E, 0x0000]  // ".."
+            let dotDotName: [UInt16] = [0x2E, 0x2E, 0x0000]
             let dotDotEntry = Kernel.Directory.Entry(
                 rawName: dotDotName,
                 inode: nil,
@@ -163,7 +143,7 @@
             )
             #expect(dotDotEntry.isDotOrDotDot)
 
-            let normalName: [UInt16] = [0x74, 0x65, 0x73, 0x74, 0x0000]  // "test"
+            let normalName: [UInt16] = [0x74, 0x65, 0x73, 0x74, 0x0000]
             let normalEntry = Kernel.Directory.Entry(
                 rawName: normalName,
                 inode: nil,

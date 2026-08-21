@@ -1,33 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// ISO 9945 signature parity for the L3 unifier (swift-kernel).
-//
-// swift-kernel's shared (cross-platform) algorithms — Copy, Clone, Open —
-// call the L2 surface with the ISO 9945 signatures (`Path.Borrowed`
-// parameters, ISO labels). This file provides those forms on the Windows
-// L2 surface, delegating to the existing wide-string implementations.
-// The `-standard` convergence rule: both platform L2 packages present the
-// same shapes to L3.
-
 #if os(Windows)
     public import WinSDK
     public import String_Primitives
 
-    // MARK: - Stats (get/lget statics, ISO shape)
-
     extension Windows.`32`.Kernel.File.Stats {
-        /// Gets file metadata for a path (follows symlinks).
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Stats.get(path:)`.
+
         public static func get(
             path: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.File.Stats.Error) -> Windows.`32`.Kernel.File.Stats {
@@ -36,9 +12,6 @@
             }
         }
 
-        /// Gets file metadata for a path without following symlinks.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Stats.lget(path:)`.
         public static func lget(
             path: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.File.Stats.Error) -> Windows.`32`.Kernel.File.Stats {
@@ -47,16 +20,12 @@
             }
         }
 
-        /// Gets file metadata for an open descriptor.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Stats.get(descriptor:)`.
         public static func get(
             descriptor: borrowing Windows.`32`.Kernel.Descriptor
         ) throws(Windows.`32`.Kernel.File.Stats.Error) -> Windows.`32`.Kernel.File.Stats {
             try Windows.`32`.Kernel.File.getStats(descriptor._rawValue)
         }
 
-        /// Path-based stat via a metadata-only handle.
         internal static func _get(
             unsafePath: UnsafePointer<Path.Char>,
             followSymlinks: Bool
@@ -92,12 +61,8 @@
         }
     }
 
-    // MARK: - Delete (unlabeled Path.Borrowed, ISO shape)
-
     extension Windows.`32`.Kernel.File.Delete {
-        /// Removes a file or symbolic link.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Delete.delete(_:)`.
+
         public static func delete(
             _ path: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.File.Delete.Error) {
@@ -107,12 +72,8 @@
         }
     }
 
-    // MARK: - Open (Path.Borrowed, ISO shape)
-
     extension Windows.`32`.Kernel.File.Open {
-        /// Opens a file at the specified path.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Open.open(path:mode:options:permissions:)`.
+
         public static func open(
             path: borrowing Path.Borrowed,
             mode: Windows.`32`.Kernel.File.Open.Mode,
@@ -125,15 +86,8 @@
         }
     }
 
-    // MARK: - Times (access/modification at path, ISO shape)
-
     extension Windows.`32`.Kernel.File.Times {
-        /// Sets access and modification times for a path.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Times.set(access:modification:at:followSymlinks:)`.
-        ///
-        /// - Parameter followSymlinks: If false, operates on the symlink itself
-        ///   (default: true).
+
         public static func set(
             access accessTime: Windows.`32`.Kernel.Time,
             modification modificationTime: Windows.`32`.Kernel.Time,
@@ -173,15 +127,8 @@
         }
     }
 
-    // MARK: - Attributes (permissions at path, ISO shape)
-
     extension Windows.`32`.Kernel.File.Attributes {
-        /// Applies POSIX-style permissions to a path.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Attributes.set(_:at:)`. Windows has no
-        /// mode bits; the only expressible dimension is the readonly attribute
-        /// (owner-write absent → readonly), matching the synthesis direction
-        /// used by `Stats`.
+
         public static func set(
             _ permissions: Windows.`32`.Kernel.File.Permissions,
             at path: borrowing Path.Borrowed
@@ -210,14 +157,8 @@
         }
     }
 
-    // MARK: - Move (Path.Borrowed, ISO shape)
-
     extension Windows.`32`.Kernel.File.Move {
-        /// Moves (renames) a file or directory.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Move.move(from:to:)` — rename(2)
-        /// semantics, which REPLACE an existing destination atomically;
-        /// MoveFileExW needs MOVEFILE_REPLACE_EXISTING to match.
+
         public static func move(
             from oldPath: borrowing Path.Borrowed,
             to newPath: borrowing Path.Borrowed
@@ -232,13 +173,8 @@
         }
     }
 
-    // MARK: - Times (access/modification on descriptor, ISO shape)
-
     extension Windows.`32`.Kernel.File.Times {
-        /// Sets access and modification times on an open descriptor.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Times.set(access:modification:on:)`
-        /// (futimens shape) via `SetFileTime` on the handle.
+
         public static func set(
             access accessTime: Windows.`32`.Kernel.Time,
             modification modificationTime: Windows.`32`.Kernel.Time,
@@ -255,19 +191,10 @@
         }
     }
 
-    // MARK: - Seek (whence label, ISO shape)
-
     extension Windows.`32`.Kernel.File.Seek {
-        /// The reference point for a seek operation (ISO name).
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Seek.Whence`; `Origin`'s cases
-        /// (`.start`, `.current`, `.end`) coincide with the ISO constants,
-        /// so the alias carries call sites written against either name.
+
         public typealias Whence = Origin
 
-        /// Seeks with the ISO label form.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Seek.seek(_:offset:whence:)`.
         @discardableResult
         public static func seek(
             _ descriptor: borrowing Windows.`32`.Kernel.Descriptor,
@@ -278,12 +205,8 @@
         }
     }
 
-    // MARK: - Hard links (ISO labels)
-
     extension Windows.`32`.Kernel.Link {
-        /// Creates a hard link.
-        ///
-        /// Mirrors `ISO_9945.Kernel.Link.create(at:to:)`.
+
         public static func create(
             at linkPath: borrowing Path.Borrowed,
             to existingPath: borrowing Path.Borrowed
@@ -298,15 +221,8 @@
         }
     }
 
-    // MARK: - Attributes (permissions on descriptor, ISO shape)
-
     extension Windows.`32`.Kernel.File.Attributes {
-        /// Applies POSIX-style permissions to an open descriptor.
-        ///
-        /// Mirrors `ISO_9945.Kernel.File.Attributes.set(_:on:)` (fchmod
-        /// shape). As with the path form, the only expressible dimension on
-        /// Windows is the readonly attribute (owner-write absent → readonly),
-        /// applied via `SetFileInformationByHandle(FileBasicInfo)`.
+
         public static func set(
             _ permissions: Windows.`32`.Kernel.File.Permissions,
             on descriptor: borrowing Windows.`32`.Kernel.Descriptor
@@ -334,7 +250,7 @@
             }
             guard updated != current else { return }
             info.FileAttributes = updated
-            // Zero timestamps mean "leave unchanged" for SetFileInformationByHandle.
+
             info.CreationTime.QuadPart = 0
             info.LastAccessTime.QuadPart = 0
             info.LastWriteTime.QuadPart = 0
@@ -354,12 +270,8 @@
         }
     }
 
-    // MARK: - Symbolic links (ISO labels)
-
     extension Windows.`32`.Kernel.Link.Symbolic {
-        /// Creates a symbolic link.
-        ///
-        /// Mirrors `ISO_9945.Kernel.Link.Symbolic.create(target:at:)`.
+
         public static func create(
             target: borrowing Path.Borrowed,
             at linkPath: borrowing Path.Borrowed
@@ -368,11 +280,7 @@
                 targetPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
                 try unsafe linkPath.withUnsafePointer {
                     linkPtr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
-                    // symlink(2) has no file/directory distinction, but
-                    // CreateSymbolicLinkW requires SYMBOLIC_LINK_FLAG_DIRECTORY
-                    // for directory targets or the link never resolves. Probe
-                    // the target; unresolvable (e.g. relative or dangling)
-                    // targets default to a file link, matching mklink.
+
                     let wTarget = UnsafeRawPointer(targetPtr).assumingMemoryBound(to: WCHAR.self)
                     let attributes = GetFileAttributesW(wTarget)
                     let isDirectory =
@@ -383,21 +291,10 @@
             }
         }
 
-        /// Reads the fully-resolved target of a symbolic link.
-        ///
-        /// Returns the fully-resolved, normalized absolute path via
-        /// `GetFinalPathNameByHandleW` (`\\?\` prefix stripped), NOT the stored
-        /// link text. This DIFFERS from POSIX `readlink` /
-        /// `ISO_9945.Kernel.Link.Symbolic.readTarget(at:)`, which return the link
-        /// text verbatim. A dangling link throws `.notFound`. The stored-text
-        /// `FSCTL_GET_REPARSE_POINT` rewrite is a tracked follow-up.
         public static func readTarget(
             at path: borrowing Path.Borrowed
         ) throws(Windows.`32`.Kernel.Link.Symbolic.Error) -> String_Primitives.String {
-            // MAX_PATH-scale buffer; reparse targets beyond this surface as
-            // bufferTooSmall from the underlying read. Raw allocation rather
-            // than Array.withUnsafeMutableBufferPointer: the rethrows closure
-            // erases the typed throw to any Error.
+
             let capacity = 32768
             let raw = UnsafeMutablePointer<UInt16>.allocate(capacity: capacity)
             defer { unsafe raw.deallocate() }
@@ -407,14 +304,13 @@
                 ptr throws(Windows.`32`.Kernel.Link.Symbolic.Error) in
                 try unsafe readTarget(unsafePath: ptr, into: buf)
             }
-            // GetFinalPathNameByHandleW returns the \\?\-prefixed NT form;
-            // strip the prefix so consumers see an ordinary drive path.
+
             var start = raw
             var count = length
             if length >= 4,
-                unsafe raw[0] == 0x5C, unsafe raw[1] == 0x5C,  // backslashes
+                unsafe raw[0] == 0x5C, unsafe raw[1] == 0x5C,
                 unsafe raw[2] == 0x3F, unsafe raw[3] == 0x5C
-            {  // "?" backslash
+            {
                 start = unsafe raw.advanced(by: 4)
                 count = length - 4
             }
@@ -423,11 +319,8 @@
         }
     }
 
-    // MARK: - FILETIME from Instant
-
     extension FILETIME {
-        /// Converts a Unix-epoch instant to a Windows FILETIME
-        /// (100-nanosecond intervals since 1601-01-01).
+
         internal init(_from instant: Windows.`32`.Kernel.Time) {
             let epochOffset: Int64 = 116_444_736_000_000_000
             let intervals =

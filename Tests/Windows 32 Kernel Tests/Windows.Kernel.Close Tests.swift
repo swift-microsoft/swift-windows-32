@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,16 +18,12 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Close.Test.Unit {
         @Test
         func `Close namespace exists`() {
             _ = Windows.`32`.Kernel.Close.self
         }
     }
-
-    // MARK: - Error Tests
 
     extension Windows.`32`.Kernel.Close.Test.Unit {
         @Test
@@ -49,7 +34,7 @@
                 try Windows.`32`.Kernel.Close.close(invalid)
                 Issue.record("Expected error")
             } catch is Kernel.Close.Error {
-                // Expected
+
             } catch {
                 Issue.record("Unexpected error type: \(error)")
             }
@@ -64,7 +49,7 @@
                 Issue.record("Expected error")
             } catch let error as Kernel.Close.Error {
                 if case .handle(.invalid) = error {
-                    // Expected
+
                 } else {
                     Issue.record("Expected .handle(.invalid), got \(error)")
                 }
@@ -73,8 +58,6 @@
             }
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Close.Test.EdgeCase {
         @Test

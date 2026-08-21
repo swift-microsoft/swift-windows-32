@@ -1,26 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import WinSDK
 
-    // MARK: - Windows CreateHardLinkW syscall
-
     extension Windows.`32`.Kernel.Link {
-        /// Creates a hard link to an existing file.
-        ///
-        /// - Parameters:
-        ///   - source: The path of the existing file.
-        ///   - linkPath: The path of the hard link to create.
-        /// - Throws: `Windows.`32`.Kernel.Link.Error` on failure.
+
         public static func create(
             source: borrowing Path,
             linkPath: borrowing Path
@@ -34,12 +16,6 @@
             }
         }
 
-        /// Creates a hard link to an existing file using unsafe wide strings.
-        ///
-        /// - Parameters:
-        ///   - source: The source file path as a null-terminated wide string.
-        ///   - linkPath: The link path as a null-terminated wide string.
-        /// - Throws: `Windows.`32`.Kernel.Link.Error` on failure.
         public static func create(
             source: UnsafePointer<Path.Char>,
             linkPath: UnsafePointer<Path.Char>
@@ -53,10 +29,8 @@
         }
     }
 
-    // MARK: - Error Construction
-
     extension Windows.`32`.Kernel.Link.Error {
-        /// Creates an error from the current Win32 last error.
+
         @usableFromInline
         internal static func current() -> Self {
             let code = Error_Primitives.Error.captureLastError()
@@ -66,7 +40,6 @@
             return current(from: win32Code)
         }
 
-        /// Maps a Win32 error code to the semantic error (testing seam).
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
             case Error_Primitives.Error.Code.File.notFound,

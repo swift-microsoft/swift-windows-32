@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,16 +18,12 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Descriptor.Duplicate.Test.Unit {
         @Test
         func `Dup namespace exists`() {
             _ = Windows.`32`.Kernel.Descriptor.Duplicate.self
         }
     }
-
-    // MARK: - Error Tests
 
     extension Windows.`32`.Kernel.Descriptor.Duplicate.Test.Unit {
         @Test
@@ -59,7 +44,7 @@
                 Issue.record("Expected error")
             } catch let error as Kernel.Descriptor.Duplicate.Error {
                 if case .handle(.invalid) = error {
-                    // Expected
+
                 } else {
                     Issue.record("Expected .handle(.invalid), got \(error)")
                 }

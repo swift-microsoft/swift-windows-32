@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -29,8 +18,6 @@
         }
     }
 
-    // MARK: - Namespace Tests
-
     extension Windows.`32`.Kernel.Thread.Mutex.Test.Unit {
         @Test
         func `Thread.Mutex class exists`() {
@@ -48,8 +35,6 @@
         }
     }
 
-    // MARK: - Mutex Creation Tests
-
     extension Windows.`32`.Kernel.Thread.Mutex.Test.Unit {
         @Test
         func `Mutex can be created`() {
@@ -65,8 +50,6 @@
             _ = mutex2
         }
     }
-
-    // MARK: - Lock/Unlock Tests
 
     extension Windows.`32`.Kernel.Thread.Mutex.Test.Unit {
         @Test
@@ -88,14 +71,9 @@
             mutex.lock()
             defer { mutex.unlock() }
 
-            // From another thread, should throw
-            // But from same thread on Windows SRWLOCK, this will deadlock
-            // so we just verify the function exists
             _ = Windows.`32`.Kernel.Thread.Mutex.Lock.Error.contention
         }
     }
-
-    // MARK: - withLock Tests
 
     extension Windows.`32`.Kernel.Thread.Mutex.Test.Unit {
         @Test
@@ -122,21 +100,17 @@
         }
     }
 
-    // MARK: - Error Tests
-
     extension Windows.`32`.Kernel.Thread.Mutex.Test.Unit {
         @Test
         func `Lock.Error.contention exists`() {
             let error = Windows.`32`.Kernel.Thread.Mutex.Lock.Error.contention
             if case .contention = error {
-                // Expected
+
             } else {
                 Issue.record("Expected .contention")
             }
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Thread.Mutex.Test.EdgeCase {
         @Test

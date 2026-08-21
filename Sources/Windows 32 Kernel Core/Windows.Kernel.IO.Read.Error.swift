@@ -1,24 +1,11 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Windows.`32`.Kernel.IO.Read {
-    /// Errors that can occur during read operations.
+
     public enum Error: Swift.Error, Sendable {
         case handle(Windows.`32`.Kernel.Descriptor.Validity.Error)
         case blocking(Windows.`32`.Kernel.IO.Blocking.Error)
         case platform(Error_Primitives.Error)
     }
 }
-
-// MARK: - Equatable
 
 extension Windows.`32`.Kernel.IO.Read.Error: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -30,8 +17,6 @@ extension Windows.`32`.Kernel.IO.Read.Error: Equatable {
         }
     }
 }
-
-// MARK: - CustomStringConvertible
 
 extension Windows.`32`.Kernel.IO.Read.Error: CustomStringConvertible {
     public var description: Swift.String {

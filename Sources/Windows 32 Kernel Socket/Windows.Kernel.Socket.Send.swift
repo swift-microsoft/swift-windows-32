@@ -1,22 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import Error_Primitives
     public import WinSDK
 
-    // MARK: - Socket Send
-
     extension Windows.`32`.Kernel.Socket {
-        /// Send flags.
+
         public struct SendOptions: OptionSet, Sendable {
             public let rawValue: Int32
 
@@ -27,31 +14,16 @@
     }
 
     extension Windows.`32`.Kernel.Socket.SendOptions {
-        /// Send out-of-band data.
+
         public static let outOfBand = Self(rawValue: MSG_OOB)
 
-        /// Bypass routing, send directly to interface.
         public static let dontRoute = Self(rawValue: MSG_DONTROUTE)
 
-        /// No flags.
         public static let none = Self(rawValue: 0)
     }
 
     extension Windows.`32`.Kernel.Socket {
-        /// Sends data on a connected socket.
-        ///
-        /// - Parameters:
-        ///   - socket: The connected socket.
-        ///   - buffer: Pointer to the data to send.
-        ///   - length: Number of bytes to send.
-        ///   - flags: Send flags.
-        /// - Returns: Number of bytes sent.
-        /// - Throws: `Error.send` on failure.
-        ///
-        /// ## Partial Sends
-        ///
-        /// The return value may be less than `length` if the send buffer is full
-        /// or for other reasons. Callers should loop to send remaining data.
+
         package static func send(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeRawPointer,
@@ -61,20 +33,6 @@
             try send(socket._rawValue, buffer: buffer, length: length, flags: flags)
         }
 
-        /// Sends data on a SOCKET bit pattern.
-        ///
-        /// Spec-literal raw `send`. The typed L2 convenience
-        /// (`send(_:buffer:length:flags:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - buffer: Pointer to the data to send.
-        ///   - length: Number of bytes to send.
-        ///   - flags: Send flags.
-        /// - Returns: Number of bytes sent (may be less than `length`).
-        /// - Throws: `Error.send` on failure.
         package static func send(
             _ socket: UInt,
             buffer: UnsafeRawPointer,
@@ -93,14 +51,6 @@
             return Int(result)
         }
 
-        /// Sends data on a connected socket.
-        ///
-        /// - Parameters:
-        ///   - socket: The connected socket.
-        ///   - buffer: The buffer containing data to send.
-        ///   - flags: Send flags.
-        /// - Returns: Number of bytes sent.
-        /// - Throws: `Error.send` on failure.
         package static func send(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeBufferPointer<UInt8>,
@@ -112,20 +62,6 @@
             return try send(socket, buffer: baseAddress, length: buffer.count, flags: flags)
         }
 
-        /// Sends data to a specific destination address.
-        ///
-        /// Used for connectionless (datagram) sockets, or to override the
-        /// destination address for connected sockets.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - buffer: Pointer to the data to send.
-        ///   - length: Number of bytes to send.
-        ///   - flags: Send flags.
-        ///   - destAddr: Destination address.
-        ///   - destAddrLength: Size of the destination address structure.
-        /// - Returns: Number of bytes sent.
-        /// - Throws: `Error.send` on failure.
         package static func sendTo(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeRawPointer,
@@ -144,22 +80,6 @@
             )
         }
 
-        /// Sends data to a destination on a SOCKET bit pattern.
-        ///
-        /// Spec-literal raw `sendto`. The typed L2 convenience
-        /// (`sendTo(_:buffer:length:flags:destAddr:destAddrLength:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - buffer: Pointer to the data to send.
-        ///   - length: Number of bytes to send.
-        ///   - flags: Send flags.
-        ///   - destAddr: Destination address.
-        ///   - destAddrLength: Size of the destination address structure.
-        /// - Returns: Number of bytes sent.
-        /// - Throws: `Error.send` on failure.
         package static func sendTo(
             _ socket: UInt,
             buffer: UnsafeRawPointer,
@@ -184,7 +104,7 @@
     }
 
     extension Windows.`32`.Kernel.Socket {
-        /// Sends one datagram and returns Winsock's reported byte count.
+
         public static func send(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             from span: Swift.Span<UInt8>,

@@ -1,22 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import Error_Primitives
     public import WinSDK
 
-    // MARK: - Socket Receive
-
     extension Windows.`32`.Kernel.Socket {
-        /// Receive flags.
+
         public struct ReceiveOptions: OptionSet, Sendable {
             public let rawValue: Int32
 
@@ -27,35 +14,18 @@
     }
 
     extension Windows.`32`.Kernel.Socket.ReceiveOptions {
-        /// Peek at incoming data without removing it from the queue.
+
         public static let peek = Self(rawValue: MSG_PEEK)
 
-        /// Receive out-of-band data.
         public static let outOfBand = Self(rawValue: MSG_OOB)
 
-        /// Block until the full amount is received.
         public static let waitAll = Self(rawValue: MSG_WAITALL)
 
-        /// No flags.
         public static let none = Self(rawValue: 0)
     }
 
     extension Windows.`32`.Kernel.Socket {
-        /// Receives data from a connected socket.
-        ///
-        /// - Parameters:
-        ///   - socket: The connected socket.
-        ///   - buffer: Buffer to receive data into.
-        ///   - length: Maximum number of bytes to receive.
-        ///   - flags: Receive flags.
-        /// - Returns: Number of bytes received, or 0 if the connection was closed.
-        /// - Throws: `Error.receive` on failure.
-        ///
-        /// ## Return Values
-        ///
-        /// - Positive: Number of bytes received.
-        /// - Zero: Connection closed gracefully (EOF).
-        /// - Error: Connection error or socket error.
+
         package static func receive(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableRawPointer,
@@ -65,20 +35,6 @@
             try receive(socket._rawValue, buffer: buffer, length: length, flags: flags)
         }
 
-        /// Receives data from a SOCKET bit pattern.
-        ///
-        /// Spec-literal raw `recv`. The typed L2 convenience
-        /// (`receive(_:buffer:length:flags:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - buffer: Buffer to receive data into.
-        ///   - length: Maximum number of bytes to receive.
-        ///   - flags: Receive flags.
-        /// - Returns: Number of bytes received, or 0 if the connection was closed.
-        /// - Throws: `Error.receive` on failure.
         package static func receive(
             _ socket: UInt,
             buffer: UnsafeMutableRawPointer,
@@ -97,14 +53,6 @@
             return Int(result)
         }
 
-        /// Receives data from a connected socket into a buffer.
-        ///
-        /// - Parameters:
-        ///   - socket: The connected socket.
-        ///   - buffer: The buffer to receive data into.
-        ///   - flags: Receive flags.
-        /// - Returns: Number of bytes received.
-        /// - Throws: `Error.receive` on failure.
         package static func receive(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableBufferPointer<UInt8>,
@@ -116,21 +64,6 @@
             return try receive(socket, buffer: baseAddress, length: buffer.count, flags: flags)
         }
 
-        /// Receives data and retrieves the source address.
-        ///
-        /// Used for connectionless (datagram) sockets to receive data and
-        /// determine who sent it.
-        ///
-        /// - Parameters:
-        ///   - socket: The socket.
-        ///   - buffer: Buffer to receive data into.
-        ///   - length: Maximum number of bytes to receive.
-        ///   - flags: Receive flags.
-        ///   - srcAddr: Pointer to receive the source address.
-        ///   - srcAddrLength: On input, size of the address buffer.
-        ///                    On output, actual size of the returned address.
-        /// - Returns: Number of bytes received.
-        /// - Throws: `Error.receive` on failure.
         package static func receiveFrom(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             buffer: UnsafeMutableRawPointer,
@@ -149,23 +82,6 @@
             )
         }
 
-        /// Receives data on a SOCKET bit pattern and retrieves the source address.
-        ///
-        /// Spec-literal raw `recvfrom`. The typed L2 convenience
-        /// (`receiveFrom(_:buffer:length:flags:srcAddr:srcAddrLength:)` taking
-        /// `borrowing Windows.`32`.Kernel.Socket.Descriptor`) delegates to this raw SPI
-        /// internally via `socket._rawValue`.
-        ///
-        /// - Parameters:
-        ///   - socket: SOCKET bit pattern.
-        ///   - buffer: Buffer to receive data into.
-        ///   - length: Maximum number of bytes to receive.
-        ///   - flags: Receive flags.
-        ///   - srcAddr: Pointer to receive the source address.
-        ///   - srcAddrLength: On input, size of the address buffer.
-        ///                    On output, actual size of the returned address.
-        /// - Returns: Number of bytes received.
-        /// - Throws: `Error.receive` on failure.
         package static func receiveFrom(
             _ socket: UInt,
             buffer: UnsafeMutableRawPointer,
@@ -190,7 +106,7 @@
     }
 
     extension Windows.`32`.Kernel.Socket {
-        /// Receives one datagram and returns Winsock's reported byte count and source address.
+
         public static func receive(
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             into span: inout Swift.MutableSpan<UInt8>,

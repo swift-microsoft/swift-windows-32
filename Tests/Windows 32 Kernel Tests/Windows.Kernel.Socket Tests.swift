@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2025 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     import WinSDK
     import Testing
@@ -25,8 +14,6 @@
         }
     }
 
-    // MARK: - Winsock Initialization Tests
-
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
         func `startup succeeds`() throws {
@@ -36,15 +23,13 @@
 
         @Test
         func `startup and cleanup can be called multiple times`() throws {
-            // Winsock uses reference counting
+
             try Windows.`32`.Kernel.Socket.startup()
             try Windows.`32`.Kernel.Socket.startup()
             #expect(Windows.`32`.Kernel.Socket.cleanup())
             #expect(Windows.`32`.Kernel.Socket.cleanup())
         }
     }
-
-    // MARK: - Socket Creation Tests
 
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
@@ -99,7 +84,7 @@
 
             let sock = try Windows.`32`.Kernel.Socket.create(family: .inet, type: .stream)
             Windows.`32`.Kernel.Socket.close(sock)
-            // No throw means success
+
         }
 
         @Test
@@ -114,8 +99,6 @@
             #expect(sock1._rawValue != sock2._rawValue)
         }
     }
-
-    // MARK: - Family Tests
 
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
@@ -137,8 +120,6 @@
         }
     }
 
-    // MARK: - SocketType Tests
-
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
         func `SocketType.stream exists`() {
@@ -159,11 +140,8 @@
         }
     }
 
-    // MARK: - Protocol Tests
-
     extension Windows.`32`.Kernel.Socket {
-        /// `Socket.Protocol` cannot be named via member syntax (`.Protocol` is
-        /// metatype syntax even backticked); alias it from inside the scope.
+
         fileprivate typealias Proto = `Protocol`
     }
 
@@ -187,8 +165,6 @@
         }
     }
 
-    // MARK: - Byte Order Tests
-
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
         func `htons converts port correctly`() {
@@ -206,8 +182,6 @@
             #expect(hostOrder == value)
         }
     }
-
-    // MARK: - Socket Options Tests
 
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
@@ -276,8 +250,6 @@
         }
     }
 
-    // MARK: - Option Level Tests
-
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
         func `OptionLevel.socket exists`() {
@@ -304,8 +276,6 @@
         }
     }
 
-    // MARK: - Option Name Tests
-
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
         func `OptionName.reuseAddr exists`() {
@@ -325,8 +295,6 @@
             #expect(name.rawValue == TCP_NODELAY)
         }
     }
-
-    // MARK: - Backlog Tests
 
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
@@ -354,8 +322,6 @@
         }
     }
 
-    // MARK: - Shutdown Tests
-
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
         func `Shutdown.How.sdReceive exists`() {
@@ -375,8 +341,6 @@
             #expect(how == SD_BOTH)
         }
     }
-
-    // MARK: - Send/Receive Flags Tests
 
     extension Windows.`32`.Kernel.Socket.Test.Unit {
         @Test
@@ -409,8 +373,6 @@
             #expect(flags.rawValue == MSG_WAITALL)
         }
     }
-
-    // MARK: - Edge Cases
 
     extension Windows.`32`.Kernel.Socket.Test.EdgeCase {
         @Test

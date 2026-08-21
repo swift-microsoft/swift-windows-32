@@ -1,22 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if os(Windows)
     public import Error_Primitives
     public import WinSDK
 
     extension Windows.`32`.Kernel.IO.Completion.Port.Entry {
-        /// Byte-related properties for completion entry.
-        ///
-        /// Provides access to byte counts from completed I/O operations.
+
         public struct Bytes: Sendable {
             @usableFromInline
             let entry: Windows.`32`.Kernel.IO.Completion.Port.Entry
@@ -29,7 +16,7 @@
     }
 
     extension Windows.`32`.Kernel.IO.Completion.Port.Entry.Bytes {
-        /// Number of bytes transferred in the completed operation.
+
         @inlinable
         public var transferred: Windows.`32`.Kernel.File.Size {
             Windows.`32`.Kernel.File.Size(Int64(entry.raw.dwNumberOfBytesTransferred))

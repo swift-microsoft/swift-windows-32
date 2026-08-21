@@ -1,21 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-windows-32 open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-windows-32 project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Windows.`32`.Kernel.Descriptor.Validity.Error {
-    /// Limit scope for Windows handle exhaustion.
+
     public enum Limit: Sendable, Equatable, Hashable {
-        /// Per-process handle limit reached (`ERROR_TOO_MANY_OPEN_FILES`).
+
         case process
 
-        /// System-wide handle limit reached.
         case system
     }
 }
