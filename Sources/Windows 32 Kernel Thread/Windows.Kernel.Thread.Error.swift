@@ -1,12 +1,12 @@
 #if os(Windows)
 
-    public import Error_Primitives
+    public import Error
 
     extension Windows.`32`.Kernel.Thread {
 
         public enum Error: Swift.Error, Sendable, Equatable, Hashable {
 
-            case create(Error_Primitives.Error)
+            case create(Error.Error)
         }
     }
 

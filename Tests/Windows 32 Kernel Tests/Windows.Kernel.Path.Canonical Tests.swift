@@ -3,12 +3,12 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
-    import Path_Primitives
-    import Clock_Primitives
-    import Random_Primitives
-    import String_Primitives
-    import System_Primitives
+    import Error
+    import Path
+    import Clock
+    import Random
+    import String
+    import System
 
     extension Path.Canonical {
         enum Test {

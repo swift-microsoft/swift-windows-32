@@ -1,6 +1,6 @@
 #if os(Windows)
 
-    public import Error_Primitives
+    public import Error
 
     extension Windows.`32`.Kernel.Thread.Affinity {
 
@@ -12,7 +12,7 @@
 
             case tooManyCPUs
 
-            case platform(Error_Primitives.Error.Code)
+            case platform(Error.Error.Code)
         }
     }
 

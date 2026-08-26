@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Pair_Primitives
+    public import Pair
     internal import WinSDK
 
     extension Windows.`32`.Kernel.File {

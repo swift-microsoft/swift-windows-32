@@ -3,7 +3,7 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
+    import Error
 
     extension Kernel.IO.Completion.Port {
         enum Test {

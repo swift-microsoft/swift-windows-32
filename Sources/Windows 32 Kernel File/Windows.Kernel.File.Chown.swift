@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Error_Primitives
+    public import Error
 
     extension Windows.`32`.Kernel.File {
 
@@ -16,7 +16,7 @@
 
             case io(IO)
 
-            case platform(Error_Primitives.Error)
+            case platform(Error.Error)
 
             public enum Path: Swift.Error, Sendable, Equatable {
                 case notFound

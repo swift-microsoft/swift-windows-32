@@ -3,7 +3,7 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
+    import Error
 
     extension Kernel.IO.Completion.Port.Dequeue {
         enum Test {
@@ -29,7 +29,7 @@
         func `Status type exists with ok and platform cases`() {
             let ok: Kernel.IO.Completion.Port.Dequeue.Status = .ok
             let error: Kernel.IO.Completion.Port.Dequeue.Status = .platform(
-                Error_Primitives.Error(code: .win32(0))
+                Error.Error(code: .win32(0))
             )
 
             #expect(ok == .ok)
@@ -89,7 +89,7 @@
                 bytes: 0,
                 key: .init(rawValue: 0),
                 overlapped: ov,
-                status: .platform(Error_Primitives.Error(code: .win32(5)))
+                status: .platform(Error.Error(code: .win32(5)))
             )
 
             if case .platform(let error) = item.status {

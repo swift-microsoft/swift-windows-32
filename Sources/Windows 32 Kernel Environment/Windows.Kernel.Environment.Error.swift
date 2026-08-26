@@ -1,11 +1,11 @@
-public import Error_Primitives
+public import Error
 
 extension Windows.`32`.Kernel.Environment {
 
     public enum Error: Swift.Error, Sendable {
         case permission(Windows.`32`.Kernel.Permission.Error)
         case invalid(Invalid)
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }
 
@@ -22,11 +22,11 @@ extension Windows.`32`.Kernel.Environment.Error {
 #if os(Windows)
     extension Windows.`32`.Kernel.Environment.Error {
 
-        public init(code: Error_Primitives.Error.Code) {
+        public init(code: Error.Error.Code) {
             if let permission = Windows.`32`.Kernel.Permission.Error(code: code) {
                 self = .permission(permission)
             } else {
-                self = .platform(Error_Primitives.Error(code: code))
+                self = .platform(Error.Error(code: code))
             }
         }
     }

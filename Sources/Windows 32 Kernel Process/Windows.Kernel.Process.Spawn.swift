@@ -1,6 +1,6 @@
 #if os(Windows)
     public import WinSDK
-    public import Path_Primitives
+    public import Path
 #endif
 
 extension Windows.`32`.Kernel.Process {
@@ -82,7 +82,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
             }
 
             guard success else {
-                throw .create(Error_Primitives.Error.captureLastError())
+                throw .create(Error.Error.captureLastError())
             }
 
             return Result(

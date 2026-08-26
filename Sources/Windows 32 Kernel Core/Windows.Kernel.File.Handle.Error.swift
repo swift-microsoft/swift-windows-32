@@ -1,5 +1,5 @@
-public import Error_Primitives
-public import Memory_Primitives
+public import Error
+public import Memory
 
 extension Windows.`32`.Kernel.File.Handle {
 
@@ -12,6 +12,6 @@ extension Windows.`32`.Kernel.File.Handle {
         case invalidLength(length: Int, requiredMultiple: Memory.Alignment)
         case requirementsUnknown
         case alignmentViolation(operation: Operation)
-        case platform(code: Error_Primitives.Error.Code, operation: Operation)
+        case platform(code: Error.Error.Code, operation: Operation)
     }
 }

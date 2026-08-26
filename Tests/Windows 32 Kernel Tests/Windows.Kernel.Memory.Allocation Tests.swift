@@ -3,8 +3,8 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
-    import Memory_Primitives
+    import Error
+    import Memory
 
     extension Memory.Allocation {
         enum Test {

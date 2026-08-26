@@ -1,8 +1,8 @@
 #if os(Windows)
-    public import Error_Primitives
+    public import Error
     internal import WinSDK
 
-    extension Error_Primitives.Error.Code {
+    extension Error.Error.Code {
 
         public var win32Message: Swift.String? {
             switch self {

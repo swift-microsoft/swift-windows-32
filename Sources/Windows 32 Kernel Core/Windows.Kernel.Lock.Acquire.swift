@@ -1,4 +1,4 @@
-public import Clock_Primitives
+public import Clock
 
 extension Windows.`32`.Kernel.Lock {
 

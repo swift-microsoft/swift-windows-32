@@ -14,7 +14,7 @@ extension Windows.`32`.Kernel.Lock {
 
         case invalidRange(start: Int64, end: Int64)
 
-        case platform(code: Error_Primitives.Error.Code)
+        case platform(code: Error.Error.Code)
     }
 }
 

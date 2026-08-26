@@ -62,7 +62,7 @@
         ) throws(Windows.`32`.Kernel.File.Attributes.Error) {
             guard SetFileAttributesW(path, attributes.rawValue) else {
                 throw .platform(
-                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    Error.Error(code: Error.Error.captureLastError())
                 )
             }
         }
@@ -129,7 +129,7 @@
 
             case io(IO)
 
-            case platform(Error_Primitives.Error)
+            case platform(Error.Error)
         }
     }
 

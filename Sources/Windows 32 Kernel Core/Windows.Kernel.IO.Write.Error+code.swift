@@ -3,7 +3,7 @@
     extension Windows.`32`.Kernel.IO.Write.Error {
 
         @inlinable
-        public var code: Error_Primitives.Error.Code {
+        public var code: Error.Error.Code {
             switch self {
             case .handle(let e): return e.code
             case .blocking: return .Windows.ERROR_NOT_SUPPORTED
@@ -15,7 +15,7 @@
     extension Windows.`32`.Kernel.IO.Write.Error {
 
         @inlinable
-        public init(code: Error_Primitives.Error.Code) {
+        public init(code: Error.Error.Code) {
             if let e = Windows.`32`.Kernel.Descriptor.Validity.Error(code: code) {
                 self = .handle(e)
                 return
@@ -24,7 +24,7 @@
                 self = .blocking(e)
                 return
             }
-            self = .platform(Error_Primitives.Error(code: code))
+            self = .platform(Error.Error(code: code))
         }
     }
 #endif

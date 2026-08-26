@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Terminal_Primitives
+    public import Terminal
 
     extension Terminal.Stream.Write {
 

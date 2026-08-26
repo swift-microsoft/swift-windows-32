@@ -148,19 +148,19 @@
 
         package init(_windowsError error: DWORD) {
             switch error {
-            case Error_Primitives.Error.Code.File.notFound,
-                Error_Primitives.Error.Code.File.pathNotFound:
+            case Error.Error.Code.File.notFound,
+                Error.Error.Code.File.pathNotFound:
                 self = .notFound
 
-            case Error_Primitives.Error.Code.Access.denied:
+            case Error.Error.Code.Access.denied:
                 self = .permission
 
-            case Error_Primitives.Error.Code.Directory.invalidName:
+            case Error.Error.Code.Directory.invalidName:
 
                 self = .notDirectory
 
             default:
-                self = .platform(Error_Primitives.Error(code: .win32(error)))
+                self = .platform(Error.Error(code: .win32(error)))
             }
         }
     }

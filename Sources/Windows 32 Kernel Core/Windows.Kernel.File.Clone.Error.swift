@@ -14,7 +14,7 @@ extension Windows.`32`.Kernel.File.Clone {
 
         case isDirectory
 
-        case platform(code: Error_Primitives.Error.Code, operation: Operation)
+        case platform(code: Error.Error.Code, operation: Operation)
     }
 }
 

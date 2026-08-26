@@ -130,7 +130,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                     DWORD(HANDLE_FLAG_INHERIT)
                 )
             else {
-                throw .create(Error_Primitives.Error.captureLastError())
+                throw .create(Error.Error.captureLastError())
             }
 
             let newCount = _inheritHandlesCount + 1
@@ -159,7 +159,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 )
             else {
 
-                let err = Error_Primitives.Error.captureLastError()
+                let err = Error.Error.captureLastError()
                 unsafe attrList.deallocate()
                 unsafe (self._attributeListRaw = nil)
                 throw .create(err)
@@ -176,7 +176,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                     nil
                 )
             else {
-                throw .create(Error_Primitives.Error.captureLastError())
+                throw .create(Error.Error.captureLastError())
             }
         }
     }

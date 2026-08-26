@@ -126,7 +126,7 @@
             let failIfExists = !overwrite
 
             guard CopyFileW(wSource, wDest, failIfExists) else {
-                throw Error(fromLastError: Error_Primitives.Error.captureLastError())
+                throw Error(fromLastError: Error.Error.captureLastError())
             }
         }
 
@@ -142,7 +142,7 @@
                     let wDest = UnsafeRawPointer(dstPtr).assumingMemoryBound(to: WCHAR.self)
                     guard CopyFileW(wSource, wDest, true) else {
                         throw .platform(
-                            code: Error_Primitives.Error.captureLastError(),
+                            code: Error.Error.captureLastError(),
                             operation: .copyfile
                         )
                     }
@@ -153,7 +153,7 @@
 
     extension Windows.`32`.Kernel.File.Copy.Error {
 
-        internal init(fromLastError code: Error_Primitives.Error.Code) {
+        internal init(fromLastError code: Error.Error.Code) {
             switch code {
             case _ where code == .Windows.ERROR_FILE_NOT_FOUND,
                 _ where code == .Windows.ERROR_PATH_NOT_FOUND:

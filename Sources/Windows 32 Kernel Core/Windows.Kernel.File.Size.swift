@@ -1,5 +1,5 @@
-public import Dimension_Primitives
-public import Memory_Primitives
+public import Dimension
+public import Memory
 
 extension Windows.`32`.Kernel.File {
 

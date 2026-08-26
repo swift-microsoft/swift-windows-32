@@ -1,6 +1,6 @@
 #if os(Windows)
-    public import Error_Primitives
-    public import Memory_Primitives
+    public import Error
+    public import Memory
     public import WinSDK
 
     extension Memory.Lock {
@@ -16,7 +16,7 @@
                     SIZE_T(length.underlying.rawValue)
                 )
             else {
-                throw .lock(Error_Primitives.Error.captureLastError())
+                throw .lock(Error.Error.captureLastError())
             }
         }
 
@@ -31,7 +31,7 @@
                     SIZE_T(length.underlying.rawValue)
                 )
             else {
-                throw .unlock(Error_Primitives.Error.captureLastError())
+                throw .unlock(Error.Error.captureLastError())
             }
         }
     }

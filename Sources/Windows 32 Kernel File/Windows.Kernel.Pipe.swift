@@ -1,4 +1,4 @@
-public import Pair_Primitives
+public import Pair
 
 #if os(Windows)
     internal import WinSDK
@@ -61,7 +61,7 @@ extension Windows.`32`.Kernel.Pipe {
             )
         #else
 
-            throw Error.platform(Error_Primitives.Error(code: .win32(0)))
+            throw Error.platform(Error.Error(code: .win32(0)))
         #endif
     }
 }
@@ -71,9 +71,9 @@ extension Windows.`32`.Kernel.Pipe.Error {
     @usableFromInline
     internal static func current() -> Self {
         #if os(Windows)
-            return Self(code: Error_Primitives.Error.captureLastError())
+            return Self(code: Error.Error.captureLastError())
         #else
-            return .platform(Error_Primitives.Error(code: .win32(0)))
+            return .platform(Error.Error(code: .win32(0)))
         #endif
     }
 }

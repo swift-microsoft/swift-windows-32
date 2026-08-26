@@ -1,6 +1,6 @@
 #if os(Windows)
     internal import WinSDK
-    public import String_Primitives
+    public import String
 
     extension Path.Canonical {
 
@@ -30,7 +30,7 @@
 
             if result > buffer.count {
                 throw .platform(
-                    Error_Primitives.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER)))
+                    Error.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER)))
                 )
             }
 
@@ -82,11 +82,11 @@
 
         public static func withCanonical<R: ~Copyable>(
             _ path: borrowing Path.Borrowed,
-            _ body: (borrowing String_Primitives.String.Borrowed) -> R
+            _ body: (borrowing String.String.Borrowed) -> R
         ) throws(Path.Canonical.Error) -> R {
             try unsafe path.withUnsafePointer { unsafePath throws(Path.Canonical.Error) in
                 try withFinalPath(unsafePath: unsafePath) { pointer, count in
-                    let view = unsafe String_Primitives.String.Borrowed(pointer, count: count)
+                    let view = unsafe String.String.Borrowed(pointer, count: count)
                     return body(view)
                 }
             }
@@ -94,9 +94,9 @@
 
         public static func canonicalize(
             _ path: borrowing Path.Borrowed
-        ) throws(Path.Canonical.Error) -> String_Primitives.String {
+        ) throws(Path.Canonical.Error) -> String.String {
             try withCanonical(path) { view in
-                String_Primitives.String(copying: view)
+                String.String(copying: view)
             }
         }
 
@@ -159,11 +159,11 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            let code = Error_Primitives.Error.captureLastError()
+            let code = Error.Error.captureLastError()
             if let e = Path.Resolution.Error(code: code) {
                 return .path(e)
             }
-            return .platform(Error_Primitives.Error(code: code))
+            return .platform(Error.Error(code: code))
         }
     }
 

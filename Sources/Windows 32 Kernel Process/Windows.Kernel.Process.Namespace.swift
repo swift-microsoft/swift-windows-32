@@ -7,11 +7,11 @@ extension Windows.`32`.Kernel.Process {
 
     public enum Error: Swift.Error, Sendable, Equatable, Hashable {
 
-        case create(Error_Primitives.Error.Code)
+        case create(Error.Error.Code)
 
-        case wait(Error_Primitives.Error.Code)
+        case wait(Error.Error.Code)
 
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }
 

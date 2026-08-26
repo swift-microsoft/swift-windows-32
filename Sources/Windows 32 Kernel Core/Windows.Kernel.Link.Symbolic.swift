@@ -1,4 +1,4 @@
-public import Error_Primitives
+public import Error
 
 extension Windows.`32`.Kernel.Link {
 
@@ -29,7 +29,7 @@ extension Windows.`32`.Kernel.Link.Symbolic {
 
         case bufferTooSmall
 
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }
 

@@ -85,7 +85,7 @@
             )
 
             guard success else {
-                throw .create(Error_Primitives.Error.captureLastError())
+                throw .create(Error.Error.captureLastError())
             }
 
             return Info(
@@ -118,7 +118,7 @@
             )
 
             guard success else {
-                throw .create(Error_Primitives.Error.captureLastError())
+                throw .create(Error.Error.captureLastError())
             }
 
             return Info(

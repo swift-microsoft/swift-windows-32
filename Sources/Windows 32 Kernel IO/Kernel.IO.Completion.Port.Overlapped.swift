@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Error_Primitives
+    public import Error
     public import WinSDK
 
     extension Windows.`32`.Kernel.IO.Completion.Port {

@@ -1,7 +1,7 @@
-internal import Error_Primitives
-internal import Path_Primitives
-internal import Random_Primitives
-internal import System_Primitives
+internal import Error
+internal import Path
+internal import Random
+internal import System
 internal import Windows_32_Core
 
 #if os(Windows)
@@ -151,12 +151,12 @@ internal import Windows_32_Core
     extension Windows.`32`.Kernel.File.Stats.Error {
 
         internal init(_windowsError error: DWORD) {
-            let errorCode = Error_Primitives.Error.Code.win32(error)
+            let errorCode = Error.Error.Code.win32(error)
             if let e = Windows.`32`.Kernel.Descriptor.Validity.Error(code: errorCode) {
                 self = .handle(e)
                 return
             }
-            self = .platform(Error_Primitives.Error(code: errorCode))
+            self = .platform(Error.Error(code: errorCode))
         }
     }
 

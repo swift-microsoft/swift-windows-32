@@ -1,6 +1,6 @@
 #if os(Windows)
-    public import Byte_Primitives
-    public import Error_Primitives
+    public import Byte
+    public import Error
     public import WinSDK
 
     extension Windows.`32`.Kernel.IO.Write {
@@ -142,7 +142,7 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            Self(code: Error_Primitives.Error.captureLastError())
+            Self(code: Error.Error.captureLastError())
         }
     }
 

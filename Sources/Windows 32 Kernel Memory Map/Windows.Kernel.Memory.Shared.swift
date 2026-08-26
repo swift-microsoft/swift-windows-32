@@ -1,6 +1,6 @@
 #if os(Windows)
-    public import Error_Primitives
-    public import Memory_Primitives
+    public import Error
+    public import Memory
     public import WinSDK
 
     extension Memory.Shared {
@@ -23,7 +23,7 @@
             )
 
             guard let handle, handle != INVALID_HANDLE_VALUE else {
-                throw .open(Error_Primitives.Error.captureLastError())
+                throw .open(Error.Error.captureLastError())
             }
 
             return handle
@@ -40,7 +40,7 @@
             )
 
             guard let handle, handle != INVALID_HANDLE_VALUE else {
-                throw .open(Error_Primitives.Error.captureLastError())
+                throw .open(Error.Error.captureLastError())
             }
 
             return handle
@@ -84,7 +84,7 @@
             }
 
             if let handle {
-                let error = Error_Primitives.Error.captureLastError()
+                let error = Error.Error.captureLastError()
                 if options.contains(.exclusive), GetLastError() == DWORD(ERROR_ALREADY_EXISTS) {
                     _ = CloseHandle(handle)
                     throw .open(error)
@@ -150,7 +150,7 @@
                     SIZE_T(size)
                 )
             else {
-                throw .open(Error_Primitives.Error.captureLastError())
+                throw .open(Error.Error.captureLastError())
             }
 
             return ptr

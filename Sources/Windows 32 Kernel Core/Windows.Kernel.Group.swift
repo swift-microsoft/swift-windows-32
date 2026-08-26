@@ -1,4 +1,4 @@
-public import Tagged_Primitives
+public import Tagged
 
 extension Windows.`32`.Kernel {
 

@@ -4,7 +4,7 @@ extension Windows.`32`.Kernel.Directory.Working {
 
         case path(Path.Resolution.Error)
 
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }
 

@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Error_Primitives
+    public import Error
     public import WinSDK
 
     extension Windows.`32`.Kernel.Socket {
@@ -46,7 +46,7 @@
                 flags.rawValue
             )
             guard result != SOCKET_ERROR else {
-                throw .platform(Error_Primitives.Error(code: captureLastSocketError()))
+                throw .platform(Error.Error(code: captureLastSocketError()))
             }
             return Int(result)
         }
@@ -97,7 +97,7 @@
                 destAddrLength
             )
             guard result != SOCKET_ERROR else {
-                throw .platform(Error_Primitives.Error(code: captureLastSocketError()))
+                throw .platform(Error.Error(code: captureLastSocketError()))
             }
             return Int(result)
         }

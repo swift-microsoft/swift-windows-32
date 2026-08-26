@@ -1,6 +1,6 @@
 #if os(Windows)
     public import WinSDK
-    public import Random_Primitives
+    public import Random
 
     extension Windows.`32`.Kernel.Random {
 

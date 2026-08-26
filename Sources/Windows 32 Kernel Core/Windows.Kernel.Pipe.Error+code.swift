@@ -3,12 +3,12 @@
     extension Windows.`32`.Kernel.Pipe.Error {
 
         @inlinable
-        public init(code: Error_Primitives.Error.Code) {
+        public init(code: Error.Error.Code) {
             if let e = Windows.`32`.Kernel.Descriptor.Validity.Error(code: code) {
                 self = .handle(e)
                 return
             }
-            self = .platform(Error_Primitives.Error(code: code))
+            self = .platform(Error.Error(code: code))
         }
     }
 #endif

@@ -3,7 +3,7 @@
     extension Windows.`32`.Kernel.IO.Error {
 
         @inlinable
-        public init?(code: Error_Primitives.Error.Code) {
+        public init?(code: Error.Error.Code) {
             switch code {
             case .Windows.ERROR_BROKEN_PIPE:
                 self = .broken

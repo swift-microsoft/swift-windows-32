@@ -1,4 +1,4 @@
-public import Dimension_Primitives
+public import Dimension
 
 extension Windows.`32`.Kernel.File {
 

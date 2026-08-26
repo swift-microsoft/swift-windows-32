@@ -1,6 +1,6 @@
 #if os(Windows)
-    public import Byte_Primitives
-    public import Error_Primitives
+    public import Byte
+    public import Error
     public import WinSDK
 
     extension Windows.`32`.Kernel.IO.Read {
@@ -28,7 +28,7 @@
             if !success {
                 let error = GetLastError()
 
-                if error == Error_Primitives.Error.Code.IO.handleEOF {
+                if error == Error.Error.Code.IO.handleEOF {
                     return 0
                 }
                 throw .current()
@@ -75,7 +75,7 @@
 
             if !readSuccess {
                 let error = GetLastError()
-                if error == Error_Primitives.Error.Code.IO.handleEOF {
+                if error == Error.Error.Code.IO.handleEOF {
                     return 0
                 }
                 throw .current()
@@ -163,7 +163,7 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            Self(code: Error_Primitives.Error.captureLastError())
+            Self(code: Error.Error.captureLastError())
         }
     }
 

@@ -4,8 +4,8 @@
 
     @testable import Windows_32_Kernel
     @testable import Windows_32_Kernel_Memory_Map
-    import Error_Primitives
-    import Memory_Primitives
+    import Error
+    import Memory
 
     extension Memory.Map {
         enum Test {

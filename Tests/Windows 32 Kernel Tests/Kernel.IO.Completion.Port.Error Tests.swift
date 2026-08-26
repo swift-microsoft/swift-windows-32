@@ -3,7 +3,7 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
+    import Error
 
     extension Kernel.IO.Completion.Port.Error {
         enum Test {
@@ -17,7 +17,7 @@
     extension Kernel.IO.Completion.Port.Error.Test.Unit {
         @Test
         func `create case exists`() {
-            let code = Error_Primitives.Error.Code.win32(1)
+            let code = Error.Error.Code.win32(1)
             let error = Kernel.IO.Completion.Port.Error.create(code)
             if case .create(let c) = error {
                 #expect(c == code)
@@ -28,7 +28,7 @@
 
         @Test
         func `associate case exists`() {
-            let code = Error_Primitives.Error.Code.win32(2)
+            let code = Error.Error.Code.win32(2)
             let error = Kernel.IO.Completion.Port.Error.associate(code)
             if case .associate(let c) = error {
                 #expect(c == code)
@@ -39,7 +39,7 @@
 
         @Test
         func `dequeue case exists`() {
-            let code = Error_Primitives.Error.Code.win32(3)
+            let code = Error.Error.Code.win32(3)
             let error = Kernel.IO.Completion.Port.Error.dequeue(code)
             if case .dequeue(let c) = error {
                 #expect(c == code)
@@ -50,7 +50,7 @@
 
         @Test
         func `post case exists`() {
-            let code = Error_Primitives.Error.Code.win32(4)
+            let code = Error.Error.Code.win32(4)
             let error = Kernel.IO.Completion.Port.Error.post(code)
             if case .post(let c) = error {
                 #expect(c == code)
@@ -61,7 +61,7 @@
 
         @Test
         func `read case exists`() {
-            let code = Error_Primitives.Error.Code.win32(5)
+            let code = Error.Error.Code.win32(5)
             let error = Kernel.IO.Completion.Port.Error.read(code)
             if case .read(let c) = error {
                 #expect(c == code)
@@ -72,7 +72,7 @@
 
         @Test
         func `write case exists`() {
-            let code = Error_Primitives.Error.Code.win32(6)
+            let code = Error.Error.Code.win32(6)
             let error = Kernel.IO.Completion.Port.Error.write(code)
             if case .write(let c) = error {
                 #expect(c == code)
@@ -83,7 +83,7 @@
 
         @Test
         func `result case exists`() {
-            let code = Error_Primitives.Error.Code.win32(7)
+            let code = Error.Error.Code.win32(7)
             let error = Kernel.IO.Completion.Port.Error.result(code)
             if case .result(let c) = error {
                 #expect(c == code)
@@ -228,7 +228,7 @@
     extension Kernel.IO.Completion.Port.Error.Test.EdgeCase {
         @Test
         func `All cases with same code are equal`() {
-            let code = Error_Primitives.Error.Code.win32(42)
+            let code = Error.Error.Code.win32(42)
             #expect(
                 Kernel.IO.Completion.Port.Error.create(code)
                     == Kernel.IO.Completion.Port.Error.create(code)
@@ -241,7 +241,7 @@
 
         @Test
         func `Different cases with same code are not equal`() {
-            let code = Error_Primitives.Error.Code.win32(42)
+            let code = Error.Error.Code.win32(42)
             #expect(
                 Kernel.IO.Completion.Port.Error.create(code)
                     != Kernel.IO.Completion.Port.Error.read(code)

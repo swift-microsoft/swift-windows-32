@@ -3,8 +3,8 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
-    import Path_Primitives
+    import Error
+    import Path
 
     extension Windows.`32`.Kernel.File.Open {
         enum Test {

@@ -1,4 +1,4 @@
-public import Time_Primitives
+public import Time
 
 extension Windows.`32`.Kernel {
 

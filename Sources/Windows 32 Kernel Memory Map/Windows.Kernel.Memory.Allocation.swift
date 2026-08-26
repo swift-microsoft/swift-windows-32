@@ -1,6 +1,6 @@
 #if os(Windows)
-    public import Error_Primitives
-    public import Memory_Primitives
+    public import Error
+    public import Memory
     public import WinSDK
 
     extension Memory.Allocation {
@@ -22,7 +22,7 @@
             )
 
             guard let result else {
-                throw .map(Error_Primitives.Error.captureLastError())
+                throw .map(Error.Error.captureLastError())
             }
 
             return unsafe Memory.Address(result)
@@ -32,7 +32,7 @@
             addr: Memory.Address
         ) throws(Memory.Map.Error) {
             guard unsafe VirtualFree(addr.mutablePointer, 0, DWORD(MEM_RELEASE)) else {
-                throw .unmap(Error_Primitives.Error.captureLastError())
+                throw .unmap(Error.Error.captureLastError())
             }
         }
 

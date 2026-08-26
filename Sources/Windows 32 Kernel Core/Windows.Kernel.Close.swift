@@ -22,7 +22,7 @@ extension Windows.`32`.Kernel.Close {
                 throw .handle(.invalid)
             }
             guard unsafe CloseHandle(pointer) else {
-                throw .platform(Error_Primitives.Error(code: .win32(GetLastError())))
+                throw .platform(Error.Error(code: .win32(GetLastError())))
             }
         #endif
     }

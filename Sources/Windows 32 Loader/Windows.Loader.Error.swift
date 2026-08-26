@@ -1,7 +1,7 @@
 #if os(Windows)
-    public import Loader_Primitives
+    public import Loader
     public import WinSDK
-    internal import String_Primitives
+    internal import String
 
     @usableFromInline
     internal func captureLastErrorMessage() -> Loader.Message {
@@ -37,7 +37,7 @@
         while count > 0, unsafe (buffer[count - 1] == 0x000D || buffer[count - 1] == 0x000A) {
             count -= 1
         }
-        let view = unsafe String_Primitives.String.Borrowed(UnsafePointer(buffer), count: count)
+        let view = unsafe String.String.Borrowed(UnsafePointer(buffer), count: count)
         return unsafe Loader.Message(copying: view)
     }
 

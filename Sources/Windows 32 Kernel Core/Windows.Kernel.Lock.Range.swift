@@ -1,4 +1,4 @@
-public import Memory_Allocation_Primitives
+public import Memory_Allocation
 
 extension Windows.`32`.Kernel.Lock {
 

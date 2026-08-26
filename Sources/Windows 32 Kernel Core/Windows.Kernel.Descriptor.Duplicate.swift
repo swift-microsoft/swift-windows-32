@@ -11,6 +11,6 @@ extension Windows.`32`.Kernel.Descriptor.Duplicate {
 
         case tooManyOpen
 
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }

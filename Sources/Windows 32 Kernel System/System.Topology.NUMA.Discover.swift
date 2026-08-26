@@ -1,4 +1,4 @@
-public import System_Primitives
+public import System
 
 #if os(Windows)
     internal import WinSDK

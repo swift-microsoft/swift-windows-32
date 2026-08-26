@@ -1,24 +1,24 @@
 #if os(Windows)
-    public import Error_Primitives
+    public import Error
     public import WinSDK
 
     extension Windows.`32`.Kernel.IO.Completion.Port {
 
         public enum Error: Swift.Error, Sendable, Equatable, Hashable {
 
-            case create(Error_Primitives.Error.Code)
+            case create(Error.Error.Code)
 
-            case associate(Error_Primitives.Error.Code)
+            case associate(Error.Error.Code)
 
-            case dequeue(Error_Primitives.Error.Code)
+            case dequeue(Error.Error.Code)
 
-            case post(Error_Primitives.Error.Code)
+            case post(Error.Error.Code)
 
-            case read(Error_Primitives.Error.Code)
+            case read(Error.Error.Code)
 
-            case write(Error_Primitives.Error.Code)
+            case write(Error.Error.Code)
 
-            case result(Error_Primitives.Error.Code)
+            case result(Error.Error.Code)
 
             case timeout
         }

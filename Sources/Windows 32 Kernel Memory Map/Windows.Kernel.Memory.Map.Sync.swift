@@ -1,6 +1,6 @@
 #if os(Windows)
-    public import Error_Primitives
-    public import Memory_Primitives
+    public import Error
+    public import Memory
     public import WinSDK
 
     extension Memory.Map {
@@ -10,7 +10,7 @@
             size: Int
         ) throws(Memory.Map.Error) {
             guard unsafe FlushViewOfFile(address.pointer, SIZE_T(size)) else {
-                throw .sync(Error_Primitives.Error.captureLastError())
+                throw .sync(Error.Error.captureLastError())
             }
         }
 
@@ -19,7 +19,7 @@
         ) throws(Memory.Map.Error) {
             guard let baseAddress = buffer.baseAddress else { return }
             guard unsafe FlushViewOfFile(baseAddress, SIZE_T(buffer.count)) else {
-                throw .sync(Error_Primitives.Error.captureLastError())
+                throw .sync(Error.Error.captureLastError())
             }
         }
 
@@ -28,7 +28,7 @@
         ) throws(Memory.Map.Error) {
             guard let baseAddress = buffer.baseAddress else { return }
             guard unsafe FlushViewOfFile(baseAddress, SIZE_T(buffer.count)) else {
-                throw .sync(Error_Primitives.Error.captureLastError())
+                throw .sync(Error.Error.captureLastError())
             }
         }
     }

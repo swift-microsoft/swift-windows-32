@@ -3,7 +3,7 @@
     import Testing
 
     @testable import Windows_32_Loader
-    import Loader_Primitives
+    import Loader
 
     extension Windows.Loader {
         enum Test {

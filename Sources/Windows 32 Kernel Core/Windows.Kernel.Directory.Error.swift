@@ -1,4 +1,4 @@
-public import Error_Primitives
+public import Error
 
 extension Windows.`32`.Kernel.Directory {
 
@@ -16,7 +16,7 @@ extension Windows.`32`.Kernel.Directory {
 
         case closed
 
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }
 

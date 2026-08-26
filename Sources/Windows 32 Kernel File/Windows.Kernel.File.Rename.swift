@@ -9,9 +9,9 @@
     extension Windows.`32`.Kernel.File.Rename {
 
         public struct Error: Swift.Error, Sendable {
-            public let code: Error_Primitives.Error.Code
+            public let code: Error.Error.Code
 
-            public init(code: Error_Primitives.Error.Code) {
+            public init(code: Error.Error.Code) {
                 self.code = code
             }
         }
@@ -20,30 +20,30 @@
     extension Windows.`32`.Kernel.File.Rename.Error {
 
         public static let destinationExists = Self(
-            code: .win32(Error_Primitives.Error.Code.File.alreadyExists)
+            code: .win32(Error.Error.Code.File.alreadyExists)
         )
 
         public static let permissionDenied = Self(
-            code: .win32(Error_Primitives.Error.Code.Access.denied)
+            code: .win32(Error.Error.Code.Access.denied)
         )
 
         public static let sharingViolation = Self(
-            code: .win32(Error_Primitives.Error.Code.Access.sharingViolation)
+            code: .win32(Error.Error.Code.Access.sharingViolation)
         )
 
         public static let notSupported = Self(code: .win32(0x32))
 
         @usableFromInline
         internal static func current() -> Self {
-            Self(code: Error_Primitives.Error.captureLastError())
+            Self(code: Error.Error.captureLastError())
         }
 
         public var isTransient: Bool {
             guard let win32 = code.win32 else { return false }
             switch win32 {
-            case Error_Primitives.Error.Code.Access.denied,
-                Error_Primitives.Error.Code.Access.sharingViolation,
-                Error_Primitives.Error.Code.Access.lockViolation:
+            case Error.Error.Code.Access.denied,
+                Error.Error.Code.Access.sharingViolation,
+                Error.Error.Code.Access.lockViolation:
                 return true
 
             default:
@@ -54,8 +54,8 @@
         public var isDestinationExists: Bool {
             guard let win32 = code.win32 else { return false }
             switch win32 {
-            case Error_Primitives.Error.Code.File.exists,
-                Error_Primitives.Error.Code.File.alreadyExists:
+            case Error.Error.Code.File.exists,
+                Error.Error.Code.File.alreadyExists:
                 return true
 
             default:

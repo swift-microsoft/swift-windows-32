@@ -32,7 +32,7 @@
 
             guard success else {
                 throw .platform(
-                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    Error.Error(code: Error.Error.captureLastError())
                 )
             }
         }
@@ -208,7 +208,7 @@
 
             guard success else {
                 throw .platform(
-                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    Error.Error(code: Error.Error.captureLastError())
                 )
             }
 
@@ -230,7 +230,7 @@
 
             guard success else {
                 throw .platform(
-                    Error_Primitives.Error(code: Error_Primitives.Error.captureLastError())
+                    Error.Error(code: Error.Error.captureLastError())
                 )
             }
         }

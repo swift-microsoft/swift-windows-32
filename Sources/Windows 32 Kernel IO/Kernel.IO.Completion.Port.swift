@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Error_Primitives
+    public import Error
     public import WinSDK
 
     extension Windows.`32`.Kernel.IO.Completion {
@@ -22,7 +22,7 @@
                 DWORD(threads)
             )
             guard let handle, handle != INVALID_HANDLE_VALUE else {
-                throw .create(Error_Primitives.Error.captureLastError())
+                throw .create(Error.Error.captureLastError())
             }
             return Windows.`32`.Kernel.Descriptor(_raw: UInt(bitPattern: handle))
         }
@@ -40,7 +40,7 @@
                 0
             )
             guard result != nil else {
-                throw .associate(Error_Primitives.Error.captureLastError())
+                throw .associate(Error.Error.captureLastError())
             }
         }
 
@@ -59,7 +59,7 @@
                 overlapped
             )
             guard result else {
-                throw .post(Error_Primitives.Error.captureLastError())
+                throw .post(Error.Error.captureLastError())
             }
         }
 
@@ -143,7 +143,7 @@
                 return count
             }
 
-            throw .result(Error_Primitives.Error.captureLastError())
+            throw .result(Error.Error.captureLastError())
         }
     }
 

@@ -3,7 +3,7 @@
     extension Windows.`32`.Kernel.File.Open.Error {
 
         @inlinable
-        package init(code: Error_Primitives.Error.Code) {
+        package init(code: Error.Error.Code) {
             if let e = Path.Resolution.Error(code: code) {
                 self = .path(e)
                 return
@@ -12,7 +12,7 @@
                 self = .handle(e)
                 return
             }
-            self = .platform(Error_Primitives.Error(code: code))
+            self = .platform(Error.Error(code: code))
         }
     }
 #endif

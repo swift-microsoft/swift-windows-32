@@ -1,12 +1,12 @@
 #if os(Windows)
 
-    public import Error_Primitives
-    public import Memory_Allocation_Primitives
+    public import Error
+    public import Memory_Allocation
 
     extension Memory.Allocation.Error {
 
         @inlinable
-        public init?(code: Error_Primitives.Error.Code) {
+        public init?(code: Error.Error.Code) {
             switch code {
             case .Windows.ERROR_NOT_ENOUGH_MEMORY,
                 .win32(14):

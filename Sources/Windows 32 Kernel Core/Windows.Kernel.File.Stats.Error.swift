@@ -1,4 +1,4 @@
-public import Error_Primitives
+public import Error
 
 extension Windows.`32`.Kernel.File.Stats {
 
@@ -6,7 +6,7 @@ extension Windows.`32`.Kernel.File.Stats {
 
         case handle(Windows.`32`.Kernel.Descriptor.Validity.Error)
 
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }
 

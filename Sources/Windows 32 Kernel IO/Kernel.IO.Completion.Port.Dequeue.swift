@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Error_Primitives
+    public import Error
     public import WinSDK
 
     extension Windows.`32`.Kernel.IO.Completion.Port {
@@ -16,7 +16,7 @@
 
             case ok
 
-            case platform(Error_Primitives.Error)
+            case platform(Error.Error)
         }
     }
 
@@ -103,7 +103,7 @@
                     bytes: UInt32(bytes),
                     key: Windows.`32`.Kernel.IO.Completion.Port.Key(rawValue: key),
                     overlapped: toOverlapped(overlapped),
-                    status: .platform(Error_Primitives.Error(code: .win32(error)))
+                    status: .platform(Error.Error(code: .win32(error)))
                 )
             }
 

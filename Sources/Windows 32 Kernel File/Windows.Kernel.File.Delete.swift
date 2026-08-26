@@ -26,27 +26,27 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            let code = Error_Primitives.Error.captureLastError()
+            let code = Error.Error.captureLastError()
             guard let win32Code = code.win32 else {
-                return .platform(Error_Primitives.Error(code: code))
+                return .platform(Error.Error(code: code))
             }
             return current(from: win32Code)
         }
 
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
-            case Error_Primitives.Error.Code.File.notFound,
-                Error_Primitives.Error.Code.File.pathNotFound:
+            case Error.Error.Code.File.notFound,
+                Error.Error.Code.File.pathNotFound:
                 return .notFound
 
-            case Error_Primitives.Error.Code.Access.denied:
+            case Error.Error.Code.Access.denied:
                 return .permission
 
-            case Error_Primitives.Error.Code.Access.sharingViolation:
+            case Error.Error.Code.Access.sharingViolation:
                 return .busy
 
             default:
-                return .platform(Error_Primitives.Error(code: .win32(win32Code)))
+                return .platform(Error.Error(code: .win32(win32Code)))
             }
         }
     }

@@ -3,7 +3,7 @@
     extension Windows.`32`.Kernel.Socket.Error {
 
         @inlinable
-        public var code: Error_Primitives.Error.Code {
+        public var code: Error.Error.Code {
             switch self {
             case .platform(let e): return e.code
             }
@@ -13,8 +13,8 @@
     extension Windows.`32`.Kernel.Socket.Error {
 
         @inlinable
-        public init(code: Error_Primitives.Error.Code) {
-            self = .platform(Error_Primitives.Error(code: code))
+        public init(code: Error.Error.Code) {
+            self = .platform(Error.Error(code: code))
         }
     }
 #endif

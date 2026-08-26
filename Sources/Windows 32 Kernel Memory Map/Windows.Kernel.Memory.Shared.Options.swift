@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Memory_Primitives
+    public import Memory
 
     extension Memory.Shared {
 

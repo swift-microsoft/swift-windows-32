@@ -3,11 +3,11 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
-    import Path_Primitives
-    import Clock_Primitives
-    import Random_Primitives
-    import System_Primitives
+    import Error
+    import Path
+    import Clock
+    import Random
+    import System
 
     extension Windows.`32`.Kernel.Descriptor.Duplicate {
         enum Test {

@@ -4,7 +4,7 @@ extension Windows.`32`.Kernel.File.Flush {
 
         case handle(Windows.`32`.Kernel.Descriptor.Validity.Error)
 
-        case platform(Error_Primitives.Error)
+        case platform(Error.Error)
     }
 }
 

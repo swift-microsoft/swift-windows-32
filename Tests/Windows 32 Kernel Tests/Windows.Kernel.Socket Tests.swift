@@ -3,7 +3,7 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    @_spi(Syscall) import Error_Primitives
+    @_spi(Syscall) import Error
 
     extension Windows.`32`.Kernel.Socket {
         enum Test {

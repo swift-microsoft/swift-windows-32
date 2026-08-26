@@ -1,10 +1,10 @@
 #if os(Windows)
     public import WinSDK
-    public import String_Primitives
+    public import String
 
     extension Windows.`32`.Kernel.Environment {
 
-        public static func get(_ name: Swift.String) -> String_Primitives.String? {
+        public static func get(_ name: Swift.String) -> String.String? {
             var wname = Array(name.utf16)
             wname.append(0)
             guard
@@ -17,7 +17,7 @@
             else {
                 return nil
             }
-            return String_Primitives.String(units.span)
+            return String.String(units.span)
         }
 
         public static func set(
@@ -77,20 +77,20 @@
 
     extension Windows.`32`.Kernel.Environment.Entries.Entry {
 
-        public var name: String_Primitives.String.Borrowed {
+        public var name: String.String.Borrowed {
             @_lifetime(borrow self)
             borrowing get {
                 let ptr = unsafe _name.withUnsafeBufferPointer { $0.baseAddress! }
-                let view = unsafe String_Primitives.String.Borrowed(ptr, count: _name.count - 1)
+                let view = unsafe String.String.Borrowed(ptr, count: _name.count - 1)
                 return unsafe _overrideLifetime(view, borrowing: self)
             }
         }
 
-        public var value: String_Primitives.String.Borrowed {
+        public var value: String.String.Borrowed {
             @_lifetime(borrow self)
             borrowing get {
                 let ptr = unsafe _value.withUnsafeBufferPointer { $0.baseAddress! }
-                let view = unsafe String_Primitives.String.Borrowed(ptr, count: _value.count - 1)
+                let view = unsafe String.String.Borrowed(ptr, count: _value.count - 1)
                 return unsafe _overrideLifetime(view, borrowing: self)
             }
         }

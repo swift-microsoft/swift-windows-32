@@ -1,4 +1,4 @@
-public import Path_Primitives
+public import Path
 
 extension Windows.`32`.Kernel.File.Direct {
 

@@ -1,4 +1,4 @@
-import Equation_Protocol_Primitives
+import Equation_Protocol
 
 extension Windows.`32`.Kernel.Descriptor: Equation.`Protocol` {
     @inlinable

@@ -1,5 +1,5 @@
-public import Cardinal_Primitives
-public import Tagged_Primitives
+public import Cardinal
+public import Tagged
 
 extension Windows.`32`.Kernel {
 

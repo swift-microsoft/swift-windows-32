@@ -1,4 +1,4 @@
-public import Memory_Primitives
+public import Memory
 
 extension Windows.`32`.Kernel.File.Direct.Requirements {
 

@@ -81,19 +81,19 @@
     extension Windows.`32`.Kernel.File.Seek.Error {
 
         internal static func current() -> Self {
-            let code = Error_Primitives.Error.captureLastError()
+            let code = Error.Error.captureLastError()
             guard let win32Code = code.win32 else {
                 return .platform(code: code)
             }
 
             switch win32Code {
-            case Error_Primitives.Error.Code.Handle.invalid:
+            case Error.Error.Code.Handle.invalid:
                 return .invalidDescriptor
 
-            case Error_Primitives.Error.Code.General.invalidParameter:
+            case Error.Error.Code.General.invalidParameter:
                 return .negativeOffset
 
-            case Error_Primitives.Error.Code.IO.brokenPipe:
+            case Error.Error.Code.IO.brokenPipe:
                 return .notSeekable
 
             default:

@@ -35,10 +35,10 @@
 
             guard let handle else {
 
-                let lastError = Error_Primitives.Error.captureLastError()
+                let lastError = Error.Error.captureLastError()
                 context.deinitialize(count: 1)
                 context.deallocate()
-                throw .create(Error_Primitives.Error(code: lastError))
+                throw .create(Error.Error(code: lastError))
             }
 
             return Windows.`32`.Kernel.Thread.Handle(_handle: handle)

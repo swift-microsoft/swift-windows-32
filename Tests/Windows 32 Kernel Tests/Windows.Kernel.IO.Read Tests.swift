@@ -3,7 +3,7 @@
     import Testing
 
     @testable import Windows_32_Kernel
-    import Error_Primitives
+    import Error
 
     extension Windows.`32`.Kernel.IO.Read {
         enum Test {

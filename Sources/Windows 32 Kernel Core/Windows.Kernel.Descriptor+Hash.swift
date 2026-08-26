@@ -1,4 +1,4 @@
-import Hash_Protocol_Primitives
+import Hash_Protocol
 
 extension Windows.`32`.Kernel.Descriptor: Hash.`Protocol` {
     @inlinable

@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Loader_Primitives
+    public import Loader
     public import WinSDK
 
     extension Windows.Loader.Library {
