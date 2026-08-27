@@ -1,5 +1,5 @@
 #if os(Windows)
-    public import Loader
+    public import Loader_Vocabulary
     public import WinSDK
     internal import String
 
