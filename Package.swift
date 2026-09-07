@@ -162,7 +162,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-dimension.git",
+            url: "https://github.com/swift-atoms/swift-spatial.git",
             branch: "main"
         ),
         .package(
@@ -218,7 +218,7 @@ let package = Package(
                 ),
                 .product(name: "Hash Protocol", package: "swift-hash"),
                 .product(name: "Time", package: "swift-time"),
-                .product(name: "Dimension", package: "swift-dimension"),
+                .product(name: "Spatial", package: "swift-spatial"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(
@@ -278,7 +278,7 @@ let package = Package(
                 .product(name: "Path", package: "swift-path"),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Binary", package: "swift-binary"),
-                .product(name: "Dimension", package: "swift-dimension"),
+                .product(name: "Spatial", package: "swift-spatial"),
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "String", package: "swift-string"),
             ]

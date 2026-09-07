@@ -1,4 +1,4 @@
-public import Dimension
+public import Spatial
 
 extension Windows.`32`.Kernel.File {
 
