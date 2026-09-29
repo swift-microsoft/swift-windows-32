@@ -172,7 +172,6 @@ let package = Package(
             url: "https://github.com/swift-atoms/swift-string.git",
             branch: "main"
         ),
-        .package(url: "https://github.com/swift-compositions/swift-test-application.git", branch: "main"),
     ],
     targets: [
 
@@ -405,7 +404,6 @@ let package = Package(
                 .product(name: "Path", package: "swift-path", condition: .when(platforms: [.windows])),
                 .product(name: "Random", package: "swift-random", condition: .when(platforms: [.windows])),
                 .product(name: "System", package: "swift-system", condition: .when(platforms: [.windows])),
-                .product(name: "Testing", package: "swift-test-application", condition: .when(platforms: [.windows])),
             ]
         ),
         .testTarget(
