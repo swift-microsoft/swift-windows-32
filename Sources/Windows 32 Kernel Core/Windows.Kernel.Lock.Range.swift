@@ -20,7 +20,7 @@ extension Windows.`32`.Kernel.Lock {
                 self = .bytes(start: offset, end: .max)
                 return
             }
-            let roundedEnd = granularity.underlying.alignUp(Windows.`32`.Kernel.File.Offset(sum))
+            let roundedEnd = Windows.`32`.Kernel.File.Offset(granularity.underlying.alignUp(sum))
             self = .bytes(start: offset, end: roundedEnd)
         }
     }

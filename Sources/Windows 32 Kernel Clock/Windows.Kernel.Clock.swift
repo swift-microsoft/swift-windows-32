@@ -17,7 +17,7 @@
             let remainder = counterValue % frequencyValue
 
             let ns = seconds * 1_000_000_000 + (remainder * 1_000_000_000) / frequencyValue
-            return Clock.Continuous.Instant(nanoseconds: ns)
+            return Clock.Continuous.Instant(offset: .nanoseconds(ns))
         }
     }
 
@@ -29,7 +29,7 @@
             QueryUnbiasedInterruptTime(&unbiasedTime)
 
             let ns = UInt64(unbiasedTime) * 100
-            return Clock.Suspending.Instant(nanoseconds: ns)
+            return Clock.Suspending.Instant(offset: .nanoseconds(ns))
         }
     }
 

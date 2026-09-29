@@ -12,5 +12,5 @@ extension Windows.`32`.Kernel.User {
 
 extension Tagged where Tag == Windows.`32`.Kernel.User, Underlying == UInt32 {
 
-    public static var root: Self { .zero }
+    public static var root: Self { Self(0) }
 }

@@ -3,7 +3,7 @@ public import Memory
 
 extension Windows.`32`.Kernel.File {
 
-    public typealias Size = Magnitude<Space>.Value<Int64>
+    public typealias Size = Spatial::Magnitude<Space>.Value<Int64>
 }
 
 extension Windows.`32`.Kernel.File.Size {

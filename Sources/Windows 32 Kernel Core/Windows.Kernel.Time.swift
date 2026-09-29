@@ -2,5 +2,5 @@ public import Time
 
 extension Windows.`32`.Kernel {
 
-    public typealias Time = Instant
+    public typealias Time = Time::Time.Instant
 }
