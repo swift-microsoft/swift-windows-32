@@ -99,10 +99,10 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/swift-atoms/swift-memory.git",
-            branch: "main", traits: ["Lock", "Map", "Shared"]),
+            branch: "main", traits: ["Lock", "Map", "Shared", "Cursor"]),
         .package(
             url: "https://github.com/swift-molecules/swift-memory-allocation.git",
-            branch: "main"
+            branch: "main", traits: ["MemorySmall"]
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-clock.git",
@@ -142,7 +142,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-binary.git",
-            branch: "main"
+            branch: "main", traits: ["Serializer"]
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-byte.git",
@@ -154,7 +154,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-terminal.git",
-            branch: "main"
+            branch: "main", traits: ["Error", "Input"]
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-pair.git",
@@ -369,7 +369,7 @@ let package = Package(
             name: "Windows 32 Loader",
             dependencies: [
                 .target(name: "Windows 32 Core"),
-                .product(name: "Loader", package: "swift-loader-vocabulary"),
+                .product(name: "Loader Vocabulary", package: "swift-loader-vocabulary"),
             ]
         ),
 
