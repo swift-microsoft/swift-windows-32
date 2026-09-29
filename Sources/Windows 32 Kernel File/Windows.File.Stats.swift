@@ -151,7 +151,7 @@ internal import Windows_32_Core
     extension Windows.`32`.Kernel.File.Stats.Error {
 
         internal init(_windowsError error: DWORD) {
-            let errorCode = Error.Error.Code.win32(error)
+            let errorCode = Error::Error.Code.win32(error)
             if let e = Windows.`32`.Kernel.Descriptor.Validity.Error(code: errorCode) {
                 self = .handle(e)
                 return

@@ -25,8 +25,8 @@
         }
 
         @Test
-        func `Error.Error.Code type exists`() {
-            _ = Error.Error.Code.self
+        func `Error::Error.Code type exists`() {
+            _ = Error::Error.Code.self
         }
     }
 
@@ -37,7 +37,7 @@
             SetLastError(DWORD(ERROR_FILE_NOT_FOUND))
 
             let code = Error.Error.captureLastError()
-            #expect(code.win32 == Error.Error.Code.File.notFound)
+            #expect(code.win32 == Error::Error.Code.File.notFound)
         }
 
         @Test
@@ -52,25 +52,25 @@
     extension Error.Error.Test.Unit {
         @Test
         func `Code.File.notFound exists`() {
-            let code = Error.Error.Code.File.notFound
+            let code = Error::Error.Code.File.notFound
             #expect(code == DWORD(ERROR_FILE_NOT_FOUND))
         }
 
         @Test
         func `Code.File.pathNotFound exists`() {
-            let code = Error.Error.Code.File.pathNotFound
+            let code = Error::Error.Code.File.pathNotFound
             #expect(code == DWORD(ERROR_PATH_NOT_FOUND))
         }
 
         @Test
         func `Code.Access.denied exists`() {
-            let code = Error.Error.Code.Access.denied
+            let code = Error::Error.Code.Access.denied
             #expect(code == DWORD(ERROR_ACCESS_DENIED))
         }
 
         @Test
         func `Code.Handle.invalid exists`() {
-            let code = Error.Error.Code.Handle.invalid
+            let code = Error::Error.Code.Handle.invalid
             #expect(code == DWORD(ERROR_INVALID_HANDLE))
         }
     }
@@ -78,7 +78,7 @@
     extension Error.Error.Test.Unit {
         @Test
         func `Code.win32 creates correct code`() {
-            let code = Error.Error.Code.win32(DWORD(ERROR_FILE_NOT_FOUND))
+            let code = Error::Error.Code.win32(DWORD(ERROR_FILE_NOT_FOUND))
             #expect(code.win32 == DWORD(ERROR_FILE_NOT_FOUND))
         }
     }

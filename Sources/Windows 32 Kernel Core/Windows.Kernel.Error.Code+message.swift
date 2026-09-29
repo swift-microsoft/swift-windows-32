@@ -2,7 +2,7 @@
     public import Error
     internal import WinSDK
 
-    extension Error.Error.Code {
+    extension Error::Error.Code {
 
         public var win32Message: Swift.String? {
             switch self {

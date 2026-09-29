@@ -148,14 +148,14 @@
 
         package init(_windowsError error: DWORD) {
             switch error {
-            case Error.Error.Code.File.notFound,
-                Error.Error.Code.File.pathNotFound:
+            case Error::Error.Code.File.notFound,
+                Error::Error.Code.File.pathNotFound:
                 self = .notFound
 
-            case Error.Error.Code.Access.denied:
+            case Error::Error.Code.Access.denied:
                 self = .permission
 
-            case Error.Error.Code.Directory.invalidName:
+            case Error::Error.Code.Directory.invalidName:
 
                 self = .notDirectory
 

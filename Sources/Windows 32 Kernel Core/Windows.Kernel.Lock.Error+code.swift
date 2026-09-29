@@ -3,7 +3,7 @@
     extension Windows.`32`.Kernel.Lock.Error {
 
         @inlinable
-        public init?(code: Error.Error.Code) {
+        public init?(code: Error::Error.Code) {
             switch code {
             case .Windows.ERROR_LOCK_VIOLATION:
                 self = .contention
@@ -14,7 +14,7 @@
         }
 
         @usableFromInline
-        internal init(_ code: Error.Error.Code) {
+        internal init(_ code: Error::Error.Code) {
             if let mapped = Self(code: code) {
                 self = mapped
             } else {

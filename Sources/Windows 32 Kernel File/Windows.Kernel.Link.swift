@@ -42,19 +42,19 @@
 
         package static func current(from win32Code: UInt32) -> Self {
             switch win32Code {
-            case Error.Error.Code.File.notFound,
-                Error.Error.Code.File.pathNotFound:
+            case Error::Error.Code.File.notFound,
+                Error::Error.Code.File.pathNotFound:
                 return .notFound
 
-            case Error.Error.Code.Access.denied:
+            case Error::Error.Code.Access.denied:
                 return .permission
 
-            case Error.Error.Code.File.exists,
-                Error.Error.Code.File.alreadyExists:
+            case Error::Error.Code.File.exists,
+                Error::Error.Code.File.alreadyExists:
                 return .exists
 
-            case Error.Error.Code.Storage.diskFull,
-                Error.Error.Code.Storage.handleDiskFull:
+            case Error::Error.Code.Storage.diskFull,
+                Error::Error.Code.Storage.handleDiskFull:
                 return .noSpace
 
             default:

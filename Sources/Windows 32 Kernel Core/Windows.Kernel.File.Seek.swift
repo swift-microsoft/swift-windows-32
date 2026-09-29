@@ -17,7 +17,7 @@ extension Windows.`32`.Kernel.File.Seek {
 
         case overflow
 
-        case platform(code: Error.Error.Code)
+        case platform(code: Error::Error.Code)
     }
 }
 

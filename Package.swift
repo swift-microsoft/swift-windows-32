@@ -98,31 +98,18 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-molecules/swift-memory.git",
-            branch: "main"
-        ),
-        .package(
-            url: "https://github.com/swift-molecules/swift-memory-map.git",
-            branch: "main"
-        ),
-        .package(
-            url: "https://github.com/swift-molecules/swift-memory-lock.git",
-            branch: "main"
-        ),
-        .package(
-            url: "https://github.com/swift-molecules/swift-memory-shared.git",
-            branch: "main"
-        ),
+            url: "https://github.com/swift-atoms/swift-memory.git",
+            branch: "main", traits: ["Lock", "Map", "Shared"]),
         .package(
             url: "https://github.com/swift-molecules/swift-memory-allocation.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-clock.git",
+            url: "https://github.com/swift-atoms/swift-clock.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-time.git",
+            url: "https://github.com/swift-atoms/swift-time.git",
             branch: "main"
         ),
         .package(
@@ -130,7 +117,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-sequence.git",
+            url: "https://github.com/swift-atoms/swift-sequence.git",
             branch: "main"
         ),
         .package(
@@ -138,27 +125,27 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-error.git",
+            url: "https://github.com/swift-atoms/swift-error.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-random.git",
+            url: "https://github.com/swift-atoms/swift-random.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-path.git",
+            url: "https://github.com/swift-atoms/swift-path.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-system.git",
+            url: "https://github.com/swift-atoms/swift-system.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-binary.git",
+            url: "https://github.com/swift-atoms/swift-binary.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-byte.git",
+            url: "https://github.com/swift-atoms/swift-byte.git",
             branch: "main"
         ),
         .package(
@@ -166,33 +153,26 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-terminal.git",
+            url: "https://github.com/swift-atoms/swift-terminal.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-pair.git",
+            url: "https://github.com/swift-atoms/swift-pair.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-equation.git",
+            url: "https://github.com/swift-atoms/swift-tagged.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-hash.git",
+            url: "https://github.com/swift-atoms/swift-cardinal.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-tagged.git",
+            url: "https://github.com/swift-atoms/swift-string.git",
             branch: "main"
         ),
-        .package(
-            url: "https://github.com/swift-molecules/swift-cardinal.git",
-            branch: "main"
-        ),
-        .package(
-            url: "https://github.com/swift-molecules/swift-string.git",
-            branch: "main"
-        ),
+        .package(url: "https://github.com/swift-compositions/swift-test-application.git", branch: "main"),
     ],
     targets: [
 
@@ -212,11 +192,6 @@ let package = Package(
                 .product(name: "Error", package: "swift-error"),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Path", package: "swift-path"),
-                .product(
-                    name: "Equation Protocol",
-                    package: "swift-equation"
-                ),
-                .product(name: "Hash Protocol", package: "swift-hash"),
                 .product(name: "Time", package: "swift-time"),
                 .product(name: "Spatial", package: "swift-spatial"),
                 .product(name: "Tagged", package: "swift-tagged"),
@@ -306,12 +281,6 @@ let package = Package(
             dependencies: [
                 "Windows 32 Kernel Core",
                 .product(name: "Memory", package: "swift-memory"),
-                .product(name: "Memory Map", package: "swift-memory-map"),
-                .product(name: "Memory Lock", package: "swift-memory-lock"),
-                .product(
-                    name: "Memory Shared",
-                    package: "swift-memory-shared"
-                ),
                 .product(
                     name: "Memory Allocation",
                     package: "swift-memory-allocation"
@@ -341,6 +310,7 @@ let package = Package(
                 "Windows 32 Kernel Core",
                 .product(name: "System", package: "swift-system"),
                 .product(name: "Random", package: "swift-random"),
+                .product(name: "Cardinal", package: "swift-cardinal"),
             ]
         ),
 
@@ -430,6 +400,12 @@ let package = Package(
                     name: "Standard Library Extensions",
                     package: "swift-standard-library-extensions"
                 ),
+                .product(name: "Clock", package: "swift-clock", condition: .when(platforms: [.windows])),
+                .product(name: "Error", package: "swift-error", condition: .when(platforms: [.windows])),
+                .product(name: "Path", package: "swift-path", condition: .when(platforms: [.windows])),
+                .product(name: "Random", package: "swift-random", condition: .when(platforms: [.windows])),
+                .product(name: "System", package: "swift-system", condition: .when(platforms: [.windows])),
+                .product(name: "Testing", package: "swift-test-application", condition: .when(platforms: [.windows])),
             ]
         ),
         .testTarget(

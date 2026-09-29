@@ -6,19 +6,19 @@
 
         public enum Error: Swift.Error, Sendable, Equatable, Hashable {
 
-            case create(Error.Error.Code)
+            case create(Error::Error.Code)
 
-            case associate(Error.Error.Code)
+            case associate(Error::Error.Code)
 
-            case dequeue(Error.Error.Code)
+            case dequeue(Error::Error.Code)
 
-            case post(Error.Error.Code)
+            case post(Error::Error.Code)
 
-            case read(Error.Error.Code)
+            case read(Error::Error.Code)
 
-            case write(Error.Error.Code)
+            case write(Error::Error.Code)
 
-            case result(Error.Error.Code)
+            case result(Error::Error.Code)
 
             case timeout
         }

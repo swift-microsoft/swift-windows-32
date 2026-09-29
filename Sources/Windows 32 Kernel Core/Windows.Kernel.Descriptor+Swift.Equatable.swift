@@ -1,6 +1,5 @@
-import Equation_Protocol
 
-extension Windows.`32`.Kernel.Descriptor: Equation.`Protocol` {
+extension Windows.`32`.Kernel.Descriptor: Swift.Equatable {
     @inlinable
     public static func == (
         lhs: borrowing Windows.`32`.Kernel.Descriptor,

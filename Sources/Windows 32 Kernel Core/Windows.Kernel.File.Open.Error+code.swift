@@ -3,7 +3,7 @@
     extension Windows.`32`.Kernel.File.Open.Error {
 
         @inlinable
-        package init(code: Error.Error.Code) {
+        package init(code: Error::Error.Code) {
             if let e = Path.Resolution.Error(code: code) {
                 self = .path(e)
                 return

@@ -1,6 +1,6 @@
 #if os(Windows)
 
-    extension Error.Error.Code {
+    extension Error::Error.Code {
 
         @inlinable
         public var isNotFound: Bool {

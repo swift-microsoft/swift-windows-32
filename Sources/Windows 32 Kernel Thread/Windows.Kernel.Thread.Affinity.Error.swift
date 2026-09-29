@@ -12,7 +12,7 @@
 
             case tooManyCPUs
 
-            case platform(Error.Error.Code)
+            case platform(Error::Error.Code)
         }
     }
 

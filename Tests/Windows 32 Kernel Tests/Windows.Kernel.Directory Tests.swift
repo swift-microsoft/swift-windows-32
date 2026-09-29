@@ -42,7 +42,7 @@
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
             let error = Kernel.Directory.Error(
-                _windowsError: Error.Error.Code.File.notFound
+                _windowsError: Error::Error.Code.File.notFound
             )
             if case .notFound = error {
 
@@ -54,7 +54,7 @@
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
             let error = Kernel.Directory.Error(
-                _windowsError: Error.Error.Code.File.pathNotFound
+                _windowsError: Error::Error.Code.File.pathNotFound
             )
             if case .notFound = error {
 
@@ -66,7 +66,7 @@
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
             let error = Kernel.Directory.Error(
-                _windowsError: Error.Error.Code.Access.denied
+                _windowsError: Error::Error.Code.Access.denied
             )
             if case .permission = error {
 

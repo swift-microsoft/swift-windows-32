@@ -29,7 +29,7 @@
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
             let error = Kernel.Directory.Remove.Error.current(
-                from: Error.Error.Code.File.notFound
+                from: Error::Error.Code.File.notFound
             )
             if case .notFound = error {
 
@@ -41,7 +41,7 @@
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
             let error = Kernel.Directory.Remove.Error.current(
-                from: Error.Error.Code.File.pathNotFound
+                from: Error::Error.Code.File.pathNotFound
             )
             if case .notFound = error {
 
@@ -53,7 +53,7 @@
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
             let error = Kernel.Directory.Remove.Error.current(
-                from: Error.Error.Code.Access.denied
+                from: Error::Error.Code.Access.denied
             )
             if case .permission = error {
 
@@ -65,7 +65,7 @@
         @Test
         func `Error.notEmpty maps from DIR_NOT_EMPTY`() {
             let error = Kernel.Directory.Remove.Error.current(
-                from: Error.Error.Code.Directory.notEmpty
+                from: Error::Error.Code.Directory.notEmpty
             )
             if case .notEmpty = error {
 
@@ -77,7 +77,7 @@
         @Test
         func `Error.busy maps from SHARING_VIOLATION`() {
             let error = Kernel.Directory.Remove.Error.current(
-                from: Error.Error.Code.Access.sharingViolation
+                from: Error::Error.Code.Access.sharingViolation
             )
             if case .busy = error {
 

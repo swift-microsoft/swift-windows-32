@@ -3,7 +3,7 @@
     extension Windows.`32`.Kernel.File.System.Stats.Error {
 
         @usableFromInline
-        internal init(code: Error.Error.Code) {
+        internal init(code: Error::Error.Code) {
             if let e = Path.Resolution.Error(code: code) {
                 self = .path(e)
                 return

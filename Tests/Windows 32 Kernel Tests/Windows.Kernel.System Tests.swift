@@ -37,21 +37,21 @@
         @Test
         func `pageSize returns positive value`() {
             let pageSize = System.pageSize
-            #expect(pageSize.underlying > 0)
+            #expect(pageSize > 0)
         }
 
         @Test
         func `pageSize is typically 4096`() {
             let pageSize = System.pageSize
 
-            #expect(pageSize.underlying >= 4096)
-            #expect(pageSize.underlying <= 65536)
+            #expect(pageSize >= 4096)
+            #expect(pageSize <= 65536)
         }
 
         @Test
         func `pageSize is power of 2`() {
             let pageSize = System.pageSize
-            let value = pageSize.underlying.rawValue
+            let value = pageSize
             #expect(value > 0 && (value & (value - 1)) == 0)
         }
     }
@@ -60,15 +60,15 @@
         @Test
         func `processorCount returns positive value`() {
             let count = System.processorCount
-            #expect(count.underlying > 0)
+            #expect(count > 0)
         }
 
         @Test
         func `processorCount is reasonable`() {
             let count = System.processorCount
 
-            #expect(count.underlying >= 1)
-            #expect(count.underlying <= 1024)
+            #expect(count >= 1)
+            #expect(count <= 1024)
         }
 
         @Test
@@ -77,7 +77,7 @@
             GetSystemInfo(&sysInfo)
 
             let count = System.processorCount
-            #expect(count.underlying.rawValue == UInt(sysInfo.dwNumberOfProcessors))
+            #expect(count == Int(exactly: sysInfo.dwNumberOfProcessors))
         }
     }
 
@@ -106,14 +106,14 @@
         func `pageSize is consistent`() {
             let size1 = System.pageSize
             let size2 = System.pageSize
-            #expect(size1.underlying == size2.underlying)
+            #expect(size1 == size2)
         }
 
         @Test
         func `processorCount is consistent`() {
             let count1 = System.processorCount
             let count2 = System.processorCount
-            #expect(count1.underlying == count2.underlying)
+            #expect(count1 == count2)
         }
     }
 

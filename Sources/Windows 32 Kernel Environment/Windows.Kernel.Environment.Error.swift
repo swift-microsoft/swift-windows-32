@@ -22,7 +22,7 @@ extension Windows.`32`.Kernel.Environment.Error {
 #if os(Windows)
     extension Windows.`32`.Kernel.Environment.Error {
 
-        public init(code: Error.Error.Code) {
+        public init(code: Error::Error.Code) {
             if let permission = Windows.`32`.Kernel.Permission.Error(code: code) {
                 self = .permission(permission)
             } else {

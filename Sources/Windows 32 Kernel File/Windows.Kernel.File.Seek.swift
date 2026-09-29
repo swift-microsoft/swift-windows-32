@@ -87,13 +87,13 @@
             }
 
             switch win32Code {
-            case Error.Error.Code.Handle.invalid:
+            case Error::Error.Code.Handle.invalid:
                 return .invalidDescriptor
 
-            case Error.Error.Code.General.invalidParameter:
+            case Error::Error.Code.General.invalidParameter:
                 return .negativeOffset
 
-            case Error.Error.Code.IO.brokenPipe:
+            case Error::Error.Code.IO.brokenPipe:
                 return .notSeekable
 
             default:

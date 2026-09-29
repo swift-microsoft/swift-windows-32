@@ -28,7 +28,7 @@
             if !success {
                 let error = GetLastError()
 
-                if error == Error.Error.Code.IO.handleEOF {
+                if error == Error::Error.Code.IO.handleEOF {
                     return 0
                 }
                 throw .current()
@@ -75,7 +75,7 @@
 
             if !readSuccess {
                 let error = GetLastError()
-                if error == Error.Error.Code.IO.handleEOF {
+                if error == Error::Error.Code.IO.handleEOF {
                     return 0
                 }
                 throw .current()

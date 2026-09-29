@@ -13,7 +13,7 @@
         }
 
         @_spi(Syscall)
-        public init(code: Error.Error.Code, operation: Operation) {
+        public init(code: Error::Error.Code, operation: Operation) {
             switch code {
             case _ where code == .Windows.ERROR_FILE_NOT_FOUND:
                 self = .sourceNotFound

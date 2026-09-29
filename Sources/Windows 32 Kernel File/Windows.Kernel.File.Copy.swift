@@ -153,7 +153,7 @@
 
     extension Windows.`32`.Kernel.File.Copy.Error {
 
-        internal init(fromLastError code: Error.Error.Code) {
+        internal init(fromLastError code: Error::Error.Code) {
             switch code {
             case _ where code == .Windows.ERROR_FILE_NOT_FOUND,
                 _ where code == .Windows.ERROR_PATH_NOT_FOUND:

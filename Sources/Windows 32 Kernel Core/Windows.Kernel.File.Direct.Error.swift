@@ -14,7 +14,7 @@ extension Windows.`32`.Kernel.File.Direct {
 
         case invalidHandle
 
-        case platform(code: Error.Error.Code, operation: Operation)
+        case platform(code: Error::Error.Code, operation: Operation)
     }
 }
 

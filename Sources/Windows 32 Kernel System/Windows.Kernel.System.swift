@@ -1,3 +1,4 @@
+public import System
 #if os(Windows)
     public import WinSDK
 
@@ -7,16 +8,22 @@
             System.Path.Length(_unchecked: Cardinal(UInt(260)))
         }
 
-        public static var pageSize: System.Page.Size {
+        public static var pageSize: Int {
             var sysInfo = SYSTEM_INFO()
             GetSystemInfo(&sysInfo)
-            return System.Page.Size(_unchecked: Cardinal(UInt(sysInfo.dwPageSize)))
+            guard let result = Int(exactly: sysInfo.dwPageSize) else {
+                preconditionFailure("Platform page size is not representable as Int")
+            }
+            return result
         }
 
-        public static var processorCount: System.Processor.Count {
+        public static var processorCount: Int {
             var sysInfo = SYSTEM_INFO()
             GetSystemInfo(&sysInfo)
-            return System.Processor.Count(_unchecked: Cardinal(UInt(sysInfo.dwNumberOfProcessors)))
+            guard let result = Int(exactly: sysInfo.dwNumberOfProcessors) else {
+                preconditionFailure("Processor count is not representable as Int")
+            }
+            return result
         }
 
         @inlinable

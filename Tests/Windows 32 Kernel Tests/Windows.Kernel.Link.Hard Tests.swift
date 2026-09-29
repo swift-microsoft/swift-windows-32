@@ -28,7 +28,7 @@
     extension Windows.`32`.Kernel.Link.Test.Unit {
         @Test
         func `Error.notFound maps from FILE_NOT_FOUND`() {
-            let error = Kernel.Link.Error.current(from: Error.Error.Code.File.notFound)
+            let error = Kernel.Link.Error.current(from: Error::Error.Code.File.notFound)
             if case .notFound = error {
 
             } else {
@@ -39,7 +39,7 @@
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
             let error = Kernel.Link.Error.current(
-                from: Error.Error.Code.File.pathNotFound
+                from: Error::Error.Code.File.pathNotFound
             )
             if case .notFound = error {
 
@@ -50,7 +50,7 @@
 
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
-            let error = Kernel.Link.Error.current(from: Error.Error.Code.Access.denied)
+            let error = Kernel.Link.Error.current(from: Error::Error.Code.Access.denied)
             if case .permission = error {
 
             } else {
@@ -60,7 +60,7 @@
 
         @Test
         func `Error.exists maps from FILE_EXISTS`() {
-            let error = Kernel.Link.Error.current(from: Error.Error.Code.File.exists)
+            let error = Kernel.Link.Error.current(from: Error::Error.Code.File.exists)
             if case .exists = error {
 
             } else {
@@ -71,7 +71,7 @@
         @Test
         func `Error.noSpace maps from DISK_FULL`() {
             let error = Kernel.Link.Error.current(
-                from: Error.Error.Code.Storage.diskFull
+                from: Error::Error.Code.Storage.diskFull
             )
             if case .noSpace = error {
 

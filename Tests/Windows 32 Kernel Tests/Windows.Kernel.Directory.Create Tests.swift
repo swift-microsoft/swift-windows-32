@@ -29,7 +29,7 @@
         @Test
         func `Error.notFound maps from PATH_NOT_FOUND`() {
             let error = Kernel.Directory.Create.Error.current(
-                from: Error.Error.Code.File.pathNotFound
+                from: Error::Error.Code.File.pathNotFound
             )
             if case .notFound = error {
 
@@ -41,7 +41,7 @@
         @Test
         func `Error.permission maps from ACCESS_DENIED`() {
             let error = Kernel.Directory.Create.Error.current(
-                from: Error.Error.Code.Access.denied
+                from: Error::Error.Code.Access.denied
             )
             if case .permission = error {
 
@@ -53,7 +53,7 @@
         @Test
         func `Error.exists maps from FILE_EXISTS`() {
             let error = Kernel.Directory.Create.Error.current(
-                from: Error.Error.Code.File.exists
+                from: Error::Error.Code.File.exists
             )
             if case .exists = error {
 
@@ -65,7 +65,7 @@
         @Test
         func `Error.exists maps from ALREADY_EXISTS`() {
             let error = Kernel.Directory.Create.Error.current(
-                from: Error.Error.Code.File.alreadyExists
+                from: Error::Error.Code.File.alreadyExists
             )
             if case .exists = error {
 
@@ -77,7 +77,7 @@
         @Test
         func `Error.noSpace maps from DISK_FULL`() {
             let error = Kernel.Directory.Create.Error.current(
-                from: Error.Error.Code.Storage.diskFull
+                from: Error::Error.Code.Storage.diskFull
             )
             if case .noSpace = error {
 

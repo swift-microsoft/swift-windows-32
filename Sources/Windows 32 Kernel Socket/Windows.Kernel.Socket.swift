@@ -9,7 +9,7 @@
             let result = WSAStartup(makeWord(2, 2), &wsaData)
             guard result == 0 else {
                 throw .platform(
-                    Error.Error(code: Error.Error.Code.win32(DWORD(result)))
+                    Error.Error(code: Error::Error.Code.win32(DWORD(result)))
                 )
             }
         }
@@ -101,7 +101,7 @@
     }
 
     @usableFromInline
-    internal func captureLastSocketError() -> Error.Error.Code {
+    internal func captureLastSocketError() -> Error::Error.Code {
         .win32(DWORD(WSAGetLastError()))
     }
 

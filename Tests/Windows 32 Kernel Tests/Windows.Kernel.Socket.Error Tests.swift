@@ -76,7 +76,7 @@
     extension Windows.`32`.Kernel.Socket.Error.Test.EdgeCase {
         @Test
         func `Same code platform errors are equal`() {
-            let code = Error.Error.Code.win32(42)
+            let code = Error::Error.Code.win32(42)
             #expect(
                 Windows.`32`.Kernel.Socket.Error.platform(Error.Error(code: code))
                     == Windows.`32`.Kernel.Socket.Error.platform(Error.Error(code: code))
