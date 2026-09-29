@@ -17,7 +17,7 @@
 
             if result > buffer.count {
                 throw .platform(
-                    Error.Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER)))
+                    Error::Error(code: .win32(DWORD(ERROR_INSUFFICIENT_BUFFER)))
                 )
             }
 
@@ -64,7 +64,7 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            Self(code: Error.Error.captureLastError())
+            Self(code: Error::Error.captureLastError())
         }
     }
 

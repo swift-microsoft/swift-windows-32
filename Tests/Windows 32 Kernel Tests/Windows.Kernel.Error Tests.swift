@@ -9,7 +9,7 @@
     import Random
     import System
 
-    extension Error.Error {
+    extension Error::Error {
         enum Test {
             @Suite struct Unit {}
             @Suite struct EdgeCase {}
@@ -18,10 +18,10 @@
         }
     }
 
-    extension Error.Error.Test.Unit {
+    extension Error::Error.Test.Unit {
         @Test
-        func `Error.Error namespace exists`() {
-            _ = Error.Error.self
+        func `Error::Error namespace exists`() {
+            _ = Error::Error.self
         }
 
         @Test
@@ -30,13 +30,13 @@
         }
     }
 
-    extension Error.Error.Test.Unit {
+    extension Error::Error.Test.Unit {
         @Test
         func `captureLastError returns Code`() {
 
             SetLastError(DWORD(ERROR_FILE_NOT_FOUND))
 
-            let code = Error.Error.captureLastError()
+            let code = Error::Error.captureLastError()
             #expect(code.win32 == Error::Error.Code.File.notFound)
         }
 
@@ -44,12 +44,12 @@
         func `captureLastError with no error returns success`() {
             SetLastError(0)
 
-            let code = Error.Error.captureLastError()
+            let code = Error::Error.captureLastError()
             #expect(code.win32 == 0)
         }
     }
 
-    extension Error.Error.Test.Unit {
+    extension Error::Error.Test.Unit {
         @Test
         func `Code.File.notFound exists`() {
             let code = Error::Error.Code.File.notFound
@@ -75,7 +75,7 @@
         }
     }
 
-    extension Error.Error.Test.Unit {
+    extension Error::Error.Test.Unit {
         @Test
         func `Code.win32 creates correct code`() {
             let code = Error::Error.Code.win32(DWORD(ERROR_FILE_NOT_FOUND))
@@ -83,12 +83,12 @@
         }
     }
 
-    extension Error.Error.Test.EdgeCase {
+    extension Error::Error.Test.EdgeCase {
         @Test
         func `captureLastError is non-destructive`() {
             SetLastError(DWORD(ERROR_ACCESS_DENIED))
 
-            let code1 = Error.Error.captureLastError()
+            let code1 = Error::Error.captureLastError()
             let code2 = GetLastError()
 
             #expect(code1.win32 == code2)

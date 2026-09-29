@@ -11,7 +11,7 @@ extension Windows.`32`.Kernel.Process {
 
         case wait(Error::Error.Code)
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

@@ -82,7 +82,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
             }
 
             guard success else {
-                throw .create(Error.Error.captureLastError())
+                throw .create(Error::Error.captureLastError())
             }
 
             return Result(

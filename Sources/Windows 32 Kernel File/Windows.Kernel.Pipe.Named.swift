@@ -106,7 +106,7 @@
                 return false
             }
 
-            throw .platform(Error.Error(code: .win32(error)))
+            throw .platform(Error::Error(code: .win32(error)))
         }
 
         package static func disconnect(

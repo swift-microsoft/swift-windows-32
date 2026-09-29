@@ -3,7 +3,7 @@ extension Windows.`32`.Kernel.IO.Write {
     public enum Error: Swift.Error, Sendable {
         case handle(Windows.`32`.Kernel.Descriptor.Validity.Error)
         case blocking(Windows.`32`.Kernel.IO.Blocking.Error)
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

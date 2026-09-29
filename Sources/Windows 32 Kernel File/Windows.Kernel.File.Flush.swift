@@ -32,11 +32,11 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            let code = Error.Error.captureLastError()
+            let code = Error::Error.captureLastError()
             if let e = Windows.`32`.Kernel.Descriptor.Validity.Error(code: code) {
                 return .handle(e)
             }
-            return .platform(Error.Error(code: code))
+            return .platform(Error::Error(code: code))
         }
     }
 

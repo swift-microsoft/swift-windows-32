@@ -6,7 +6,7 @@ extension Windows.`32`.Kernel.File.Stats {
 
         case handle(Windows.`32`.Kernel.Descriptor.Validity.Error)
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

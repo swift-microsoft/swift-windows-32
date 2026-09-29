@@ -26,7 +26,7 @@ extension Windows.`32`.Kernel.Link {
 
         case nameTooLong
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

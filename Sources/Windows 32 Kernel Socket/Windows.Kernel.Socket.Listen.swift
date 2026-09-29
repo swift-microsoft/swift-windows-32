@@ -17,7 +17,7 @@
         ) throws(Error) {
             let result = WinSDK.listen(SOCKET(socket), backlog.rawValue)
             guard result == 0 else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
         }
     }

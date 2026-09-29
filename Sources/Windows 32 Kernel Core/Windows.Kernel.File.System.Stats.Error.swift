@@ -3,7 +3,7 @@ extension Windows.`32`.Kernel.File.System.Stats {
     public enum Error: Swift.Error, Sendable, Equatable {
         case path(Path.Resolution.Error)
         case handle(Windows.`32`.Kernel.Descriptor.Validity.Error)
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

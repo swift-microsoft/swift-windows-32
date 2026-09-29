@@ -32,7 +32,7 @@
             )
 
             guard let mappingHandle, mappingHandle != INVALID_HANDLE_VALUE else {
-                throw .map(Error.Error.captureLastError())
+                throw .map(Error::Error.captureLastError())
             }
 
             let desiredAccess =
@@ -47,7 +47,7 @@
                 SIZE_T(length.underlying.rawValue)
             )
 
-            let mapError = Error.Error.captureLastError()
+            let mapError = Error::Error.captureLastError()
 
             _ = CloseHandle(mappingHandle)
 
@@ -92,7 +92,7 @@
             )
 
             guard let result else {
-                throw .map(Error.Error.captureLastError())
+                throw .map(Error::Error.captureLastError())
             }
 
             return unsafe Memory.Address(result)
@@ -111,7 +111,7 @@
             }
 
             guard success else {
-                throw .unmap(Error.Error.captureLastError())
+                throw .unmap(Error::Error.captureLastError())
             }
         }
 
@@ -120,7 +120,7 @@
             length: Memory.Address.Count
         ) throws(Memory.Map.Error) {
             guard unsafe FlushViewOfFile(addr.pointer, SIZE_T(length.underlying.rawValue)) else {
-                throw .sync(Error.Error.captureLastError())
+                throw .sync(Error::Error.captureLastError())
             }
         }
 
@@ -138,7 +138,7 @@
                     &oldProtect
                 )
             else {
-                throw .protect(Error.Error.captureLastError())
+                throw .protect(Error::Error.captureLastError())
             }
         }
     }

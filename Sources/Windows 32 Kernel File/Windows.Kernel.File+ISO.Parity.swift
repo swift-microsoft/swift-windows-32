@@ -46,7 +46,7 @@
             )
             guard let handle, handle != INVALID_HANDLE_VALUE else {
                 throw .platform(
-                    Error.Error(code: Error.Error.captureLastError())
+                    Error::Error(code: Error::Error.captureLastError())
                 )
             }
             defer { CloseHandle(handle) }
@@ -54,7 +54,7 @@
             var info = BY_HANDLE_FILE_INFORMATION()
             guard GetFileInformationByHandle(handle, &info) else {
                 throw .platform(
-                    Error.Error(code: Error.Error.captureLastError())
+                    Error::Error(code: Error::Error.captureLastError())
                 )
             }
             return Windows.`32`.Kernel.File.Stats(_from: info)
@@ -111,7 +111,7 @@
                 )
                 guard let handle, handle != INVALID_HANDLE_VALUE else {
                     throw .platform(
-                        Error.Error(code: Error.Error.captureLastError())
+                        Error::Error(code: Error::Error.captureLastError())
                     )
                 }
                 defer { CloseHandle(handle) }
@@ -120,7 +120,7 @@
                 var write = FILETIME(_from: modificationTime)
                 guard SetFileTime(handle, nil, &access, &write) else {
                     throw .platform(
-                        Error.Error(code: Error.Error.captureLastError())
+                        Error::Error(code: Error::Error.captureLastError())
                     )
                 }
             }
@@ -139,7 +139,7 @@
                 let current = GetFileAttributesW(wpath)
                 guard current != INVALID_FILE_ATTRIBUTES else {
                     throw .platform(
-                        Error.Error(code: Error.Error.captureLastError())
+                        Error::Error(code: Error::Error.captureLastError())
                     )
                 }
                 var updated = current
@@ -150,7 +150,7 @@
                 }
                 guard updated == current || SetFileAttributesW(wpath, updated) else {
                     throw .platform(
-                        Error.Error(code: Error.Error.captureLastError())
+                        Error::Error(code: Error::Error.captureLastError())
                     )
                 }
             }
@@ -185,7 +185,7 @@
             let handle = UnsafeMutableRawPointer(bitPattern: descriptor._rawValue)
             guard SetFileTime(handle, nil, &access, &write) else {
                 throw .platform(
-                    Error.Error(code: Error.Error.captureLastError())
+                    Error::Error(code: Error::Error.captureLastError())
                 )
             }
         }
@@ -238,7 +238,7 @@
                 )
             else {
                 throw .platform(
-                    Error.Error(code: Error.Error.captureLastError())
+                    Error::Error(code: Error::Error.captureLastError())
                 )
             }
             let current = info.FileAttributes
@@ -264,7 +264,7 @@
                 )
             else {
                 throw .platform(
-                    Error.Error(code: Error.Error.captureLastError())
+                    Error::Error(code: Error::Error.captureLastError())
                 )
             }
         }
@@ -293,7 +293,7 @@
 
         public static func readTarget(
             at path: borrowing Path.Borrowed
-        ) throws(Windows.`32`.Kernel.Link.Symbolic.Error) -> String.String {
+        ) throws(Windows.`32`.Kernel.Link.Symbolic.Error) -> String::String {
 
             let capacity = 32768
             let raw = UnsafeMutablePointer<UInt16>.allocate(capacity: capacity)
@@ -314,8 +314,8 @@
                 start = unsafe raw.advanced(by: 4)
                 count = length - 4
             }
-            let view = unsafe String.String.Borrowed(UnsafePointer(start), count: count)
-            return unsafe String.String(copying: view)
+            let view = unsafe String::String.Borrowed(UnsafePointer(start), count: count)
+            return unsafe String::String(copying: view)
         }
     }
 

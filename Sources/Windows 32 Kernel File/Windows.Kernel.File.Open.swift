@@ -66,7 +66,7 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            Self(code: Error.Error.captureLastError())
+            Self(code: Error::Error.captureLastError())
         }
     }
 

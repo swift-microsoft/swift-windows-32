@@ -9,7 +9,7 @@
         ) throws(Error) -> UInt {
             let clientSocket = WinSDK.accept(SOCKET(socket), nil, nil)
             guard clientSocket != INVALID_SOCKET else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
             return UInt(clientSocket)
         }
@@ -21,7 +21,7 @@
         ) throws(Error) -> UInt {
             let clientSocket = WinSDK.accept(SOCKET(socket), address, addressLength)
             guard clientSocket != INVALID_SOCKET else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
             return UInt(clientSocket)
         }

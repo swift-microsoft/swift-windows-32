@@ -11,7 +11,7 @@
                 return
             }
 
-            self = .platform(Error.Error(code: code))
+            self = .platform(Error::Error(code: code))
         }
     }
 #endif

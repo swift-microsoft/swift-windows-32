@@ -2,7 +2,7 @@ extension Windows.`32`.Kernel.Socket {
 
     public enum Error: Swift.Error, Sendable {
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

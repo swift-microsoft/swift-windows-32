@@ -15,7 +15,7 @@ extension Windows.`32`.Kernel.File.Times {
 
         case io(IO)
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

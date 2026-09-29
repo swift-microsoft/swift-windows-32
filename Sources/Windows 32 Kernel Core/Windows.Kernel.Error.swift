@@ -2,7 +2,7 @@
     public import Error
     public import WinSDK
 
-    extension Error.Error {
+    extension Error::Error {
 
         @inlinable
         public static func captureLastError() -> Error::Error.Code {

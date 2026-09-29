@@ -21,7 +21,7 @@
         ) throws(Error) {
             let result = WinSDK.connect(SOCKET(socket), address, addressLength)
             guard result == 0 else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
         }
     }

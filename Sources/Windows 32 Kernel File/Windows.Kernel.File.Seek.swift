@@ -81,7 +81,7 @@
     extension Windows.`32`.Kernel.File.Seek.Error {
 
         internal static func current() -> Self {
-            let code = Error.Error.captureLastError()
+            let code = Error::Error.captureLastError()
             guard let win32Code = code.win32 else {
                 return .platform(code: code)
             }

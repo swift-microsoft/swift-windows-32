@@ -37,7 +37,7 @@
         while count > 0, unsafe (buffer[count - 1] == 0x000D || buffer[count - 1] == 0x000A) {
             count -= 1
         }
-        let view = unsafe String.String.Borrowed(UnsafePointer(buffer), count: count)
+        let view = unsafe String::String.Borrowed(UnsafePointer(buffer), count: count)
         return unsafe Loader.Message(copying: view)
     }
 

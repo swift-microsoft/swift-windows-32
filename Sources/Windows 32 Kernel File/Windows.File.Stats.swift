@@ -156,7 +156,7 @@ internal import Windows_32_Core
                 self = .handle(e)
                 return
             }
-            self = .platform(Error.Error(code: errorCode))
+            self = .platform(Error::Error(code: errorCode))
         }
     }
 

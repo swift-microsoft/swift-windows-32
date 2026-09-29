@@ -2,7 +2,7 @@ extension Windows.`32`.Kernel.Socket.Shutdown {
 
     public enum Error: Swift.Error, Sendable {
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

@@ -160,7 +160,7 @@
                 self = .notDirectory
 
             default:
-                self = .platform(Error.Error(code: .win32(error)))
+                self = .platform(Error::Error(code: .win32(error)))
             }
         }
     }

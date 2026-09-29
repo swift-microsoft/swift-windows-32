@@ -126,7 +126,7 @@
             let failIfExists = !overwrite
 
             guard CopyFileW(wSource, wDest, failIfExists) else {
-                throw Error(fromLastError: Error.Error.captureLastError())
+                throw Error(fromLastError: Error::Error.captureLastError())
             }
         }
 
@@ -142,7 +142,7 @@
                     let wDest = UnsafeRawPointer(dstPtr).assumingMemoryBound(to: WCHAR.self)
                     guard CopyFileW(wSource, wDest, true) else {
                         throw .platform(
-                            code: Error.Error.captureLastError(),
+                            code: Error::Error.captureLastError(),
                             operation: .copyfile
                         )
                     }

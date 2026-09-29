@@ -255,6 +255,7 @@ let package = Package(
                 .product(name: "Spatial", package: "swift-spatial"),
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "String", package: "swift-string"),
+                .product(name: "Random", package: "swift-random"),
             ]
         ),
 

@@ -48,7 +48,7 @@
                 flags.rawValue
             )
             guard result != SOCKET_ERROR else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
             return Int(result)
         }
@@ -99,7 +99,7 @@
                 srcAddrLength
             )
             guard result != SOCKET_ERROR else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
             return Int(result)
         }

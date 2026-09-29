@@ -25,7 +25,7 @@ extension Windows.`32`.Kernel.File.Delete {
 
         case nameTooLong
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

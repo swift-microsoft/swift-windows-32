@@ -16,7 +16,7 @@
 
             case ok
 
-            case platform(Error.Error)
+            case platform(Error::Error)
         }
     }
 
@@ -103,7 +103,7 @@
                     bytes: UInt32(bytes),
                     key: Windows.`32`.Kernel.IO.Completion.Port.Key(rawValue: key),
                     overlapped: toOverlapped(overlapped),
-                    status: .platform(Error.Error(code: .win32(error)))
+                    status: .platform(Error::Error(code: .win32(error)))
                 )
             }
 

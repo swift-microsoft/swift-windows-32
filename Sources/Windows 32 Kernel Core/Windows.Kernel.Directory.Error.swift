@@ -16,7 +16,7 @@ extension Windows.`32`.Kernel.Directory {
 
         case closed
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

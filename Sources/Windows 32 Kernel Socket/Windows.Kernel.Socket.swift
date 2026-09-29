@@ -9,7 +9,7 @@
             let result = WSAStartup(makeWord(2, 2), &wsaData)
             guard result == 0 else {
                 throw .platform(
-                    Error.Error(code: Error::Error.Code.win32(DWORD(result)))
+                    Error::Error(code: Error::Error.Code.win32(DWORD(result)))
                 )
             }
         }
@@ -85,7 +85,7 @@
         ) throws(Error) -> Windows.`32`.Kernel.Socket.Descriptor {
             let sock = socket(family.rawValue, type.rawValue, `protocol`.rawValue)
             guard sock != INVALID_SOCKET else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
             return Windows.`32`.Kernel.Socket.Descriptor(_rawValue: UInt(sock))
         }

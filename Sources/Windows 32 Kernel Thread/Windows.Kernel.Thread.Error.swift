@@ -6,7 +6,7 @@
 
         public enum Error: Swift.Error, Sendable, Equatable, Hashable {
 
-            case create(Error.Error)
+            case create(Error::Error)
         }
     }
 

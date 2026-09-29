@@ -35,7 +35,7 @@ extension Windows.`32`.Kernel.File.Move {
 
         case noSpace
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

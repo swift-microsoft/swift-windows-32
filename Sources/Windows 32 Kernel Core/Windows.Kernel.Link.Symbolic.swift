@@ -29,7 +29,7 @@ extension Windows.`32`.Kernel.Link.Symbolic {
 
         case bufferTooSmall
 
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 

@@ -5,7 +5,7 @@ extension Windows.`32`.Kernel.Environment {
     public enum Error: Swift.Error, Sendable {
         case permission(Windows.`32`.Kernel.Permission.Error)
         case invalid(Invalid)
-        case platform(Error.Error)
+        case platform(Error::Error)
     }
 }
 
@@ -26,7 +26,7 @@ extension Windows.`32`.Kernel.Environment.Error {
             if let permission = Windows.`32`.Kernel.Permission.Error(code: code) {
                 self = .permission(permission)
             } else {
-                self = .platform(Error.Error(code: code))
+                self = .platform(Error::Error(code: code))
             }
         }
     }

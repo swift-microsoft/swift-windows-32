@@ -24,10 +24,10 @@ extension Windows.`32`.Kernel.Lock {
             }
 
             guard let handle = UnsafeMutableRawPointer(bitPattern: descriptor._rawValue) else {
-                throw Windows.`32`.Kernel.Lock.Error(Error.Error.captureLastError())
+                throw Windows.`32`.Kernel.Lock.Error(Error::Error.captureLastError())
             }
             guard unsafe LockFileEx(handle, flags, 0, lengthLow, lengthHigh, &overlapped) else {
-                throw Windows.`32`.Kernel.Lock.Error(Error.Error.captureLastError())
+                throw Windows.`32`.Kernel.Lock.Error(Error::Error.captureLastError())
             }
         #endif
     }
@@ -44,10 +44,10 @@ extension Windows.`32`.Kernel.Lock {
             overlapped.OffsetHigh = offsetHigh
 
             guard let handle = UnsafeMutableRawPointer(bitPattern: descriptor._rawValue) else {
-                throw Windows.`32`.Kernel.Lock.Error(Error.Error.captureLastError())
+                throw Windows.`32`.Kernel.Lock.Error(Error::Error.captureLastError())
             }
             guard unsafe UnlockFileEx(handle, 0, lengthLow, lengthHigh, &overlapped) else {
-                throw Windows.`32`.Kernel.Lock.Error(Error.Error.captureLastError())
+                throw Windows.`32`.Kernel.Lock.Error(Error::Error.captureLastError())
             }
         #endif
     }
@@ -112,10 +112,10 @@ extension Windows.`32`.Kernel.Lock.Immediate {
             }
 
             guard let handle = UnsafeMutableRawPointer(bitPattern: descriptor._rawValue) else {
-                throw Windows.`32`.Kernel.Lock.Error(Error.Error.captureLastError())
+                throw Windows.`32`.Kernel.Lock.Error(Error::Error.captureLastError())
             }
             guard unsafe LockFileEx(handle, flags, 0, lengthLow, lengthHigh, &overlapped) else {
-                throw Windows.`32`.Kernel.Lock.Error(Error.Error.captureLastError())
+                throw Windows.`32`.Kernel.Lock.Error(Error::Error.captureLastError())
             }
         #endif
     }

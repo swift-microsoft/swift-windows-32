@@ -16,7 +16,7 @@
                     SIZE_T(length.underlying.rawValue)
                 )
             else {
-                throw .lock(Error.Error.captureLastError())
+                throw .lock(Error::Error.captureLastError())
             }
         }
 
@@ -31,7 +31,7 @@
                     SIZE_T(length.underlying.rawValue)
                 )
             else {
-                throw .unlock(Error.Error.captureLastError())
+                throw .unlock(Error::Error.captureLastError())
             }
         }
     }

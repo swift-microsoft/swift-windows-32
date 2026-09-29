@@ -38,9 +38,9 @@
 
         @usableFromInline
         internal static func current() -> Self {
-            let code = Error.Error.captureLastError()
+            let code = Error::Error.captureLastError()
             guard let win32Code = code.win32 else {
-                return .platform(Error.Error(code: code))
+                return .platform(Error::Error(code: code))
             }
             return current(from: win32Code)
         }
@@ -62,7 +62,7 @@
                 return .noSpace
 
             default:
-                return .platform(Error.Error(code: .win32(win32Code)))
+                return .platform(Error::Error(code: .win32(win32Code)))
             }
         }
     }

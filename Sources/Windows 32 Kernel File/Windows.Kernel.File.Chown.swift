@@ -16,7 +16,7 @@
 
             case io(IO)
 
-            case platform(Error.Error)
+            case platform(Error::Error)
 
             public enum Path: Swift.Error, Sendable, Equatable {
                 case notFound

@@ -46,7 +46,7 @@
                 flags.rawValue
             )
             guard result != SOCKET_ERROR else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
             return Int(result)
         }
@@ -97,7 +97,7 @@
                 destAddrLength
             )
             guard result != SOCKET_ERROR else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
             return Int(result)
         }

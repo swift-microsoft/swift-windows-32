@@ -29,7 +29,7 @@
 
             let result = WinSDK.shutdown(SOCKET(socket), sdHow)
             guard result == 0 else {
-                throw .platform(Error.Error(code: captureLastSocketError()))
+                throw .platform(Error::Error(code: captureLastSocketError()))
             }
         }
     }

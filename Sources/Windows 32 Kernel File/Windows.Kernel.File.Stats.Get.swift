@@ -55,7 +55,7 @@
             guard GetFileInformationByHandle(UnsafeMutableRawPointer(bitPattern: handle)!, &info)
             else {
                 throw .platform(
-                    Error.Error(code: Error.Error.captureLastError())
+                    Error::Error(code: Error::Error.captureLastError())
                 )
             }
 
