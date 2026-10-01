@@ -1,9 +1,9 @@
-public import Spatial
+public import Space
 public import Memory
 
 extension Windows.`32`.Kernel.File {
 
-    public typealias Size = Spatial::Magnitude<Space>.Value<Int64>
+    public typealias Size = Space::Magnitude<Space>.Value<Int64>
 }
 
 extension Windows.`32`.Kernel.File.Size {

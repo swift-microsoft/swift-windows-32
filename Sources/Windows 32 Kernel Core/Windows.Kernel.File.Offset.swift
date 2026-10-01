@@ -1,10 +1,10 @@
-public import Spatial
+public import Space
 
 extension Windows.`32`.Kernel.File {
 
-    public typealias Offset = Spatial::Coordinate.X<Space>.Value<Int64>
+    public typealias Offset = Space::Coordinate.X<Space>.Value<Int64>
 
-    public typealias Delta = Spatial::Displacement.X<Space>.Value<Int64>
+    public typealias Delta = Space::Displacement.X<Space>.Value<Int64>
 }
 
 extension Windows.`32`.Kernel.File.Offset {
