@@ -23,7 +23,8 @@
                 granularity: granularity
             )
 
-            #expect(range == .bytes(start: offset, end: granularity.underlying.alignUp(65_537)))
+            let end = Windows.`32`.Kernel.File.Offset(granularity.underlying.alignUp(Int64(65_537)))
+            #expect(range == .bytes(start: offset, end: end))
         }
     }
 
