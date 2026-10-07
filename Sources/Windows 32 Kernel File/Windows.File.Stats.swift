@@ -143,7 +143,7 @@ internal import Windows_32_Core
         internal init(_from info: BY_HANDLE_FILE_INFORMATION) {
             self.init(
                 base: Windows.`32`.Kernel.File.Stats(_from: info),
-                creationTime: Instant(_from: info.ftCreationTime)
+                creationTime: Windows.`32`.Kernel.Time(_from: info.ftCreationTime)
             )
         }
     }
@@ -160,7 +160,7 @@ internal import Windows_32_Core
         }
     }
 
-    extension Instant {
+    extension Windows.`32`.Kernel.Time {
 
         internal init(_from ft: FILETIME) {
 

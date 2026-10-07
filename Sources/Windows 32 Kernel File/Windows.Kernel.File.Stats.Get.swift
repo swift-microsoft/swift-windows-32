@@ -38,9 +38,9 @@
                 linkCount: Windows.`32`.Kernel.Link.Count(
                     _unchecked: Cardinal(UInt(info.nNumberOfLinks))
                 ),
-                accessTime: Instant(_from: info.ftLastAccessTime),
-                modificationTime: Instant(_from: info.ftLastWriteTime),
-                changeTime: Instant(_from: info.ftLastWriteTime)
+                accessTime: Windows.`32`.Kernel.Time(_from: info.ftLastAccessTime),
+                modificationTime: Windows.`32`.Kernel.Time(_from: info.ftLastWriteTime),
+                changeTime: Windows.`32`.Kernel.Time(_from: info.ftLastWriteTime)
             )
         }
     }
