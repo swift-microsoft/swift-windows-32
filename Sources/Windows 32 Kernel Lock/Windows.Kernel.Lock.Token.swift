@@ -85,13 +85,12 @@ extension Windows.`32`.Kernel.Lock.Token {
         deadline: Clock.Continuous.Instant
     ) throws(Windows.`32`.Kernel.Lock.Error) {
         #if os(Windows)
-            let clock = Clock.Continuous()
             var backoff: Duration = .milliseconds(1)
             let maxBackoff: Duration = .milliseconds(100)
 
             while true {
 
-                let now = clock.now
+                let now = Clock.Continuous.now
                 if now >= deadline {
                     throw .timedOut
                 }
@@ -103,7 +102,7 @@ extension Windows.`32`.Kernel.Lock.Token {
                         kind: kind
                     )
 
-                    if clock.now >= deadline {
+                    if Clock.Continuous.now >= deadline {
 
                         try Windows.`32`.Kernel.Lock.unlock(descriptor, range: range)
                         throw Windows.`32`.Kernel.Lock.Error.timedOut
@@ -119,7 +118,7 @@ extension Windows.`32`.Kernel.Lock.Token {
                     }
                 }
 
-                let remaining = deadline - clock.now
+                let remaining = deadline.offset - Clock.Continuous.now.offset
                 if remaining <= .zero {
                     throw .timedOut
                 }
