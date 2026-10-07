@@ -1,6 +1,7 @@
 public import Error
 
 #if os(Windows)
+    internal import Space
     internal import WinSDK
 #endif
 
