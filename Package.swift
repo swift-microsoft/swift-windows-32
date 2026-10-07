@@ -285,6 +285,7 @@ let package = Package(
                     name: "Memory Allocation",
                     package: "swift-memory-allocation"
                 ),
+                .product(name: "Space", package: "swift-spatial"),
             ]
         ),
 

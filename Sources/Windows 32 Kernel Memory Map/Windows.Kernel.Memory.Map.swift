@@ -1,6 +1,7 @@
 #if os(Windows)
     public import Error
     public import Memory
+    public import Space
     public import WinSDK
 
     extension Memory.Map {
