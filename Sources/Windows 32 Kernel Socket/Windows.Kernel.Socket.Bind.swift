@@ -16,7 +16,7 @@
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor,
             address: Windows.`32`.Kernel.Socket.Address.Storage
         ) throws(Error) {
-            try address.withUnsafeAddress { pointer, length in
+            try address.withUnsafeAddress { pointer, length throws(Error) in
                 try bind(socket._rawValue, address: pointer, addressLength: length)
             }
         }

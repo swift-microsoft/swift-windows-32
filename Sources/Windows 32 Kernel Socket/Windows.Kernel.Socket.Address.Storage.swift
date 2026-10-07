@@ -24,8 +24,8 @@
             _ body: (UnsafePointer<sockaddr>, Int32) throws(Failure) -> Result
         ) throws(Failure) -> Result {
             try unsafe Swift.withUnsafePointer(to: value) { pointer throws(Failure) in
-                try unsafe pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-                    try unsafe body($0, length)
+                try unsafe pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { address throws(Failure) in
+                    try unsafe body(address, length)
                 }
             }
         }
@@ -35,7 +35,7 @@
                 Result
         ) throws(Failure) -> Result {
             try unsafe Swift.withUnsafeMutablePointer(to: &value) { pointer throws(Failure) in
-                try unsafe pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { address in
+                try unsafe pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { address throws(Failure) in
                     try unsafe body(address, &length)
                 }
             }

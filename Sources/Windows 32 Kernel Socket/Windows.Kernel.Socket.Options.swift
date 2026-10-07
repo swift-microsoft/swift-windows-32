@@ -261,7 +261,7 @@
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
         ) throws(Error) -> Windows.`32`.Kernel.Socket.Address.Storage {
             var address = Windows.`32`.Kernel.Socket.Address.Storage()
-            try address.withUnsafeMutableAddress { pointer, length in
+            try address.withUnsafeMutableAddress { pointer, length throws(Error) in
                 try getSockName(socket._rawValue, address: pointer, addressLength: length)
             }
             return address
@@ -271,7 +271,7 @@
             _ socket: borrowing Windows.`32`.Kernel.Socket.Descriptor
         ) throws(Error) -> Windows.`32`.Kernel.Socket.Address.Storage {
             var address = Windows.`32`.Kernel.Socket.Address.Storage()
-            try address.withUnsafeMutableAddress { pointer, length in
+            try address.withUnsafeMutableAddress { pointer, length throws(Error) in
                 try getPeerName(socket._rawValue, address: pointer, addressLength: length)
             }
             return address

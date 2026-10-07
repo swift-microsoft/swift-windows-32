@@ -114,7 +114,7 @@
             try unsafe span.withUnsafeBytes { buffer throws(Error) in
                 var zero: UInt8 = 0
                 return try unsafe Swift.withUnsafePointer(to: &zero) { fallback throws(Error) in
-                    try address.withUnsafeAddress { pointer, length in
+                    try address.withUnsafeAddress { pointer, length throws(Error) in
                         try sendTo(
                             socket._rawValue,
                             buffer: buffer.baseAddress ?? UnsafeRawPointer(fallback),

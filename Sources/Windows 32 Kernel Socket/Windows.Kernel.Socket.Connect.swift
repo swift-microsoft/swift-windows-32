@@ -33,7 +33,7 @@
             address: Windows.`32`.Kernel.Socket.Address.Storage
         ) throws(Windows.`32`.Kernel.Socket.Error) -> Start {
             do throws(Windows.`32`.Kernel.Socket.Error) {
-                try address.withUnsafeAddress { pointer, length in
+                try address.withUnsafeAddress { pointer, length throws(Windows.`32`.Kernel.Socket.Error) in
                     try Windows.`32`.Kernel.Socket.connect(
                         socket._rawValue,
                         address: pointer,

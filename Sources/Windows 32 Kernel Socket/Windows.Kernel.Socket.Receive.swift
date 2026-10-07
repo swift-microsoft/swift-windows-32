@@ -117,7 +117,7 @@
                 var zero: UInt8 = 0
                 let count = try unsafe Swift.withUnsafeMutablePointer(to: &zero) {
                     fallback throws(Error) in
-                    try address.withUnsafeMutableAddress { pointer, length in
+                    try address.withUnsafeMutableAddress { pointer, length throws(Error) in
                         try receiveFrom(
                             socket._rawValue,
                             buffer: buffer.baseAddress ?? UnsafeMutableRawPointer(fallback),
