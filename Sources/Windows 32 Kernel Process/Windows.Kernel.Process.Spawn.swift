@@ -49,7 +49,20 @@ extension Windows.`32`.Kernel.Process.Spawn {
         ) throws(Windows.`32`.Kernel.Process.Error) -> Result {
             var startupInfo = STARTUPINFOEXW()
             startupInfo.StartupInfo.cb = DWORD(MemoryLayout<STARTUPINFOEXW>.size)
-            startupInfo.lpAttributeList = unsafe actions._attributeList
+
+            var standardInheritance = try Actions()
+            let inheritsHandles: Bool
+            if actions._inheritHandlesCount > 0 {
+                startupInfo.lpAttributeList = unsafe actions._attributeList
+                inheritsHandles = true
+            } else {
+                for handle in unsafe _inheritableStandardHandles(actions) {
+                    try unsafe standardInheritance._appendInheritedHandle(handle)
+                }
+                inheritsHandles = standardInheritance._inheritHandlesCount > 0
+                startupInfo.lpAttributeList =
+                    inheritsHandles ? unsafe standardInheritance._attributeList : nil
+            }
 
             if let handles = unsafe actions._stdioHandles {
                 unsafe startupInfo.StartupInfo.dwFlags |= DWORD(STARTF_USESTDHANDLES)
@@ -72,7 +85,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
                     commandLine,
                     nil,
                     nil,
-                    true,
+                    inheritsHandles,
                     creationFlags,
                     environment,
                     workingDirectory,
@@ -82,8 +95,11 @@ extension Windows.`32`.Kernel.Process.Spawn {
             }
 
             guard success else {
-                throw .create(Error::Error.captureLastError())
+                let error = Error::Error.captureLastError()
+                _ = consume standardInheritance
+                throw .create(error)
             }
+            _ = consume standardInheritance
 
             return Result(
                 processHandle: Windows.`32`.Kernel.Descriptor(
@@ -95,6 +111,36 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 processID: processInfo.dwProcessId,
                 threadID: processInfo.dwThreadId
             )
+        }
+
+        private static func _inheritableStandardHandles(
+            _ actions: borrowing Actions
+        ) -> [HANDLE] {
+            let candidates: [HANDLE?] =
+                if let handles = unsafe actions._stdioHandles {
+                    unsafe [handles.stdin, handles.stdout, handles.stderr]
+                } else {
+                    unsafe [
+                        GetStdHandle(STD_INPUT_HANDLE),
+                        GetStdHandle(STD_OUTPUT_HANDLE),
+                        GetStdHandle(STD_ERROR_HANDLE),
+                    ]
+                }
+
+            var inheritable: [HANDLE] = []
+            for candidate in candidates {
+                guard let handle = unsafe candidate, unsafe handle != INVALID_HANDLE_VALUE else {
+                    continue
+                }
+                var flags: DWORD = 0
+                guard
+                    unsafe GetHandleInformation(handle, &flags),
+                    flags & DWORD(HANDLE_FLAG_INHERIT) != 0,
+                    unsafe !inheritable.contains(handle)
+                else { continue }
+                unsafe inheritable.append(handle)
+            }
+            return unsafe inheritable
         }
     }
 
