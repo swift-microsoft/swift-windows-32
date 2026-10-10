@@ -133,6 +133,12 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 throw .create(Error::Error.captureLastError())
             }
 
+            try unsafe _appendInheritedHandle(handle)
+        }
+
+        internal mutating func _appendInheritedHandle(
+            _ handle: HANDLE
+        ) throws(Windows.`32`.Kernel.Process.Error) {
             let newCount = _inheritHandlesCount + 1
             let newRaw = unsafe UnsafeMutablePointer<HANDLE?>.allocate(capacity: newCount)
             if let old = _inheritHandlesRaw {
