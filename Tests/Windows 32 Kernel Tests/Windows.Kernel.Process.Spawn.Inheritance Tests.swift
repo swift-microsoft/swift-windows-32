@@ -122,7 +122,7 @@
             }
             var available: DWORD = 0
             let peeked = unsafe PeekNamedPipe(handle, nil, 0, nil, &available, nil)
-            return !peeked && unsafe GetLastError() == ERROR_BROKEN_PIPE
+            return unsafe !peeked && GetLastError() == ERROR_BROKEN_PIPE
         }
 
         static func drain(_ readHandle: UInt) -> [UInt8] {

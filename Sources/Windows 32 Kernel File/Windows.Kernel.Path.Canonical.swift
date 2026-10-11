@@ -144,7 +144,15 @@
                 }
 
                 if Int(written) < capacity {
-                    let result = body(unsafe UnsafePointer(buffer), Int(written))
+                    let count = Int(written)
+                    let start =
+                        conventionalStart(
+                            of: unsafe Swift.Span(_unsafeStart: buffer, count: count)
+                        ) ?? 0
+                    if start == 6 {
+                        unsafe buffer[start] = 0x5C
+                    }
+                    let result = body(unsafe UnsafePointer(buffer + start), count - start)
                     unsafe buffer.deallocate()
                     return result
                 }
