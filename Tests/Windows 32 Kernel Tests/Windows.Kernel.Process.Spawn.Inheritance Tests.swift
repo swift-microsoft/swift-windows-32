@@ -16,7 +16,8 @@
                 "cmd.exe /C ping -n 11 127.0.0.1 >NUL",
                 actions: Windows.`32`.Kernel.Process.Spawn.Actions()
             )
-            _ = pair.second
+            let write = pair.second
+            _ = consume write
 
             #expect(Inheritance.isBroken(read._rawValue))
             Inheritance.terminate(bystander)
@@ -80,7 +81,8 @@
             let child = try spawn("cmd.exe /C echo x", actions: actions)
             let pair = consume pipe.underlying
             let read = pair.first
-            _ = pair.second
+            let write = pair.second
+            _ = consume write
 
             let bytes = drain(read._rawValue)
             _ = consume read
