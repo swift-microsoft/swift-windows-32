@@ -84,7 +84,7 @@
         }
 
         @Test
-        func `physical canonicalization of existing directory preserves extended prefix`() throws {
+        func `physical canonicalization of existing directory returns the conventional drive form`() throws {
             var path = Array(".".utf16) + [0]
             let resultString = try path.withUnsafeBufferPointer { pathPointer in
                 let borrowed = unsafe Path.Borrowed(
@@ -97,7 +97,8 @@
                 }
             }
 
-            #expect(resultString.hasPrefix("\\\\?\\"))
+            #expect(!resultString.hasPrefix("\\\\?\\"))
+            #expect(Array(resultString.utf16.dropFirst().prefix(2)) == Array(":\\".utf16))
             #expect(!resultString.hasSuffix("\\."))
         }
 
@@ -140,7 +141,8 @@
                 }
             }
 
-            #expect(resultString.hasPrefix("\\\\?\\"))
+            #expect(!resultString.hasPrefix("\\\\?\\"))
+            #expect(Array(resultString.utf16.dropFirst().prefix(2)) == Array(":\\".utf16))
             #expect(resultString.hasSuffix("\\\(name)"))
         }
 
@@ -236,7 +238,8 @@
             let component =
                 Swift.String(repeating: "x", count: 240 - suffix.count)
                 + suffix
-            let extendedPath = current + "\\" + component
+            let root = current.hasPrefix(#"\\?\"#) ? current : #"\\?\"# + current
+            let extendedPath = root + "\\" + component
             var path = Array(extendedPath.utf16) + [0]
 
             let created = path.withUnsafeBufferPointer { pathPointer in
