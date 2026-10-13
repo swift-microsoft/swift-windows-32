@@ -27,6 +27,16 @@
 
     extension System.Test.Unit {
         @Test
+        func `name reports Windows with a release and machine`() throws {
+            let name = try #require(System.name)
+            #expect(name.system == "Windows")
+            #expect(!name.release.isEmpty)
+            #expect(name.machine != "unknown")
+        }
+    }
+
+    extension System.Test.Unit {
+        @Test
         func `pathMax returns MAX_PATH`() {
             let pathMax = System.pathMax
             #expect(pathMax.underlying == 260)
