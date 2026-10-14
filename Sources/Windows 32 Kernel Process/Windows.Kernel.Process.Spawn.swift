@@ -47,6 +47,52 @@ extension Windows.`32`.Kernel.Process.Spawn {
             workingDirectory: UnsafePointer<WCHAR>?,
             actions: borrowing Actions
         ) throws(Windows.`32`.Kernel.Process.Error) -> Result {
+            try unsafe _spawn(
+                executable: executable,
+                commandLine: commandLine,
+                environment: environment,
+                workingDirectory: workingDirectory,
+                actions: actions,
+                suspended: false,
+                preparation: { _ in }
+            )
+        }
+
+        @unsafe
+        public static func spawn(
+            executable: UnsafePointer<WCHAR>?,
+            commandLine: UnsafeMutablePointer<WCHAR>,
+            environment: UnsafeMutableRawPointer?,
+            workingDirectory: UnsafePointer<WCHAR>?,
+            actions: borrowing Actions,
+            job: borrowing Windows.`32`.Kernel.Process.Job
+        ) throws(Windows.`32`.Kernel.Process.Error) -> Result {
+            try unsafe _spawn(
+                executable: executable,
+                commandLine: commandLine,
+                environment: environment,
+                workingDirectory: workingDirectory,
+                actions: actions,
+                suspended: true
+            ) { (result: borrowing Result) throws(Windows.`32`.Kernel.Process.Error) in
+                try job.assign(result.processHandle)
+                let thread = unsafe HANDLE(bitPattern: result.threadHandle._raw)
+                guard unsafe ResumeThread(thread) != UInt32.max else {
+                    throw .create(.win32(unsafe GetLastError()))
+                }
+            }
+        }
+
+        @unsafe
+        private static func _spawn(
+            executable: UnsafePointer<WCHAR>?,
+            commandLine: UnsafeMutablePointer<WCHAR>,
+            environment: UnsafeMutableRawPointer?,
+            workingDirectory: UnsafePointer<WCHAR>?,
+            actions: borrowing Actions,
+            suspended: Bool,
+            preparation: (borrowing Result) throws(Windows.`32`.Kernel.Process.Error) -> Void
+        ) throws(Windows.`32`.Kernel.Process.Error) -> Result {
             var startupInfo = STARTUPINFOEXW()
             startupInfo.StartupInfo.cb = DWORD(MemoryLayout<STARTUPINFOEXW>.size)
 
@@ -75,6 +121,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
 
             let creationFlags: DWORD = DWORD(
                 CREATE_UNICODE_ENVIRONMENT | EXTENDED_STARTUPINFO_PRESENT
+                    | (suspended ? CREATE_SUSPENDED : 0)
             )
 
             let success = unsafe withUnsafePointer(to: &startupInfo.StartupInfo) {
@@ -101,7 +148,7 @@ extension Windows.`32`.Kernel.Process.Spawn {
             }
             _ = consume standardInheritance
 
-            return Result(
+            let result = Result(
                 processHandle: Windows.`32`.Kernel.Descriptor(
                     _raw: UInt(bitPattern: processInfo.hProcess)
                 ),
@@ -111,6 +158,14 @@ extension Windows.`32`.Kernel.Process.Spawn {
                 processID: processInfo.dwProcessId,
                 threadID: processInfo.dwThreadId
             )
+            do throws(Windows.`32`.Kernel.Process.Error) {
+                try preparation(result)
+            } catch {
+                _ = unsafe TerminateProcess(processInfo.hProcess, 1)
+                _ = unsafe WaitForSingleObject(processInfo.hProcess, INFINITE)
+                throw error
+            }
+            return result
         }
 
         private static func _inheritableStandardHandles(
