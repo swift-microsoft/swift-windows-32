@@ -37,6 +37,13 @@
 
     extension System.Test.Unit {
         @Test
+        func `memoryCapacity reports the installed physical memory`() {
+            #expect(System.memoryCapacity > 0)
+        }
+    }
+
+    extension System.Test.Unit {
+        @Test
         func `pathMax returns MAX_PATH`() {
             let pathMax = System.pathMax
             #expect(pathMax.underlying == 260)
