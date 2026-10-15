@@ -7,7 +7,7 @@
     import Path
     import Clock
     import Random
-    import System
+    import System_Primitives
 
     extension Error::Error {
         enum Test {

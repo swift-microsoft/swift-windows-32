@@ -309,7 +309,7 @@ let package = Package(
             name: "Windows 32 Kernel System",
             dependencies: [
                 "Windows 32 Kernel Core",
-                .product(name: "System", package: "swift-system"),
+                .product(name: "System Primitives", package: "swift-system"),
                 .product(name: "Random", package: "swift-random"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
             ]
@@ -405,7 +405,7 @@ let package = Package(
                 .product(name: "Error", package: "swift-error", condition: .when(platforms: [.windows])),
                 .product(name: "Path", package: "swift-path", condition: .when(platforms: [.windows])),
                 .product(name: "Random", package: "swift-random", condition: .when(platforms: [.windows])),
-                .product(name: "System", package: "swift-system", condition: .when(platforms: [.windows])),
+                .product(name: "System Primitives", package: "swift-system", condition: .when(platforms: [.windows])),
             ]
         ),
         .testTarget(

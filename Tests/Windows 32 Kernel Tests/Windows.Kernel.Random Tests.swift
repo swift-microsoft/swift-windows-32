@@ -8,7 +8,7 @@
     import Path
     import Clock
     import Random
-    import System
+    import System_Primitives
 
     extension Windows.`32`.Kernel.Random {
         enum Test {

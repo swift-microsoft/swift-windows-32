@@ -1,7 +1,7 @@
 internal import Error
 internal import Path
 internal import Random
-internal import System
+internal import System_Primitives
 internal import Windows_32_Core
 
 #if os(Windows)

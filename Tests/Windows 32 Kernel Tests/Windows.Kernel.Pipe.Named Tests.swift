@@ -7,7 +7,7 @@
     import Path
     import Clock
     import Random
-    import System
+    import System_Primitives
 
     extension Windows.`32`.Kernel.Pipe.Named {
         enum Test {
