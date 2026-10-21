@@ -99,10 +99,13 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/swift-atoms/swift-memory.git",
-            branch: "main", traits: ["Lock", "Map", "Shared", "Cursor"]),
+            branch: "main",
+            traits: ["Lock", "Map", "Shared", "Cursor"]
+        ),
         .package(
             url: "https://github.com/swift-molecules/swift-memory-allocation.git",
-            branch: "main", traits: ["MemorySmall", "MemoryAllocatorArena", "MemoryInline"]
+            branch: "main",
+            traits: ["MemorySmall", "MemoryAllocatorArena", "MemoryInline"]
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-clock.git",
@@ -142,7 +145,8 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-binary.git",
-            branch: "main", traits: ["Serializer"]
+            branch: "main",
+            traits: ["Serializer"]
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-byte.git",
@@ -154,7 +158,8 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-terminal.git",
-            branch: "main", traits: ["Error", "Input"]
+            branch: "main",
+            traits: ["Error", "Input"]
         ),
         .package(
             url: "https://github.com/swift-atoms/swift-pair.git",

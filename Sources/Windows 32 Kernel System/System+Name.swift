@@ -1,4 +1,5 @@
 public import System_Primitives
+
 #if os(Windows)
     internal import WinSDK
 
@@ -43,7 +44,13 @@ public import System_Primitives
                 unsafe value.withCString(encodedAs: UTF16.self) { value in
                     unsafe buffer.withUnsafeMutableBytes { bytes in
                         unsafe RegGetValueW(
-                            HKEY_LOCAL_MACHINE, key, value, DWORD(RRF_RT_REG_SZ), nil, bytes.baseAddress, &size
+                            HKEY_LOCAL_MACHINE,
+                            key,
+                            value,
+                            DWORD(RRF_RT_REG_SZ),
+                            nil,
+                            bytes.baseAddress,
+                            &size
                         )
                     }
                 }
@@ -59,7 +66,13 @@ public import System_Primitives
                 unsafe value.withCString(encodedAs: UTF16.self) { value in
                     unsafe withUnsafeMutableBytes(of: &number) { bytes in
                         unsafe RegGetValueW(
-                            HKEY_LOCAL_MACHINE, key, value, DWORD(RRF_RT_REG_DWORD), nil, bytes.baseAddress, &size
+                            HKEY_LOCAL_MACHINE,
+                            key,
+                            value,
+                            DWORD(RRF_RT_REG_DWORD),
+                            nil,
+                            bytes.baseAddress,
+                            &size
                         )
                     }
                 }

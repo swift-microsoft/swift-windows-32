@@ -1,5 +1,5 @@
-public import Space
 public import Memory
+public import Space
 
 extension Windows.`32`.Kernel.File {
 

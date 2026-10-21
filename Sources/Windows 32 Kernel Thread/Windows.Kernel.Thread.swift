@@ -77,8 +77,7 @@
         @available(
             *,
             deprecated,
-            message:
-                "Use Windows.`32`.Kernel.Thread.ID.current for portable, typed thread identity."
+            message: "Use Windows.`32`.Kernel.Thread.ID.current for portable, typed thread identity."
         )
         @inlinable
         public static func currentID() -> DWORD {

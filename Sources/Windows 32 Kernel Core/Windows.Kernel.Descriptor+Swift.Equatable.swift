@@ -1,4 +1,3 @@
-
 extension Windows.`32`.Kernel.Descriptor: Swift.Equatable {
     @inlinable
     public static func == (

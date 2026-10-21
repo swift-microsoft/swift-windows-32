@@ -30,8 +30,7 @@
 
             public let key: Windows.`32`.Kernel.IO.Completion.Port.Key
 
-            public let overlapped:
-                UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>?
+            public let overlapped: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>?
 
             public let status: Status
 

@@ -219,8 +219,7 @@
         }
 
         @Test
-        func `write(_:from:overlapped:) takes a caller-owned pointer, not a closure-scoped inout`()
-        {
+        func `write(_:from:overlapped:) takes a caller-owned pointer, not a closure-scoped inout`() {
             let overlapped = UnsafeMutablePointer<Kernel.IO.Completion.Port.Overlapped>.allocate(
                 capacity: 1
             )

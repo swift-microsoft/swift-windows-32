@@ -54,8 +54,7 @@
             }
         }
 
-        public static func unset(_ name: Swift.String) throws(Windows.`32`.Kernel.Environment.Error)
-        {
+        public static func unset(_ name: Swift.String) throws(Windows.`32`.Kernel.Environment.Error) {
             var wname = Array(name.utf16)
             wname.append(0)
             let ok = wname.withUnsafeBufferPointer { buf in

@@ -60,8 +60,7 @@
         public struct Pending: @unchecked Sendable {
             let handle: UInt
 
-            let overlappedPtr:
-                UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>
+            let overlappedPtr: UnsafeMutablePointer<Windows.`32`.Kernel.IO.Completion.Port.Overlapped>
 
             @unsafe
             init(
