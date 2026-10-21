@@ -14,7 +14,7 @@
 
             var newPosition: LARGE_INTEGER = LARGE_INTEGER()
             let success = SetFilePointerEx(
-                UnsafeMutableRawPointer(bitPattern: handle)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
                 distance,
                 &newPosition,
                 origin.windowsMoveMethod

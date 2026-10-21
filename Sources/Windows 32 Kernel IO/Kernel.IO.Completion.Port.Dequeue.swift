@@ -65,7 +65,7 @@
             var overlapped: LPOVERLAPPED? = nil
 
             let ok = unsafe GetQueuedCompletionStatus(
-                UnsafeMutableRawPointer(bitPattern: port)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: port),
                 &bytes,
                 &key,
                 &overlapped,
@@ -124,7 +124,7 @@
 
             var removed: ULONG = 0
             let result = unsafe GetQueuedCompletionStatusEx(
-                UnsafeMutableRawPointer(bitPattern: port)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: port),
                 rawBase,
                 ULONG(entries.count),
                 &removed,

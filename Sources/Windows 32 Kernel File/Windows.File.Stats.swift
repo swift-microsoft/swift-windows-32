@@ -124,7 +124,7 @@ internal import Windows_32_Core
 
         package static func get(handle: UInt) throws(Error) -> Self {
             var info = BY_HANDLE_FILE_INFORMATION()
-            guard GetFileInformationByHandle(UnsafeMutableRawPointer(bitPattern: handle)!, &info)
+            guard GetFileInformationByHandle(Windows.`32`.Kernel.Descriptor.handle(from: handle), &info)
             else {
                 throw Error(_windowsError: GetLastError())
             }

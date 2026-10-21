@@ -95,7 +95,10 @@
 
         @inlinable
         package var _handle: HANDLE {
-            HANDLE(bitPattern: Int(rawValue))!
+            guard let handle = HANDLE(bitPattern: Int(rawValue)) else {
+                preconditionFailure("Thread handle raw value 0 is not a valid HANDLE")
+            }
+            return handle
         }
     }
 

@@ -39,7 +39,7 @@ extension Windows.`32`.Kernel.Directory.Entry {
             _ body: (borrowing Path.Borrowed) throws(E) -> R
         ) throws(E) -> R {
             let result: Swift.Result<R, E> = unsafe rawName.withUnsafeBufferPointer { buffer in
-                let view = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.count - 1)
+                let view = unsafe Path.Borrowed(buffer.nonEmptyBaseAddress, count: buffer.count - 1)
                 do throws(E) {
                     return .success(try body(view))
                 } catch {
@@ -52,7 +52,7 @@ extension Windows.`32`.Kernel.Directory.Entry {
         public var name: Path.Borrowed {
             @_lifetime(borrow self)
             borrowing get {
-                let ptr = unsafe rawName.withUnsafeBufferPointer { $0.baseAddress! }
+                let ptr = unsafe rawName.withUnsafeBufferPointer { $0.nonEmptyBaseAddress }
                 let view = unsafe Path.Borrowed(ptr, count: rawName.count - 1)
                 return unsafe _overrideLifetime(view, borrowing: self)
             }

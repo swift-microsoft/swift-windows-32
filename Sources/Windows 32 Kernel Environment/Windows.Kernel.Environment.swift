@@ -7,7 +7,7 @@
             name: UnsafePointer<WCHAR>,
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Windows.`32`.Kernel.Environment.Error) -> Int {
-            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
+            let wbuffer = UnsafeMutableRawPointer(buffer.nonEmptyBaseAddress).assumingMemoryBound(
                 to: WCHAR.self
             )
             let result = GetEnvironmentVariableW(name, wbuffer, DWORD(buffer.count))
@@ -36,7 +36,7 @@
 
             var buffer = [UInt16](repeating: 0, count: Int(requiredSize))
             let result = buffer.withUnsafeMutableBufferPointer { bufferPtr in
-                let wbuffer = UnsafeMutableRawPointer(bufferPtr.baseAddress!).assumingMemoryBound(
+                let wbuffer = UnsafeMutableRawPointer(bufferPtr.nonEmptyBaseAddress).assumingMemoryBound(
                     to: WCHAR.self
                 )
                 return GetEnvironmentVariableW(name, wbuffer, DWORD(bufferPtr.count))

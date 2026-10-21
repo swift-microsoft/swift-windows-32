@@ -34,8 +34,8 @@
             key: Key
         ) throws(Error) {
             let result = CreateIoCompletionPort(
-                UnsafeMutableRawPointer(bitPattern: handle)!,
-                UnsafeMutableRawPointer(bitPattern: port)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
+                Windows.`32`.Kernel.Descriptor.handle(from: port),
                 key.rawValue,
                 0
             )
@@ -53,7 +53,7 @@
             overlapped: LPOVERLAPPED? = nil
         ) throws(Error) {
             let result = unsafe PostQueuedCompletionStatus(
-                UnsafeMutableRawPointer(bitPattern: port)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: port),
                 bytes,
                 key.rawValue,
                 overlapped
@@ -73,7 +73,7 @@
             var count: DWORD = 0
             let success = unsafe withUnsafeMutablePointer(to: &overlapped.pointee.raw) { rawPtr in
                 ReadFile(
-                    UnsafeMutableRawPointer(bitPattern: handle)!,
+                    Windows.`32`.Kernel.Descriptor.handle(from: handle),
                     buffer.baseAddress,
                     DWORD(buffer.count),
                     &count,
@@ -103,7 +103,7 @@
             var count: DWORD = 0
             let success = unsafe withUnsafeMutablePointer(to: &overlapped.pointee.raw) { rawPtr in
                 WriteFile(
-                    UnsafeMutableRawPointer(bitPattern: handle)!,
+                    Windows.`32`.Kernel.Descriptor.handle(from: handle),
                     buffer.baseAddress,
                     DWORD(buffer.count),
                     &count,
@@ -132,7 +132,7 @@
             var count: DWORD = 0
             let success = unsafe withUnsafeMutablePointer(to: &overlapped.raw) { rawPtr in
                 GetOverlappedResult(
-                    UnsafeMutableRawPointer(bitPattern: handle)!,
+                    Windows.`32`.Kernel.Descriptor.handle(from: handle),
                     rawPtr,
                     &count,
                     wait

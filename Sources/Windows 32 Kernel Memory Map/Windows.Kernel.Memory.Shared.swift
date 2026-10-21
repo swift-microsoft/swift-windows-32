@@ -72,7 +72,7 @@
             wideName.withUnsafeBufferPointer { buffer in
                 do throws(Self.Error) {
                     handle = try create(
-                        unsafeName: UnsafeRawPointer(buffer.baseAddress!).assumingMemoryBound(
+                        unsafeName: UnsafeRawPointer(buffer.nonEmptyBaseAddress).assumingMemoryBound(
                             to: WCHAR.self
                         ),
                         size: UInt64(size.underlying),
@@ -109,7 +109,7 @@
             wideName.withUnsafeBufferPointer { buffer in
                 do throws(Self.Error) {
                     handle = try open(
-                        unsafeName: UnsafeRawPointer(buffer.baseAddress!).assumingMemoryBound(
+                        unsafeName: UnsafeRawPointer(buffer.nonEmptyBaseAddress).assumingMemoryBound(
                             to: WCHAR.self
                         ),
                         access: DWORD(access.rawValue)

@@ -11,7 +11,7 @@
             let rawPort = port._rawValue
             return {
                 _ = unsafe PostQueuedCompletionStatus(
-                    UnsafeMutableRawPointer(bitPattern: rawPort)!,
+                    Windows.`32`.Kernel.Descriptor.handle(from: rawPort),
                     0,
                     0,
                     nil

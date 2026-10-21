@@ -70,7 +70,7 @@
             }
             defer { _ = CloseHandle(handle) }
 
-            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
+            let wbuffer = UnsafeMutableRawPointer(buffer.nonEmptyBaseAddress).assumingMemoryBound(
                 to: WCHAR.self
             )
             let result = GetFinalPathNameByHandleW(

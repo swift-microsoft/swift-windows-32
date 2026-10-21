@@ -10,7 +10,18 @@ public import Windows_32_Core
         }
 
         public var handle: HANDLE {
-            HANDLE(bitPattern: _rawValue)!
+            Self.handle(from: _rawValue)
+        }
+
+        /// Reconstructs the `HANDLE` for a raw descriptor value.
+        ///
+        /// A zero raw value is never a valid descriptor, so it traps.
+        @inlinable
+        package static func handle(from rawValue: UInt) -> HANDLE {
+            guard let handle = HANDLE(bitPattern: rawValue) else {
+                preconditionFailure("Descriptor raw value 0 is not a valid HANDLE")
+            }
+            return handle
         }
     }
 #endif

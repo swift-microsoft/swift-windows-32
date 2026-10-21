@@ -17,7 +17,7 @@
                 withUnsafePointer(to: &access) { accessPtr in
                     withUnsafePointer(to: &write) { writePtr in
                         SetFileTime(
-                            UnsafeMutableRawPointer(bitPattern: handle)!,
+                            Windows.`32`.Kernel.Descriptor.handle(from: handle),
                             creationTime != nil
                                 ? creationPtr.pointee.map { withUnsafePointer(to: $0) { $0 } }
                                 : nil,
@@ -46,7 +46,7 @@
             on handle: UInt
         ) -> Bool {
             SetFileTime(
-                UnsafeMutableRawPointer(bitPattern: handle)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
                 creationTime,
                 lastAccessTime,
                 lastWriteTime
@@ -62,7 +62,7 @@
 
             guard
                 GetFileTime(
-                    UnsafeMutableRawPointer(bitPattern: handle)!,
+                    Windows.`32`.Kernel.Descriptor.handle(from: handle),
                     &creation,
                     &access,
                     &write
@@ -200,7 +200,7 @@
             var info = FILE_BASIC_INFO()
 
             let success = GetFileInformationByHandleEx(
-                UnsafeMutableRawPointer(bitPattern: handle)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
                 FileBasicInfo,
                 &info,
                 DWORD(MemoryLayout<FILE_BASIC_INFO>.size)
@@ -222,7 +222,7 @@
             var fileInfo = info.toFileBasicInfo()
 
             let success = SetFileInformationByHandle(
-                UnsafeMutableRawPointer(bitPattern: handle)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
                 FileBasicInfo,
                 &fileInfo,
                 DWORD(MemoryLayout<FILE_BASIC_INFO>.size)
@@ -255,7 +255,7 @@
         package static func touch(_ handle: UInt) -> Bool {
             var now = FILETIME()
             GetSystemTimeAsFileTime(&now)
-            return SetFileTime(UnsafeMutableRawPointer(bitPattern: handle)!, nil, &now, &now)
+            return SetFileTime(Windows.`32`.Kernel.Descriptor.handle(from: handle), nil, &now, &now)
         }
 
         public static func touch(_ descriptor: borrowing Windows.`32`.Kernel.Descriptor) -> Bool {

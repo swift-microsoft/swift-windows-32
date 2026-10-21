@@ -76,7 +76,7 @@
             pattern[patternLength] = 0
 
             return pattern.withUnsafeBufferPointer { patternBuffer in
-                let wpath = UnsafeRawPointer(patternBuffer.baseAddress!).assumingMemoryBound(
+                let wpath = UnsafeRawPointer(patternBuffer.nonEmptyBaseAddress).assumingMemoryBound(
                     to: WCHAR.self
                 )
                 return FindFirstFileW(wpath, &findData)
@@ -120,7 +120,7 @@
         ) -> Windows.`32`.Kernel.Directory.Entry {
 
             var nameChars = withUnsafeBytes(of: findData.cFileName) { buffer in
-                let ptr = buffer.baseAddress!.assumingMemoryBound(to: UInt16.self)
+                let ptr = buffer.nonEmptyBaseAddress.assumingMemoryBound(to: UInt16.self)
                 let capacity =
                     MemoryLayout.size(ofValue: findData.cFileName) / MemoryLayout<UInt16>.size
                 var length = 0

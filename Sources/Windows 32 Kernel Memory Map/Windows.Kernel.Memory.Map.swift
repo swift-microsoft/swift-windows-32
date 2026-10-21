@@ -24,7 +24,7 @@
                 ? protection.windowsFileMapProtectCopyOnWrite
                 : protection.windowsFileMapProtect
             let mappingHandle = CreateFileMappingW(
-                UnsafeMutableRawPointer(bitPattern: handle)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
                 nil,
                 fileMappingProtect,
                 DWORD((offset.underlying + Int64(length.underlying.rawValue)) >> 32),

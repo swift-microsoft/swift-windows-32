@@ -6,7 +6,7 @@
         public static func get(
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Windows.`32`.Kernel.Directory.Working.Error) -> Int {
-            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
+            let wbuffer = UnsafeMutableRawPointer(buffer.nonEmptyBaseAddress).assumingMemoryBound(
                 to: WCHAR.self
             )
             let result = GetCurrentDirectoryW(DWORD(buffer.count), wbuffer)

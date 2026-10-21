@@ -52,7 +52,7 @@
         ) throws(Windows.`32`.Kernel.File.Stats.Error) -> Stats {
             var info = BY_HANDLE_FILE_INFORMATION()
 
-            guard GetFileInformationByHandle(UnsafeMutableRawPointer(bitPattern: handle)!, &info)
+            guard GetFileInformationByHandle(Windows.`32`.Kernel.Descriptor.handle(from: handle), &info)
             else {
                 throw .platform(
                     Error::Error(code: Error::Error.captureLastError())
@@ -73,7 +73,7 @@
             _ handle: UInt
         ) -> UInt64? {
             var size: LARGE_INTEGER = LARGE_INTEGER()
-            guard GetFileSizeEx(UnsafeMutableRawPointer(bitPattern: handle)!, &size) else {
+            guard GetFileSizeEx(Windows.`32`.Kernel.Descriptor.handle(from: handle), &size) else {
                 return nil
             }
             return UInt64(bitPattern: size.QuadPart)
@@ -156,7 +156,7 @@
         package static func getType(
             _ handle: UInt
         ) -> FileType {
-            let type = GetFileType(UnsafeMutableRawPointer(bitPattern: handle)!)
+            let type = GetFileType(Windows.`32`.Kernel.Descriptor.handle(from: handle))
             return FileType(rawValue: type) ?? .unknown
         }
 

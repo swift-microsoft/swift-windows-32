@@ -18,7 +18,7 @@
             into buffer: UnsafeMutableBufferPointer<UInt16>
         ) throws(Path.Canonical.Error) -> Cardinal {
             let wpath = UnsafeRawPointer(unsafePath).assumingMemoryBound(to: WCHAR.self)
-            let wbuffer = UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(
+            let wbuffer = UnsafeMutableRawPointer(buffer.nonEmptyBaseAddress).assumingMemoryBound(
                 to: WCHAR.self
             )
 

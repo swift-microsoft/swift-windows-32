@@ -77,7 +77,11 @@
             GetSystemInfo(&sysInfo)
             let granularity = Int(sysInfo.dwAllocationGranularity)
 
-            return Memory.Allocation.Granularity(try! Memory.Alignment(granularity))
+            do {
+                return Memory.Allocation.Granularity(try Memory.Alignment(granularity))
+            } catch {
+                preconditionFailure("System allocation granularity is not a valid alignment")
+            }
         }
     }
 

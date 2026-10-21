@@ -10,7 +10,7 @@
 
             let success = DuplicateHandle(
                 currentProcess,
-                UnsafeMutableRawPointer(bitPattern: handle)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
                 currentProcess,
                 &newHandle,
                 0,

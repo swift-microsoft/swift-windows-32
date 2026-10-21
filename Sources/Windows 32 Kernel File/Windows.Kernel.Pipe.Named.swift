@@ -97,7 +97,7 @@
         package static func connect(
             _ handle: UInt
         ) throws(Windows.`32`.Kernel.Pipe.Error) -> Bool {
-            if ConnectNamedPipe(UnsafeMutableRawPointer(bitPattern: handle)!, nil) {
+            if ConnectNamedPipe(Windows.`32`.Kernel.Descriptor.handle(from: handle), nil) {
                 return true
             }
 
@@ -112,7 +112,7 @@
         package static func disconnect(
             _ handle: UInt
         ) throws(Windows.`32`.Kernel.Pipe.Error) {
-            guard DisconnectNamedPipe(UnsafeMutableRawPointer(bitPattern: handle)!) else {
+            guard DisconnectNamedPipe(Windows.`32`.Kernel.Descriptor.handle(from: handle)) else {
                 throw .current()
             }
         }
@@ -169,7 +169,7 @@
             var inBufferSize: DWORD = 0
             var maxInstances: DWORD = 0
 
-            let pipePtr = UnsafeMutableRawPointer(bitPattern: handle)!
+            let pipePtr = Windows.`32`.Kernel.Descriptor.handle(from: handle)
             guard GetNamedPipeInfo(pipePtr, &flags, &outBufferSize, &inBufferSize, &maxInstances)
             else {
                 return nil
@@ -193,7 +193,7 @@
             var leftInMessage: DWORD = 0
 
             let result = PeekNamedPipe(
-                UnsafeMutableRawPointer(bitPattern: handle)!,
+                Windows.`32`.Kernel.Descriptor.handle(from: handle),
                 buffer?.baseAddress,
                 DWORD(buffer?.count ?? 0),
                 &bytesRead,

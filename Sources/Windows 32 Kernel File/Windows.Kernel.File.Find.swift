@@ -137,7 +137,7 @@
         var utf16 = Array(string.utf16)
         utf16.append(0)
         return unsafe utf16.withUnsafeBufferPointer { buffer in
-            unsafe buffer.baseAddress!.withMemoryRebound(
+            unsafe buffer.nonEmptyBaseAddress.withMemoryRebound(
                 to: WCHAR.self,
                 capacity: buffer.count
             ) { wcharPtr in

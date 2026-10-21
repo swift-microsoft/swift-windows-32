@@ -4,7 +4,7 @@
     extension Windows.`32`.Kernel.File.Flush {
 
         package static func flush(_ handle: UInt) throws(Windows.`32`.Kernel.File.Flush.Error) {
-            guard FlushFileBuffers(UnsafeMutableRawPointer(bitPattern: handle)!) else {
+            guard FlushFileBuffers(Windows.`32`.Kernel.Descriptor.handle(from: handle)) else {
                 throw .current()
             }
         }

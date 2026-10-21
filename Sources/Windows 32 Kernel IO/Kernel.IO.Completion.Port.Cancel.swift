@@ -11,13 +11,13 @@
 
         @inlinable
         package static func all(_ handle: UInt) -> Bool {
-            CancelIoEx(UnsafeMutableRawPointer(bitPattern: handle)!, nil)
+            CancelIoEx(Windows.`32`.Kernel.Descriptor.handle(from: handle), nil)
         }
 
         @unsafe
         @inlinable
         package static func pending(_ handle: UInt, overlapped: LPOVERLAPPED) -> Bool {
-            unsafe CancelIoEx(UnsafeMutableRawPointer(bitPattern: handle)!, overlapped)
+            unsafe CancelIoEx(Windows.`32`.Kernel.Descriptor.handle(from: handle), overlapped)
         }
     }
 
