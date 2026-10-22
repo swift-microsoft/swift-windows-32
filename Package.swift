@@ -261,6 +261,7 @@ let package = Package(
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "String", package: "swift-string"),
                 .product(name: "Random", package: "swift-random"),
+                .product(name: "System Primitives", package: "swift-system"),
             ]
         ),
 
