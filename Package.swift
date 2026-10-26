@@ -153,7 +153,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-spatial.git",
+            url: "https://github.com/swift-atoms/swift-space.git",
             branch: "main"
         ),
         .package(
@@ -197,7 +197,7 @@ let package = Package(
                 .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Path", package: "swift-path"),
                 .product(name: "Time", package: "swift-time"),
-                .product(name: "Space", package: "swift-spatial"),
+                .product(name: "Space", package: "swift-space"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(
@@ -257,7 +257,7 @@ let package = Package(
                 .product(name: "Path", package: "swift-path"),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Binary", package: "swift-binary"),
-                .product(name: "Space", package: "swift-spatial"),
+                .product(name: "Space", package: "swift-space"),
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "String", package: "swift-string"),
                 .product(name: "Random", package: "swift-random"),
@@ -291,7 +291,7 @@ let package = Package(
                     name: "Memory Allocation",
                     package: "swift-memory-allocation"
                 ),
-                .product(name: "Space", package: "swift-spatial"),
+                .product(name: "Space", package: "swift-space"),
             ]
         ),
 
