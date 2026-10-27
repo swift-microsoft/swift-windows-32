@@ -21,11 +21,11 @@
 
     extension Windows.`32`.Kernel.File.Attributes.Extended.Error {
 
-        public static let notFound = Error(code: .win32(UInt32(ERROR_NOT_FOUND)))
+        public static let notFound = Self(code: .win32(UInt32(ERROR_NOT_FOUND)))
 
-        public static let noSpace = Error(code: .win32(UInt32(ERROR_DISK_FULL)))
+        public static let noSpace = Self(code: .win32(UInt32(ERROR_DISK_FULL)))
 
-        public static let permissionDenied = Error(code: .win32(UInt32(ERROR_ACCESS_DENIED)))
+        public static let permissionDenied = Self(code: .win32(UInt32(ERROR_ACCESS_DENIED)))
 
         @usableFromInline
         internal static func current() -> Self {
