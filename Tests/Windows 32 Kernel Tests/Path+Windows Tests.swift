@@ -58,6 +58,12 @@
             #expect(throws: Never.self) { _ = try Windows.`32`.Filename("..") }
             #expect(throws: Never.self) { _ = try Windows.`32`.Filename("console.txt") }
         }
+
+        @Test func `text gets backslashes, except in a verbatim path`() throws {
+            #expect(try Path("C:/Users/a").string == #"C:\Users\a"#)
+            #expect(try Path(#"\\?\C:/x"#).string == #"\\?\C:/x"#)
+            #expect(try Path("//server/share").string == #"\\server\share"#)
+        }
     }
 
 #endif

@@ -8,6 +8,44 @@
 
     extension Path.`Protocol` where Self: ~Copyable {
 
+        /// The path `string` spells, with Win32's own separator rule: each `/` becomes `\`, except in
+        /// a path that begins `\\?\`, which Win32 passes to the file system without parsing.
+        ///
+        /// Text may not be empty or contain NUL or control characters; see `init(validating:)`.
+        @inlinable
+        public init(_ string: Swift::String) throws(Path.Error) {
+            let units = try Path.Unique(validating: string)
+            let verbatim =
+                unsafe units.count >= 4
+                && units.view.pointer[0] == 0x5C && units.view.pointer[1] == 0x5C
+                && units.view.pointer[2] == 0x3F && units.view.pointer[3] == 0x5C
+            let count = units.count
+            let source = unsafe units.view.pointer
+            unsafe self.init(count: count) { base in
+                for index in 0..<count {
+                    let unit = unsafe source[index]
+                    unsafe base[index] =
+                        !verbatim && unit == Windows.`32`.Filename.alternateSeparator
+                        ? Windows.`32`.Filename.separator : unit
+                }
+            }
+        }
+    }
+
+    extension Path: @retroactive ExpressibleByStringLiteral {
+
+        @inlinable
+        public init(stringLiteral value: Swift::String) {
+            do throws(Path.Error) {
+                try self.init(value)
+            } catch {
+                fatalError("Invalid path literal: \(value) (\(error))")
+            }
+        }
+    }
+
+    extension Path.`Protocol` where Self: ~Copyable {
+
         /// Whether the path names its volume: `C:\…` or `\\…`.
         @inlinable
         public var isAbsolute: Bool {

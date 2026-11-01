@@ -100,7 +100,7 @@
             }
             if Self.reserved.contains(string.prefix { $0 != "." }.uppercased()) { throw .reservedName }
             do throws(Path.Error) {
-                self.init(_units: try Path.Small<256>(string))
+                self.init(_units: try Path.Small<256>(validating: string))
             } catch {
                 preconditionFailure("text already checked: \(error)")
             }
@@ -126,7 +126,7 @@
         @inlinable
         public init(unchecked string: Swift::String) {
             do throws(Path.Error) {
-                self.init(_units: try Path.Small<256>(string))
+                self.init(_units: try Path.Small<256>(validating: string))
             } catch {
                 preconditionFailure("not a filename: \(string) (\(error))")
             }
