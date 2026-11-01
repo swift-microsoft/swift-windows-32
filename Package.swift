@@ -140,7 +140,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-system.git",
+            url: "https://github.com/swift-atoms/swift-cpu.git",
             branch: "main"
         ),
         .package(
@@ -261,7 +261,6 @@ let package = Package(
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "String", package: "swift-string"),
                 .product(name: "Random", package: "swift-random"),
-                .product(name: "System Primitives", package: "swift-system"),
             ]
         ),
 
@@ -315,7 +314,8 @@ let package = Package(
             name: "Windows 32 Kernel System",
             dependencies: [
                 "Windows 32 Kernel Core",
-                .product(name: "System Primitives", package: "swift-system"),
+                .product(name: "CPU", package: "swift-cpu"),
+                .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Random", package: "swift-random"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
             ]
@@ -411,7 +411,8 @@ let package = Package(
                 .product(name: "Error", package: "swift-error", condition: .when(platforms: [.windows])),
                 .product(name: "Path", package: "swift-path", condition: .when(platforms: [.windows])),
                 .product(name: "Random", package: "swift-random", condition: .when(platforms: [.windows])),
-                .product(name: "System Primitives", package: "swift-system", condition: .when(platforms: [.windows])),
+                .product(name: "CPU", package: "swift-cpu", condition: .when(platforms: [.windows])),
+                .product(name: "Memory", package: "swift-memory", condition: .when(platforms: [.windows])),
             ]
         ),
         .testTarget(

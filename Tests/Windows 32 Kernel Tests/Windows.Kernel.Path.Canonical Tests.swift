@@ -8,7 +8,8 @@
     import Clock
     import Random
     import String
-    import System_Primitives
+    import CPU
+    import Memory
 
     extension Path.Canonical {
         enum Test {

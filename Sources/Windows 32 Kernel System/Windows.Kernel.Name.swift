@@ -1,11 +1,32 @@
-public import System_Primitives
-
 #if os(Windows)
     internal import WinSDK
 
-    extension System {
+    extension Windows.`32`.Kernel {
 
-        public static var name: System.Name? {
+        /// The running system's identification: the product, its version and the native architecture.
+        public struct Name: Sendable, Hashable {
+
+            /// Always `Windows`.
+            public var system: Swift.String
+
+            /// `major.minor.build` from `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion`.
+            public var release: Swift.String
+
+            /// The native processor architecture, `GetNativeSystemInfo`.
+            public var machine: Swift.String
+
+            public init(system: Swift.String, release: Swift.String, machine: Swift.String) {
+                self.system = system
+                self.release = release
+                self.machine = machine
+            }
+        }
+    }
+
+    extension Windows.`32`.Kernel.Name {
+
+        /// The running system's name, or `nil` when the registry holds no build number.
+        public static var current: Self? {
             let key = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"
             guard let build = registryString(key, "CurrentBuildNumber") else { return nil }
             let release: Swift.String
@@ -16,7 +37,7 @@ public import System_Primitives
             } else {
                 release = build
             }
-            return System.Name(system: "Windows", release: release, machine: machine)
+            return Self(system: "Windows", release: release, machine: machine)
         }
 
         private static var machine: Swift.String {

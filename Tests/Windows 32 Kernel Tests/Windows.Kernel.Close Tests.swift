@@ -7,7 +7,8 @@
     import Path
     import Clock
     import Random
-    import System_Primitives
+    import CPU
+    import Memory
 
     extension Windows.`32`.Kernel.Close {
         enum Test {
