@@ -15,6 +15,13 @@
             #expect(a.isAbsolute && b.isAbsolute && unc.isAbsolute)
             #expect(rel.isRelative && driveRel.isRelative)
         }
+        @Test func `interpolated literals`() {
+            let name = "a"
+            let path: Path = #"C:\Users\#(name)"#
+            let component: Path.Component = "\(name).txt"
+            #expect(path == #"C:\Users\a"#)
+            #expect(component == "a.txt")
+        }
         @Test func roots() {
             let c: Path = #"C:\"#
             let unc: Path = #"\\server\share"#

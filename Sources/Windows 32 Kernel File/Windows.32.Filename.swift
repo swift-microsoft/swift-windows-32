@@ -182,6 +182,9 @@
         }
     }
 
+    /// Interpolated text is a filename by the same rule as a plain literal.
+    extension Windows.`32`.Filename: ExpressibleByStringInterpolation {}
+
     extension Windows.`32`.Filename: Binary.Serializable {
 
         /// The name's text, as UTF-8.
