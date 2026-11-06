@@ -17,7 +17,7 @@
         }
         @Test func `interpolated literals`() {
             let name = "a"
-            let path: Path = #"C:\Users\#(name)"#
+            let path: Path = #"C:\Users\\#(name)"#
             let component: Path.Component = "\(name).txt"
             #expect(path == #"C:\Users\a"#)
             #expect(component == "a.txt")
