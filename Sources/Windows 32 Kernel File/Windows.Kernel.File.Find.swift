@@ -91,6 +91,8 @@
 
     extension Windows.`32`.Kernel.File.Find {
 
+        // swift-linter:disable:next raw concept
+        // REASON: Windows system-call text, as FindFirstFileW takes it, wildcards included; looked at Path, which describes a path rather than this search pattern.
         public static func first(path: Swift.String) throws(Error) -> First {
             var findData = WIN32_FIND_DATAW()
             let handle = unsafe withWideString(path) { wpath in
@@ -123,6 +125,8 @@
 
     extension Windows.`32`.Kernel.File {
 
+        // swift-linter:disable:next raw concept
+        // REASON: Windows system-call text, handed verbatim to GetFileAttributesW, which is a leaf in this package; looked at Path, available in this target, and left the system call taking its own text.
         public static func pathExists(_ path: Swift.String) -> Bool {
             unsafe withWideString(path) { wpath in
                 unsafe GetFileAttributesW(wpath) != INVALID_FILE_ATTRIBUTES

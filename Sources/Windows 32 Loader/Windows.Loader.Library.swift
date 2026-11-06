@@ -5,6 +5,8 @@
     extension Windows.Loader.Library {
 
         @unsafe
+        // swift-linter:disable:next raw concept
+        // REASON: Windows system-call text, as LoadLibraryW takes it, which may be a bare module name searched for by the loader; looked at Path, which this target doesn't depend on.
         public static func open(path: String) throws(Loader.Error) -> Loader.Library.Handle {
             let handle = path.withCString(encodedAs: UTF16.self) { pathPtr in
                 LoadLibraryW(pathPtr)
