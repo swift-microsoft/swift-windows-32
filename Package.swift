@@ -211,7 +211,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Clock",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "Clock", package: "swift-clock"),
             ]
         ),
@@ -219,8 +219,8 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Lock",
             dependencies: [
-                "Windows 32 Kernel Core",
-                "Windows 32 Kernel Clock",
+                .target(name: "Windows 32 Kernel Core"),
+                .target(name: "Windows 32 Kernel Clock"),
                 .product(name: "Clock", package: "swift-clock"),
             ]
         ),
@@ -228,14 +228,14 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Console",
             dependencies: [
-                "Windows 32 Kernel Core"
+                .target(name: "Windows 32 Kernel Core")
             ]
         ),
 
         .target(
             name: "Windows 32 Kernel Directory",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "Path", package: "swift-path"),
             ]
         ),
@@ -243,7 +243,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Environment",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "Sequence", package: "swift-sequence"),
                 .product(name: "Error", package: "swift-error"),
                 .product(name: "String", package: "swift-string"),
@@ -253,7 +253,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel File",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "Path", package: "swift-path"),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Binary", package: "swift-binary"),
@@ -267,7 +267,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel IO",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "Byte", package: "swift-byte"),
             ]
         ),
@@ -275,8 +275,8 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Terminal",
             dependencies: [
-                "Windows 32 Kernel Core",
-                "Windows 32 Kernel IO",
+                .target(name: "Windows 32 Kernel Core"),
+                .target(name: "Windows 32 Kernel IO"),
                 .product(name: "Terminal", package: "swift-terminal"),
             ]
         ),
@@ -284,7 +284,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Memory Map",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(
                     name: "Memory Allocation",
@@ -297,8 +297,8 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Process",
             dependencies: [
-                "Windows 32 Kernel Core",
-                "Windows 32 Kernel File",
+                .target(name: "Windows 32 Kernel Core"),
+                .target(name: "Windows 32 Kernel File"),
                 .product(name: "Path", package: "swift-path"),
             ]
         ),
@@ -306,14 +306,14 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Socket",
             dependencies: [
-                "Windows 32 Kernel Core"
+                .target(name: "Windows 32 Kernel Core")
             ]
         ),
 
         .target(
             name: "Windows 32 Kernel System",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "CPU", package: "swift-cpu"),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Random", package: "swift-random"),
@@ -324,7 +324,7 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Thread",
             dependencies: [
-                "Windows 32 Kernel Core",
+                .target(name: "Windows 32 Kernel Core"),
                 .product(name: "Error", package: "swift-error"),
             ]
         ),
@@ -332,29 +332,29 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Time",
             dependencies: [
-                "Windows 32 Kernel Core",
-                "Windows 32 Kernel Clock",
+                .target(name: "Windows 32 Kernel Core"),
+                .target(name: "Windows 32 Kernel Clock"),
             ]
         ),
 
         .target(
             name: "Windows 32 Kernel",
             dependencies: [
-                "Windows 32 Kernel Core",
-                "Windows 32 Kernel Clock",
-                "Windows 32 Kernel Lock",
-                "Windows 32 Kernel Console",
-                "Windows 32 Kernel Directory",
-                "Windows 32 Kernel Environment",
-                "Windows 32 Kernel File",
-                "Windows 32 Kernel IO",
-                "Windows 32 Kernel Terminal",
-                "Windows 32 Kernel Memory Map",
-                "Windows 32 Kernel Process",
-                "Windows 32 Kernel Socket",
-                "Windows 32 Kernel System",
-                "Windows 32 Kernel Thread",
-                "Windows 32 Kernel Time",
+                .target(name: "Windows 32 Kernel Core"),
+                .target(name: "Windows 32 Kernel Clock"),
+                .target(name: "Windows 32 Kernel Lock"),
+                .target(name: "Windows 32 Kernel Console"),
+                .target(name: "Windows 32 Kernel Directory"),
+                .target(name: "Windows 32 Kernel Environment"),
+                .target(name: "Windows 32 Kernel File"),
+                .target(name: "Windows 32 Kernel IO"),
+                .target(name: "Windows 32 Kernel Terminal"),
+                .target(name: "Windows 32 Kernel Memory Map"),
+                .target(name: "Windows 32 Kernel Process"),
+                .target(name: "Windows 32 Kernel Socket"),
+                .target(name: "Windows 32 Kernel System"),
+                .target(name: "Windows 32 Kernel Thread"),
+                .target(name: "Windows 32 Kernel Time"),
             ]
         ),
 
@@ -391,8 +391,8 @@ let package = Package(
         .target(
             name: "Windows 32 Kernel Test Support",
             dependencies: [
-                "Windows 32 Kernel",
-                "Windows 32 Loader",
+                .target(name: "Windows 32 Kernel"),
+                .target(name: "Windows 32 Loader"),
             ],
             path: "Tests/Support"
         ),
@@ -400,9 +400,9 @@ let package = Package(
         .testTarget(
             name: "Windows 32 Kernel Tests",
             dependencies: [
-                "Windows 32 Kernel",
-                "Windows 32 Kernel Test Support",
-                "Windows 32 Kernel Memory Map",
+                .target(name: "Windows 32 Kernel"),
+                .target(name: "Windows 32 Kernel Test Support"),
+                .target(name: "Windows 32 Kernel Memory Map"),
                 .product(
                     name: "Standard Library Extensions",
                     package: "swift-standard-library-extensions"
@@ -418,8 +418,8 @@ let package = Package(
         .testTarget(
             name: "Windows 32 Loader Tests",
             dependencies: [
-                "Windows 32 Loader",
-                "Windows 32 Kernel Test Support",
+                .target(name: "Windows 32 Loader"),
+                .target(name: "Windows 32 Kernel Test Support"),
             ]
         ),
     ],
