@@ -1,4 +1,4 @@
-public import Path
+import Path
 
 extension Windows.`32`.Kernel.Directory {
 

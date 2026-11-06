@@ -1,4 +1,4 @@
-public import CPU
+import CPU
 
 #if os(Windows)
     internal import WinSDK

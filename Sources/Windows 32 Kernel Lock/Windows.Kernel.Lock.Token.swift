@@ -1,4 +1,4 @@
-public import Clock
+import Clock
 
 #if os(Windows)
     internal import WinSDK

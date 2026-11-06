@@ -1,4 +1,4 @@
-public import Memory
+import Memory
 
 #if os(Windows)
     internal import WinSDK

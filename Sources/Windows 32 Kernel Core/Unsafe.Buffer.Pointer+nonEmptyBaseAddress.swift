@@ -5,7 +5,7 @@ extension UnsafeBufferPointer {
     /// Traps when the buffer has no base address.
     @inlinable
     package var nonEmptyBaseAddress: UnsafePointer<Element> {
-        guard let base = unsafe baseAddress else {
+        guard let base = baseAddress else {
             preconditionFailure("Buffer must not be empty")
         }
         return unsafe base
@@ -19,7 +19,7 @@ extension UnsafeMutableBufferPointer {
     /// Traps when the buffer has no base address.
     @inlinable
     package var nonEmptyBaseAddress: UnsafeMutablePointer<Element> {
-        guard let base = unsafe baseAddress else {
+        guard let base = baseAddress else {
             preconditionFailure("Buffer must not be empty")
         }
         return unsafe base
@@ -33,7 +33,7 @@ extension UnsafeRawBufferPointer {
     /// Traps when the buffer has no base address.
     @inlinable
     package var nonEmptyBaseAddress: UnsafeRawPointer {
-        guard let base = unsafe baseAddress else {
+        guard let base = baseAddress else {
             preconditionFailure("Buffer must not be empty")
         }
         return unsafe base

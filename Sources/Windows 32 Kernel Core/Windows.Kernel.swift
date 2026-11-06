@@ -1,4 +1,4 @@
-public import Windows_32_Core
+import Windows_32_Core
 
 #if os(Windows)
     public import WinSDK
