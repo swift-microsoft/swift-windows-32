@@ -36,11 +36,15 @@
     extension Windows.`32`.Kernel.Socket {
 
         @inlinable
+        // swift-linter:disable:next raw concept
+        // REASON: A port number being byte-swapped for a sockaddr, a plain 16-bit value at the system-call boundary; looked at RFC_3986.URI.Port, a URI component from a package this one doesn't depend on.
         public static func htons(_ port: UInt16) -> UInt16 {
             port.bigEndian
         }
 
         @inlinable
+        // swift-linter:disable:next raw concept
+        // REASON: A port number being byte-swapped for a sockaddr, a plain 16-bit value at the system-call boundary; looked at RFC_3986.URI.Port, a URI component from a package this one doesn't depend on.
         public static func ntohs(_ port: UInt16) -> UInt16 {
             UInt16(bigEndian: port)
         }
