@@ -1,4 +1,4 @@
-public import Error
+import Error
 
 
 extension Windows.`32`.Kernel.File.Times.Error {
