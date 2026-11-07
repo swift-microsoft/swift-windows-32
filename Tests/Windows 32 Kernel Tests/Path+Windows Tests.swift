@@ -4,8 +4,8 @@
     import Testing
     import Windows_32_Kernel
 
-    @Suite("Path + Win32 grammar")
-    struct Path_Windows_Tests {
+    @Suite
+    struct `Path + Win32 grammar` {
         @Test func absolute() {
             let a: Path = #"C:\Users\a"#
             let b: Path = "C:/Users/a"
