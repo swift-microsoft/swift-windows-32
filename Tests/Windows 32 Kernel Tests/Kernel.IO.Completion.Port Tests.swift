@@ -165,7 +165,7 @@
 
             #expect(count == postCount)
 
-            for i in 0..<count {
+            (0..<count).forEach { i in
                 #expect(entries[i].bytes.transferred == Kernel.File.Size(i * 10))
                 #expect(entries[i].key == Kernel.IO.Completion.Port.Key(ULONG_PTR(i)))
             }

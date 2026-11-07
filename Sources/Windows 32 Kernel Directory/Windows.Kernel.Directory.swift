@@ -61,7 +61,7 @@
             while pathChars[length] != 0 { length += 1 }
 
             var pattern = [UInt16](repeating: 0, count: length + 3)
-            for i in 0..<length {
+            (0..<length).forEach { i in
                 pattern[i] = pathChars[i]
             }
 

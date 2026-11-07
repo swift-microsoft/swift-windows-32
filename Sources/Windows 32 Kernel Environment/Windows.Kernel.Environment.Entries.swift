@@ -117,7 +117,7 @@
             }
 
             var chars = [UInt16](repeating: 0, count: length)
-            for i in 0..<length {
+            (0..<length).forEach { i in
                 chars[i] = current.advanced(by: i).pointee
             }
 

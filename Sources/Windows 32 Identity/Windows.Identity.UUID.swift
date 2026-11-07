@@ -2,7 +2,7 @@
     internal import WinSDK
     public import Windows_32_Core
 
-    extension Windows_32_Core.Windows {
+    extension Windows_32_Core::Windows {
 
         public enum Identity {}
     }
@@ -83,7 +83,7 @@
             var result = ""
             result.reserveCapacity(36)
 
-            for i in 0..<4 {
+            (0..<4).forEach { i in
                 let byte = withUnsafeBytes(of: bytes) { $0[i] }
                 let (h, l) = hex(byte)
                 result.append(h)
@@ -91,7 +91,7 @@
             }
             result.append("-")
 
-            for i in 4..<6 {
+            (4..<6).forEach { i in
                 let byte = withUnsafeBytes(of: bytes) { $0[i] }
                 let (h, l) = hex(byte)
                 result.append(h)
@@ -99,7 +99,7 @@
             }
             result.append("-")
 
-            for i in 6..<8 {
+            (6..<8).forEach { i in
                 let byte = withUnsafeBytes(of: bytes) { $0[i] }
                 let (h, l) = hex(byte)
                 result.append(h)
@@ -107,7 +107,7 @@
             }
             result.append("-")
 
-            for i in 8..<10 {
+            (8..<10).forEach { i in
                 let byte = withUnsafeBytes(of: bytes) { $0[i] }
                 let (h, l) = hex(byte)
                 result.append(h)
@@ -115,7 +115,7 @@
             }
             result.append("-")
 
-            for i in 10..<16 {
+            (10..<16).forEach { i in
                 let byte = withUnsafeBytes(of: bytes) { $0[i] }
                 let (h, l) = hex(byte)
                 result.append(h)

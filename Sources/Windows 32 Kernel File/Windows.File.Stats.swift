@@ -6,7 +6,7 @@ internal import Windows_32_Core
 #if os(Windows)
     public import WinSDK
 
-    extension Windows_32_Core.Windows.File {
+    extension Windows_32_Core::Windows.File {
 
         public struct Stats: Sendable, Equatable {
 
@@ -25,7 +25,7 @@ internal import Windows_32_Core
         }
     }
 
-    extension Windows_32_Core.Windows.File.Stats {
+    extension Windows_32_Core::Windows.File.Stats {
 
         @inlinable
         public var size: Windows.`32`.Kernel.File.Size { base.size }
@@ -61,7 +61,7 @@ internal import Windows_32_Core
         public var changeTime: Windows.`32`.Kernel.Time { base.changeTime }
     }
 
-    extension Windows_32_Core.Windows.File.Stats {
+    extension Windows_32_Core::Windows.File.Stats {
 
         public typealias Error = Windows.`32`.Kernel.File.Stats.Error
 
@@ -137,7 +137,7 @@ internal import Windows_32_Core
         }
     }
 
-    extension Windows_32_Core.Windows.File.Stats {
+    extension Windows_32_Core::Windows.File.Stats {
 
         internal init(_from info: BY_HANDLE_FILE_INFORMATION) {
             self.init(

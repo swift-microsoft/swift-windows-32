@@ -1,11 +1,5 @@
 #if os(Windows)
 
-    // The Win32 path grammar: `\` separates components and `/` is accepted in its place. A path is
-    // absolute when it begins with a drive and a separator (`C:\`) or with two separators (UNC
-    // `\\server\share`, `\\.\`, `\\?\`). Written once on `Path.Protocol`, so it reaches every store.
-    // `C:x` (drive-relative) and `\x` (root of the current drive) are relative here. The scans read
-    // `view` inline: see `Path.Protocol` on why it is not bound to a local.
-
     extension Path.`Protocol` where Self: ~Copyable {
 
         /// The path `string` spells, with Win32's own separator rule: each `/` becomes `\`, except in
