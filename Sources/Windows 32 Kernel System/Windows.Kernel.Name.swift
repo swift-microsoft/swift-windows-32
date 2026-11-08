@@ -30,13 +30,14 @@
             let key = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"
             guard let build = registryString(key, "CurrentBuildNumber") else { return nil }
             let release: Swift.String
-            release = if let major = registryNumber(key, "CurrentMajorVersionNumber"),
-                let minor = registryNumber(key, "CurrentMinorVersionNumber")
-            {
-                "\(major).\(minor).\(build)"
-            } else {
-                build
-            }
+            release =
+                if let major = registryNumber(key, "CurrentMajorVersionNumber"),
+                    let minor = registryNumber(key, "CurrentMinorVersionNumber")
+                {
+                    "\(major).\(minor).\(build)"
+                } else {
+                    build
+                }
             return Self(system: "Windows", release: release, machine: machine)
         }
 

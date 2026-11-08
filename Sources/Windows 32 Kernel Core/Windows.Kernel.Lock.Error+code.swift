@@ -15,11 +15,12 @@
 
         @usableFromInline
         internal init(_ code: Error::Error.Code) {
-            self = if let mapped = Self(code: code) {
-                mapped
-            } else {
-                .platform(code: code)
-            }
+            self =
+                if let mapped = Self(code: code) {
+                    mapped
+                } else {
+                    .platform(code: code)
+                }
         }
     }
 #endif

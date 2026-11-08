@@ -1,4 +1,3 @@
-
 extension Windows.`32`.Kernel.Descriptor.Duplicate {
     public enum Error: Swift.Error, Sendable, Equatable {
 

@@ -4,9 +4,9 @@
     import Testing
     import Windows_32_Kernel
 
-enum `Path+Windows Tests` {}
+    enum `Path+Windows Tests` {}
 
-extension `Path+Windows Tests` {
+    extension `Path+Windows Tests` {
         @Suite
         struct `Path + Win32 grammar` {
             @Test func absolute() {
@@ -75,6 +75,6 @@ extension `Path+Windows Tests` {
                 #expect(try Path("//server/share").string == #"\\server\share"#)
             }
         }
-}
+    }
 
 #endif

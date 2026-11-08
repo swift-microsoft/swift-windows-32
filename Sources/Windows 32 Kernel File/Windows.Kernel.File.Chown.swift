@@ -17,7 +17,7 @@
         }
     }
 
-extension Windows.`32`.Kernel.File.Chown.Error {
+    extension Windows.`32`.Kernel.File.Chown.Error {
         public enum Path: Swift.Error, Sendable, Equatable {
             case notFound
             case tooLong
@@ -33,7 +33,7 @@ extension Windows.`32`.Kernel.File.Chown.Error {
         public enum IO: Swift.Error, Sendable, Equatable {
             case hardware
         }
-}
+    }
 
     extension Windows.`32`.Kernel.File.Chown {
         public static func chown(

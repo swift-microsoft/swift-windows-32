@@ -1,6 +1,5 @@
 public import Error
 
-
 extension Windows.`32`.Kernel.Directory.Remove {
     public enum Error: Swift.Error, Sendable, Equatable {
 

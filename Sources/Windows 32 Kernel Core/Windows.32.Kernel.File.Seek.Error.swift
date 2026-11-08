@@ -1,6 +1,5 @@
 public import Error
 
-
 extension Windows.`32`.Kernel.File.Seek {
     public enum Error: Swift.Error, Sendable, Equatable {
 

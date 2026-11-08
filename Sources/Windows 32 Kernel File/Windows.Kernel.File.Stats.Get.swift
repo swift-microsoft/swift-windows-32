@@ -7,13 +7,14 @@
             let size = (Int64(info.nFileSizeHigh) << 32) | Int64(info.nFileSizeLow)
 
             let type: Windows.`32`.Kernel.File.Stats.Kind
-            type = if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
-                .directory
-            } else if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
-                .link(.symbolic)
-            } else {
-                .regular
-            }
+            type =
+                if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
+                    .directory
+                } else if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
+                    .link(.symbolic)
+                } else {
+                    .regular
+                }
 
             var permissions: Windows.`32`.Kernel.File.Permissions = .standard
             if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_READONLY)) != 0 {

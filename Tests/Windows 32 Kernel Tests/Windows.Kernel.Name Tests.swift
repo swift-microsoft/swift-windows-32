@@ -22,9 +22,9 @@
         }
     }
 
-enum `Windows.Kernel.Name Tests` {}
+    enum `Windows.Kernel.Name Tests` {}
 
-extension `Windows.Kernel.Name Tests` {
+    extension `Windows.Kernel.Name Tests` {
         @Suite
         struct `Windows system queries` {
             @Test
@@ -77,6 +77,6 @@ extension `Windows.Kernel.Name Tests` {
                 #expect(GetTickCount64() - start < 100)
             }
         }
-}
+    }
 
 #endif
