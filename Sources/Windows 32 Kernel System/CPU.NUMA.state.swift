@@ -14,9 +14,9 @@ import CPU
 
             var nodes: [Node] = []
 
-            for number in 0...UInt(highest) {
+            (0...UInt(highest)).forEach { number in
                 guard let processors = processors(of: USHORT(number)) else {
-                    continue
+                    return
                 }
                 nodes.append(Node(id: Node.ID(_unchecked: Ordinal(number)), processors: processors))
             }

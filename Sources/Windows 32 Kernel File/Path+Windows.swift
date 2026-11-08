@@ -16,7 +16,7 @@
             let count = units.count
             let source = unsafe units.view.pointer
             unsafe self.init(count: count) { base in
-                for index in 0..<count {
+                (0..<count).forEach { index in
                     let unit = unsafe source[index]
                     unsafe base[index] =
                         !verbatim && unit == Windows.`32`.Filename.alternateSeparator
