@@ -105,10 +105,10 @@
             isAnonymous: Bool = false
         ) throws(Memory.Map.Error) {
             let success: Bool
-            if isAnonymous {
-                success = unsafe VirtualFree(addr.mutablePointer, 0, DWORD(MEM_RELEASE))
+            success = if isAnonymous {
+                unsafe VirtualFree(addr.mutablePointer, 0, DWORD(MEM_RELEASE))
             } else {
-                success = unsafe UnmapViewOfFile(addr.pointer)
+                unsafe UnmapViewOfFile(addr.pointer)
             }
 
             guard success else {

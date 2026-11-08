@@ -7,12 +7,12 @@
             let size = (Int64(info.nFileSizeHigh) << 32) | Int64(info.nFileSizeLow)
 
             let type: Windows.`32`.Kernel.File.Stats.Kind
-            if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
-                type = .directory
+            type = if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
+                .directory
             } else if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
-                type = .link(.symbolic)
+                .link(.symbolic)
             } else {
-                type = .regular
+                .regular
             }
 
             var permissions: Windows.`32`.Kernel.File.Permissions = .standard

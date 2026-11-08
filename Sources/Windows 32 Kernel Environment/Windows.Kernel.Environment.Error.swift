@@ -16,10 +16,10 @@ extension Windows.`32`.Kernel.Environment.Error {
     extension Windows.`32`.Kernel.Environment.Error {
 
         public init(code: Error::Error.Code) {
-            if let permission = Windows.`32`.Kernel.Permission.Error(code: code) {
-                self = .permission(permission)
+            self = if let permission = Windows.`32`.Kernel.Permission.Error(code: code) {
+                .permission(permission)
             } else {
-                self = .platform(Error::Error(code: code))
+                .platform(Error::Error(code: code))
             }
         }
     }

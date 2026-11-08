@@ -132,12 +132,12 @@
             nameChars.append(0)
 
             let type: Windows.`32`.Kernel.File.Stats.Kind?
-            if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
-                type = .directory
+            type = if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
+                .directory
             } else if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
-                type = .link(.symbolic)
+                .link(.symbolic)
             } else {
-                type = .regular
+                .regular
             }
 
             return Windows.`32`.Kernel.Directory.Entry(rawName: nameChars, inode: nil, type: type)

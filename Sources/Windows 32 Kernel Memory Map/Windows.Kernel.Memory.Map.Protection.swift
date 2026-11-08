@@ -24,18 +24,18 @@
             let hasWrite = contains(.write)
             let hasExecute = contains(.execute)
 
-            if hasExecute && hasWrite {
-                return DWORD(PAGE_EXECUTE_READWRITE)
+            return if hasExecute && hasWrite {
+                DWORD(PAGE_EXECUTE_READWRITE)
             } else if hasExecute && hasRead {
-                return DWORD(PAGE_EXECUTE_READ)
+                DWORD(PAGE_EXECUTE_READ)
             } else if hasExecute {
-                return DWORD(PAGE_EXECUTE)
+                DWORD(PAGE_EXECUTE)
             } else if hasWrite {
-                return DWORD(PAGE_READWRITE)
+                DWORD(PAGE_READWRITE)
             } else if hasRead {
-                return DWORD(PAGE_READONLY)
+                DWORD(PAGE_READONLY)
             } else {
-                return DWORD(PAGE_NOACCESS)
+                DWORD(PAGE_NOACCESS)
             }
         }
 
@@ -45,14 +45,14 @@
             let hasWrite = contains(.write)
             let hasExecute = contains(.execute)
 
-            if hasExecute && hasWrite {
-                return DWORD(PAGE_EXECUTE_READWRITE)
+            return if hasExecute && hasWrite {
+                DWORD(PAGE_EXECUTE_READWRITE)
             } else if hasExecute && hasRead {
-                return DWORD(PAGE_EXECUTE_READ)
+                DWORD(PAGE_EXECUTE_READ)
             } else if hasWrite {
-                return DWORD(PAGE_READWRITE)
+                DWORD(PAGE_READWRITE)
             } else {
-                return DWORD(PAGE_READONLY)
+                DWORD(PAGE_READONLY)
             }
         }
 

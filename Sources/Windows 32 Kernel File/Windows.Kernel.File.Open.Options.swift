@@ -27,21 +27,21 @@
             let hasExclusive = contains(.exclusive)
             let hasTruncate = contains(.truncate)
 
-            if hasCreate && hasExclusive {
+            return if hasCreate && hasExclusive {
 
-                return DWORD(CREATE_NEW)
+                DWORD(CREATE_NEW)
             } else if hasCreate && hasTruncate {
 
-                return DWORD(CREATE_ALWAYS)
+                DWORD(CREATE_ALWAYS)
             } else if hasCreate {
 
-                return DWORD(OPEN_ALWAYS)
+                DWORD(OPEN_ALWAYS)
             } else if hasTruncate {
 
-                return DWORD(TRUNCATE_EXISTING)
+                DWORD(TRUNCATE_EXISTING)
             } else {
 
-                return DWORD(OPEN_EXISTING)
+                DWORD(OPEN_EXISTING)
             }
         }
 
