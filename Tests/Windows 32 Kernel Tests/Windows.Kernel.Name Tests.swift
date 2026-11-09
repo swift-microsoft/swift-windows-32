@@ -65,9 +65,10 @@
 
             @Test
             func `sleep completes`() {
-                let start = GetTickCount64()
-                Windows.`32`.Kernel.Thread.sleep(.milliseconds(10))
-                #expect(GetTickCount64() - start >= 9)
+                let elapsed = ContinuousClock().measure {
+                    Windows.`32`.Kernel.Thread.sleep(.milliseconds(10))
+                }
+                #expect(elapsed >= .milliseconds(9))
             }
 
             @Test
