@@ -7,6 +7,8 @@
         public enum Error: Swift.Error, Sendable, Equatable, Hashable {
 
             case create(Error::Error)
+
+            case index(Error::Error)
         }
     }
 
@@ -15,6 +17,8 @@
             switch self {
             case .create(let error):
                 return "thread create failed: \(error)"
+            case .index(let error):
+                return "thread index allocation failed: \(error)"
             }
         }
     }
