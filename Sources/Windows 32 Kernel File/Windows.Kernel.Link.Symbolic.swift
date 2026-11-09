@@ -61,7 +61,7 @@
                 DWORD(FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE),
                 nil,
                 DWORD(OPEN_EXISTING),
-                DWORD(FILE_FLAG_BACKUP_SEMANTICS),
+                DWORD(FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT),
                 nil
             )
 
@@ -70,25 +70,87 @@
             }
             defer { _ = CloseHandle(handle) }
 
-            let wbuffer = UnsafeMutableRawPointer(buffer.nonEmptyBaseAddress).assumingMemoryBound(
-                to: WCHAR.self
+            let capacity = 16 * 1024
+            let reparse = UnsafeMutableRawPointer.allocate(
+                byteCount: capacity,
+                alignment: MemoryLayout<UInt32>.alignment
             )
-            let result = GetFinalPathNameByHandleW(
-                handle,
-                wbuffer,
-                DWORD(buffer.count),
-                DWORD(FILE_NAME_NORMALIZED)
-            )
+            defer { reparse.deallocate() }
 
-            guard result > 0 else {
+            let control: DWORD = 0x0009_00A8
+            var returned: DWORD = 0
+            guard
+                DeviceIoControl(
+                    handle,
+                    control,
+                    nil,
+                    0,
+                    reparse,
+                    DWORD(capacity),
+                    &returned,
+                    nil
+                )
+            else {
                 throw .current()
             }
 
-            if result > buffer.count {
-                throw .bufferTooSmall
+            let symbolicTag: UInt32 = 0xA000_000C
+            let junctionTag: UInt32 = 0xA000_0003
+            let available = Int(returned)
+            guard available >= 16 else {
+                throw .notSymbolicLink
+            }
+            let pathBuffer: Int
+            switch reparse.load(as: UInt32.self) {
+            case symbolicTag:
+                pathBuffer = 20
+            case junctionTag:
+                pathBuffer = 16
+            default:
+                throw .notSymbolicLink
             }
 
-            return Int(result)
+            let substituteOffset = Int(reparse.load(fromByteOffset: 8, as: UInt16.self))
+            let substituteLength = Int(reparse.load(fromByteOffset: 10, as: UInt16.self))
+            let printOffset = Int(reparse.load(fromByteOffset: 12, as: UInt16.self))
+            let printLength = Int(reparse.load(fromByteOffset: 14, as: UInt16.self))
+
+            var start = pathBuffer + printOffset
+            var length = printLength
+            if printLength == 0 {
+                start = pathBuffer + substituteOffset
+                length = substituteLength
+                if length >= 8,
+                    start + 8 <= available,
+                    reparse.load(fromByteOffset: start, as: UInt16.self) == 0x5C,
+                    reparse.load(fromByteOffset: start + 2, as: UInt16.self) == 0x3F,
+                    reparse.load(fromByteOffset: start + 4, as: UInt16.self) == 0x3F,
+                    reparse.load(fromByteOffset: start + 6, as: UInt16.self) == 0x5C
+                {
+                    start += 8
+                    length -= 8
+                }
+            }
+
+            guard start + length <= available else {
+                throw .notSymbolicLink
+            }
+
+            let count = length / MemoryLayout<UInt16>.size
+            if count > buffer.count {
+                throw .bufferTooSmall
+            }
+            if count > 0 {
+                UnsafeMutableRawPointer(buffer.nonEmptyBaseAddress).copyMemory(
+                    from: reparse + start,
+                    byteCount: count * MemoryLayout<UInt16>.size
+                )
+            }
+            if count < buffer.count {
+                buffer[count] = 0
+            }
+
+            return count
         }
     }
 
@@ -119,6 +181,9 @@
             case Error::Error.Code.Storage.diskFull,
                 Error::Error.Code.Storage.handleDiskFull:
                 return .noSpace
+
+            case UInt32(ERROR_NOT_A_REPARSE_POINT):
+                return .notSymbolicLink
 
             default:
                 return .platform(Error::Error(code: .win32(win32Code)))
