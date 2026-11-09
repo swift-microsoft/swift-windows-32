@@ -61,7 +61,7 @@
         func `read with empty buffer returns zero`() throws {
 
             let tempPath = "test_read_empty_\(GetCurrentProcessId()).tmp"
-            defer { DeleteFileW(tempPath.withCString(encodedAs: UTF16.self) { $0 }) }
+            defer { _ = tempPath.withCString(encodedAs: UTF16.self) { DeleteFileW($0) } }
 
             var utf16Path = Array(tempPath.utf16) + [0]
             let handle = utf16Path.withUnsafeMutableBufferPointer { pathPtr in
