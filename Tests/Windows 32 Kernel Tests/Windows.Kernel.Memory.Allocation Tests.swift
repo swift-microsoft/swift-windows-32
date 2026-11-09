@@ -107,4 +107,35 @@
         }
     }
 
+    extension Memory.Allocation.Test.Integration {
+        @Test
+        func `allocateAligned above the allocation granularity succeeds and is aligned`() throws {
+            var info = SYSTEM_INFO()
+            GetSystemInfo(&info)
+            let alignment = Int(info.dwAllocationGranularity) * 2
+            let size = Int(info.dwPageSize)
+
+            for _ in 0..<32 {
+                let address = try Memory.Allocation.allocateAligned(
+                    size: size,
+                    alignment: alignment,
+                    protection: .readWrite
+                )
+                #expect(Int(bitPattern: address.pointer) % alignment == 0)
+                try Memory.Allocation.free(addr: address)
+            }
+        }
+
+        @Test
+        func `allocateAligned rejects an alignment that is not a power of two`() {
+            #expect(throws: Memory.Map.Error.self) {
+                _ = try Memory.Allocation.allocateAligned(
+                    size: 4096,
+                    alignment: 3 * 65536,
+                    protection: .readWrite
+                )
+            }
+        }
+    }
+
 #endif

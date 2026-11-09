@@ -42,28 +42,52 @@
             protection: Memory.Map.Protection
         ) throws(Memory.Map.Error) -> Memory.Address {
 
-            let pageSize = Int(systemPageSize())
+            guard size > 0 else {
+                throw .invalid(.length)
+            }
+            guard alignment > 0, alignment & (alignment - 1) == 0 else {
+                throw .invalid(.alignment)
+            }
 
-            if alignment <= pageSize {
+            var info = SYSTEM_INFO()
+            GetSystemInfo(&info)
+
+            if alignment <= Int(info.dwAllocationGranularity) {
                 return try allocate(size: size, protection: protection)
             }
 
-            let extraSize = size + alignment - pageSize
-            let baseAddr = try allocate(size: extraSize, protection: protection)
-
-            let baseValue = Int(bitPattern: baseAddr.pointer)
-            let alignedValue = (baseValue + alignment - 1) & ~(alignment - 1)
-
-            if baseValue == alignedValue {
-                return baseAddr
+            let (span, overflow) = size.addingReportingOverflow(alignment)
+            guard !overflow else {
+                throw .invalid(.length)
             }
 
-            do throws(Memory.Map.Error) {
-                try free(addr: baseAddr)
-            } catch {
+            let mask = UInt(alignment) - 1
+            for _ in 0..<16 {
+                let reservation = unsafe VirtualAlloc(
+                    nil,
+                    SIZE_T(span),
+                    DWORD(MEM_RESERVE),
+                    DWORD(PAGE_NOACCESS)
+                )
+                guard let reservation else {
+                    throw .map(Error::Error.captureLastError())
+                }
 
+                let aligned = (unsafe UInt(bitPattern: reservation) + mask) & ~mask
+                _ = unsafe VirtualFree(reservation, 0, DWORD(MEM_RELEASE))
+
+                let result = unsafe VirtualAlloc(
+                    UnsafeMutableRawPointer(bitPattern: aligned),
+                    SIZE_T(size),
+                    DWORD(MEM_COMMIT | MEM_RESERVE),
+                    protection.windowsVirtualProtect
+                )
+                if let result {
+                    return unsafe Memory.Address(result)
+                }
             }
-            throw .invalid(.alignment)
+
+            throw .map(Error::Error.captureLastError())
         }
 
         public static func systemPageSize() -> UInt {
