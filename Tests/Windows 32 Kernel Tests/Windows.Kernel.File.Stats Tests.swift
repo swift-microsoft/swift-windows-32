@@ -43,11 +43,11 @@
             defer { _ = link.withUnsafeBufferPointer { RemoveDirectoryW($0.baseAddress) } }
 
             let unfollowed = try link.withUnsafeBufferPointer { buffer in
-                let path = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.count - 1)
+                let path = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.indices.dropLast().count)
                 return try Windows.`32`.Kernel.File.Stats.lget(path: path)
             }
             let followed = try link.withUnsafeBufferPointer { buffer in
-                let path = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.count - 1)
+                let path = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.indices.dropLast().count)
                 return try Windows.`32`.Kernel.File.Stats.get(path: path)
             }
 
