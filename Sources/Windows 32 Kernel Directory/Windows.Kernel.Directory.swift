@@ -133,10 +133,10 @@
 
             let type: Windows.`32`.Kernel.File.Stats.Kind?
             type =
-                if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
-                    .directory
-                } else if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
+                if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
                     .link(.symbolic)
+                } else if (findData.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
+                    .directory
                 } else {
                     .regular
                 }

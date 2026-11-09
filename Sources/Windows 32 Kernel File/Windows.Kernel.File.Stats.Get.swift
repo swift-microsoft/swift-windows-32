@@ -8,10 +8,10 @@
 
             let type: Windows.`32`.Kernel.File.Stats.Kind
             type =
-                if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
-                    .directory
-                } else if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
+                if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_REPARSE_POINT)) != 0 {
                     .link(.symbolic)
+                } else if (info.dwFileAttributes & DWORD(FILE_ATTRIBUTE_DIRECTORY)) != 0 {
+                    .directory
                 } else {
                     .regular
                 }
