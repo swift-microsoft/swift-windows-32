@@ -3,6 +3,7 @@
     import Testing
 
     @testable import Windows_32_Kernel
+    import Path
 
     extension Windows.`32`.Kernel.File.Stats {
         enum Test {
@@ -41,21 +42,17 @@
             }
             defer { _ = link.withUnsafeBufferPointer { RemoveDirectoryW($0.baseAddress) } }
 
-            let unfollowed = try link.withUnsafeBufferPointer { linkPointer in
-                try Windows.`32`.Kernel.File.Stats._get(
-                    unsafePath: linkPointer.baseAddress!,
-                    followSymlinks: false
-                )
+            let unfollowed = try link.withUnsafeBufferPointer { buffer in
+                let path = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.count - 1)
+                return try Windows.`32`.Kernel.File.Stats.lget(path: path)
             }
-            let followed = try link.withUnsafeBufferPointer { linkPointer in
-                try Windows.`32`.Kernel.File.Stats._get(
-                    unsafePath: linkPointer.baseAddress!,
-                    followSymlinks: true
-                )
+            let followed = try link.withUnsafeBufferPointer { buffer in
+                let path = unsafe Path.Borrowed(buffer.baseAddress!, count: buffer.count - 1)
+                return try Windows.`32`.Kernel.File.Stats.get(path: path)
             }
 
-            #expect(unfollowed.type == .link(.symbolic))
-            #expect(followed.type == .directory)
+            #expect(unfollowed.type == Windows.`32`.Kernel.File.Stats.Kind.link(.symbolic))
+            #expect(followed.type == Windows.`32`.Kernel.File.Stats.Kind.directory)
         }
     }
 
