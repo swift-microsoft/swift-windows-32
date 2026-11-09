@@ -9,22 +9,14 @@
             modification lastWriteTime: FILETIME? = nil,
             on handle: UInt
         ) throws(Windows.`32`.Kernel.File.Times.Error) {
-            var creation = creationTime
-            var access = lastAccessTime
-            var write = lastWriteTime
-
-            let success = withUnsafePointer(to: &creation) { creationPtr in
-                withUnsafePointer(to: &access) { accessPtr in
-                    withUnsafePointer(to: &write) { writePtr in
+            let success = creationTime.withOptionalPointer { creationPointer in
+                lastAccessTime.withOptionalPointer { accessPointer in
+                    lastWriteTime.withOptionalPointer { writePointer in
                         SetFileTime(
                             Windows.`32`.Kernel.Descriptor.handle(from: handle),
-                            creationTime != nil
-                                ? creationPtr.pointee.map { withUnsafePointer(to: $0) { $0 } }
-                                : nil,
-                            lastAccessTime != nil
-                                ? accessPtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil,
-                            lastWriteTime != nil
-                                ? writePtr.pointee.map { withUnsafePointer(to: $0) { $0 } } : nil
+                            creationPointer,
+                            accessPointer,
+                            writePointer
                         )
                     }
                 }
@@ -72,6 +64,19 @@
             }
 
             return (creation, access, write)
+        }
+    }
+
+    extension Optional where Wrapped == FILETIME {
+        fileprivate func withOptionalPointer<Result>(
+            _ body: (UnsafePointer<FILETIME>?) -> Result
+        ) -> Result {
+            switch self {
+            case .none:
+                return body(nil)
+            case .some(let value):
+                return withUnsafePointer(to: value) { body($0) }
+            }
         }
     }
 
