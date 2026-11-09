@@ -23,7 +23,7 @@
                 return nil
             }
 
-            if exitCode == DWORD(STILL_ACTIVE) {
+            if exitCode == DWORD(STILL_ACTIVE), WaitForSingleObject(handle, 0) != DWORD(WAIT_OBJECT_0) {
                 return nil
             }
             return exitCode

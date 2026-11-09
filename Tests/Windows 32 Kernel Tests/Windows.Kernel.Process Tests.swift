@@ -125,6 +125,43 @@
         }
     }
 
+    extension Windows.`32`.Kernel.Process.Test.Integration {
+
+        @Test
+        func `getExitCode reports exit code 259 of an exited process`() throws {
+            let actions = try Windows.`32`.Kernel.Process.Spawn.Actions()
+
+            var commandLine: [WCHAR] = Array("cmd.exe /C exit 259".utf16)
+            commandLine.append(0)
+            let executable: [WCHAR] = Array(#"C:\Windows\System32\cmd.exe"#.utf16) + [0]
+
+            var spawned: Windows.`32`.Kernel.Process.Spawn.Result?
+            try unsafe executable.withUnsafeBufferPointer { exePtr in
+                try unsafe commandLine.withUnsafeMutableBufferPointer { cmdPtr in
+                    spawned = try unsafe Windows.`32`.Kernel.Process.Spawn.spawn(
+                        executable: exePtr.baseAddress,
+                        commandLine: cmdPtr.baseAddress!,
+                        environment: nil,
+                        workingDirectory: nil,
+                        actions: actions
+                    )
+                }
+            }
+
+            guard let result = consume spawned else {
+                Issue.record("spawn produced no result")
+                return
+            }
+
+            let processHandle = try #require(
+                unsafe UnsafeMutableRawPointer(bitPattern: result.processHandle._rawValue)
+            )
+            let waited = unsafe WaitForSingleObject(processHandle, 10_000)
+            #expect(waited == WAIT_OBJECT_0)
+            #expect(Windows.`32`.Kernel.Process.getExitCode(handle: processHandle) == 259)
+        }
+    }
+
     extension Windows.`32`.Kernel.Process.Test.EdgeCase {
         @Test
         func `getCurrentId is consistent`() {
